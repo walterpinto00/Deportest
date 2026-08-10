@@ -153,6 +153,28 @@ body::before {
   cursor: not-allowed;
 }
 
+/* Quitar flechitas de inputs numéricos — Chrome, Safari, Edge */
+.dp-input[type="number"]::-webkit-inner-spin-button,
+.dp-input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Firefox */
+.dp-input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+/* También para cualquier input number fuera de .dp-input */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
 .dp-select {
   width: 100%;
   padding: 10px 14px;
