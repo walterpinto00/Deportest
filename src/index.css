@@ -10,6 +10,11 @@
   --color-sena-light: #F4FBF0;
 }
 
+body {
+  background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+  -webkit-font-smoothing: antialiased;
+}
+
 /* Custom scrollbar for database/code reference views */
 ::-webkit-scrollbar {
   width: 6px;
