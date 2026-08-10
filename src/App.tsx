@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import {
   Users, Activity, FileText, BarChart2, BrainCircuit, Check,
 } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence } from "framer-motion";
 
 import { Header } from "./components/layout/Header";
 import { Navigation, TabConfig } from "./components/layout/Navigation";
