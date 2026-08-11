@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Lock, Mail, Activity, ArrowRight, ShieldCheck, User, Zap, TrendingUp, Users } from "lucide-react";
+import { Lock, Mail, Activity, ArrowRight, ShieldCheck, User, Zap, Trophy, Target } from "lucide-react";
 
 interface LoginProps {
   onLogin: (role: "ENTRENADOR" | "APRENDIZ") => void;
@@ -239,24 +239,24 @@ export function Login({ onLogin }: LoginProps) {
           opacity: 0.7,
         }} />
 
-        {/* Floating Cards / Widgets (Dashboard feel) */}
+        {/* Floating Cards / Widgets (Motivacionales) */}
         <motion.div
           animate={{ y: [-15, 15, -15] }}
           transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
           style={{
-            position: "absolute", top: "25%", left: "10%",
+            position: "absolute", top: "25%", left: "10%", maxWidth: 280,
             background: "rgba(255,255,255,0.03)", backdropFilter: "blur(12px)",
             border: "1px solid rgba(255,255,255,0.08)", padding: "16px 20px",
             borderRadius: 20, display: "flex", alignItems: "center", gap: 14,
             boxShadow: "0 20px 40px rgba(0,0,0,0.3)"
           }}
         >
-          <div style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(34,197,94,0.15)", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid rgba(34,197,94,0.3)" }}>
-            <TrendingUp size={22} color="var(--color-green)" />
+          <div style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(34,197,94,0.15)", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid rgba(34,197,94,0.3)", flexShrink: 0 }}>
+            <Trophy size={22} color="var(--color-green)" />
           </div>
           <div>
-            <p style={{ fontSize: "0.75rem", color: "var(--color-text-muted)", fontWeight: 600, letterSpacing: "0.02em" }}>Desempeño Global</p>
-            <p style={{ fontSize: "1.2rem", fontWeight: 800, color: "#fff" }}>+24.5%</p>
+            <p style={{ fontSize: "0.85rem", fontWeight: 800, color: "#fff", marginBottom: 2 }}>Alcanza tus Metas</p>
+            <p style={{ fontSize: "0.7rem", color: "var(--color-text-muted)", lineHeight: 1.3 }}>Supera tus marcas con planes exactos.</p>
           </div>
         </motion.div>
 
@@ -264,19 +264,19 @@ export function Login({ onLogin }: LoginProps) {
           animate={{ y: [15, -15, 15] }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 1 }}
           style={{
-            position: "absolute", bottom: "25%", right: "10%",
+            position: "absolute", bottom: "25%", right: "8%", maxWidth: 280,
             background: "rgba(255,255,255,0.03)", backdropFilter: "blur(12px)",
             border: "1px solid rgba(255,255,255,0.08)", padding: "16px 20px",
             borderRadius: 20, display: "flex", alignItems: "center", gap: 14,
             boxShadow: "0 20px 40px rgba(0,0,0,0.3)"
           }}
         >
-          <div style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(168,85,247,0.15)", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid rgba(168,85,247,0.3)" }}>
-            <Users size={22} color="var(--color-purple)" />
+          <div style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(56,189,248,0.15)", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid rgba(56,189,248,0.3)", flexShrink: 0 }}>
+            <Target size={22} color="#38bdf8" />
           </div>
           <div>
-            <p style={{ fontSize: "0.75rem", color: "var(--color-text-muted)", fontWeight: 600, letterSpacing: "0.02em" }}>Atletas Activos</p>
-            <p style={{ fontSize: "1.2rem", fontWeight: 800, color: "#fff" }}>1,248</p>
+            <p style={{ fontSize: "0.85rem", fontWeight: 800, color: "#fff", marginBottom: 2 }}>Seguimiento Preciso</p>
+            <p style={{ fontSize: "0.7rem", color: "var(--color-text-muted)", lineHeight: 1.3 }}>Mide tu evolución física al milímetro.</p>
           </div>
         </motion.div>
 
@@ -293,13 +293,13 @@ export function Login({ onLogin }: LoginProps) {
             border: "1px solid rgba(34,197,94,0.4)", display: "flex", alignItems: "center", justifyContent: "center",
             boxShadow: "0 16px 40px rgba(34,197,94,0.2), inset 0 2px 0 rgba(255,255,255,0.1)"
           }}>
-            <Activity size={44} color="var(--color-green)" strokeWidth={2.5} />
+            <Zap size={44} color="var(--color-green)" strokeWidth={2.5} />
           </div>
-          <h2 style={{ fontSize: "3rem", fontWeight: 900, color: "#fff", letterSpacing: "-0.03em", marginBottom: 20, lineHeight: 1.05 }}>
-            Rendimiento al<br />Máximo Nivel
+          <h2 style={{ fontSize: "2.8rem", fontWeight: 900, color: "#fff", letterSpacing: "-0.03em", marginBottom: 20, lineHeight: 1.1 }}>
+            Desata tu <br />Verdadero Potencial
           </h2>
-          <p style={{ color: "rgba(255,255,255,0.7)", fontSize: "1.15rem", lineHeight: 1.6, fontWeight: 500 }}>
-            Plataforma inteligente para el control, análisis y seguimiento deportivo de atletas élite y aprendices.
+          <p style={{ color: "rgba(255,255,255,0.7)", fontSize: "1.1rem", lineHeight: 1.6, fontWeight: 500 }}>
+            Únete a Deportest y transforma tu disciplina. Usa IA, lleva tu registro antropométrico y domina tu entrenamiento.
           </p>
         </motion.div>
       </div>
