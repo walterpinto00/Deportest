@@ -2,7 +2,7 @@
 // Tab: Ficha Antropométrica
 // ─────────────────────────────────────────────
 import React, { useState } from "react";
-import { FileText, Save, Search, User, Ruler, Weight, HeartPulse, Activity } from "lucide-react";
+import { FileText, Save, Search, User, Ruler, Weight, HeartPulse, Activity, Download } from "lucide-react";
 import { Input } from "../ui/Input";
 import { Select } from "../ui/Select";
 
@@ -85,19 +85,26 @@ export function TabAntropometria({ role, onSave }: TabAntropometriaProps) {
           </div>
         </div>
         {role === "ENTRENADOR" && (
-          <div style={{ display: "flex", alignItems: "flex-end", gap: 12, flexWrap: "wrap", background: "rgba(255,255,255,0.03)", padding: "12px 20px", borderRadius: 16, border: "1px solid rgba(255,255,255,0.05)" }}>
+          <div className="no-print" style={{ display: "flex", alignItems: "flex-end", gap: 12, flexWrap: "wrap", background: "rgba(255,255,255,0.03)", padding: "12px 20px", borderRadius: 16, border: "1px solid rgba(255,255,255,0.05)" }}>
             <Input label="Documento del Aprendiz" placeholder="Buscar ID..." style={{ width: 180, background: "rgba(0,0,0,0.2)" }} />
             <button className="btn btn-secondary" style={{ marginBottom: 0, padding: "10px 16px" }}>
               <Search size={14} /> Buscar
             </button>
             <div style={{ width: 1, height: 40, background: "rgba(255,255,255,0.1)", margin: "0 8px" }} />
             <Input label="Paciente" placeholder="—" readOnly style={{ width: 200, opacity: 0.7 }} />
+            <button 
+              className="btn" 
+              onClick={() => window.print()}
+              style={{ marginBottom: 0, padding: "10px 16px", background: "rgba(34, 197, 94, 0.2)", color: "var(--color-green)", border: "1px solid rgba(34, 197, 94, 0.4)" }}
+            >
+              <Download size={14} /> Exportar PDF
+            </button>
           </div>
         )}
       </div>
 
       {/* Navegación de Pestañas con estilo Píldora */}
-      <div style={{ display: "flex", padding: "20px 40px", gap: 8, overflowX: "auto", background: "rgba(0,0,0,0.1)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+      <div className="no-print" style={{ display: "flex", padding: "20px 40px", gap: 8, overflowX: "auto", background: "rgba(0,0,0,0.1)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
         {SUB_TABS.map((t) => {
           const active = subTab === t.id;
           return (
@@ -219,7 +226,7 @@ export function TabAntropometria({ role, onSave }: TabAntropometriaProps) {
       </div>
 
       {/* Footer Action */}
-      <div style={{ padding: "24px 40px", borderTop: "1px solid rgba(255,255,255,0.05)", display: "flex", justifyContent: "flex-end", background: "rgba(0,0,0,0.2)" }}>
+      <div className="no-print" style={{ padding: "24px 40px", borderTop: "1px solid rgba(255,255,255,0.05)", display: "flex", justifyContent: "flex-end", background: "rgba(0,0,0,0.2)" }}>
         <button 
           className="btn btn-primary" 
           onClick={onSave}
