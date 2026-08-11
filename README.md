@@ -1,5 +1,4 @@
 <div align="center">
-  <img src="public/login-cover.jpg" width="100%" style="border-radius: 12px; margin-bottom: 20px;" alt="Deportest Banner">
   
   <h1>🏅 Deportest</h1>
   <p><strong>Plataforma de Alto Rendimiento Deportivo y Nutricional Inteligente (SENA)</strong></p>
