@@ -73,9 +73,9 @@ export function TabPruebas({ role, onSave }: TabPruebasProps) {
         {/* Contenido */}
         <div style={{ flex: 1, padding: 32, display: "flex", gap: 32, flexWrap: "wrap" }}>
           {/* Form */}
-          <div style={{ flex: 1, minWidth: 260, display: "flex", flexDirection: "column", gap: 20 }}>
-            {role === "INSTRUCTOR" && <Input label="ID Usuario Evaluado" placeholder="Identificación..." />}
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          <div style={{ padding: 24, display: "flex", flexDirection: "column", gap: 16 }}>
+            {role === "ENTRENADOR" && <Input label="ID Usuario Evaluado" placeholder="Identificación..." />}
+            <div style={{ flexDirection: "column", gap: 16 }}>
               <Input label={`Marca Obtenida (${test.unit})`} type="number" step="0.01" placeholder="0.00" />
               <Input label="Fecha de Ejecución" type="date" />
             </div>

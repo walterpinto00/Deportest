@@ -16,10 +16,10 @@ const USERS_DB = [
   },
   {
     id: 2,
-    email: 'instructor@deportest.sena.edu.co',
+    email: 'entrenador@deportest.sena.edu.co',
     password: '$2a$10$H7zPZqX5YwZ6xV9uY2zX8O5nZ5kF3jH7sK2lM9nBvCxW2qRtY3uE',
-    role: 'instructor',
-    name: 'Carlos Instructor'
+    role: 'entrenador',
+    name: 'Carlos Entrenador'
   },
   {
     id: 3,
@@ -140,7 +140,7 @@ class AuthController {
     try {
       const { userId, newRole } = req.body;
       
-      const allowedRoles = ['administrador', 'instructor', 'aprendiz', 'bienestar'];
+      const allowedRoles = ['administrador', 'entrenador', 'aprendiz', 'bienestar'];
       if (!allowedRoles.includes(newRole)) {
         return res.status(400).json({ error: 'Rol no válido para el sistema DEPORTEST' });
       }

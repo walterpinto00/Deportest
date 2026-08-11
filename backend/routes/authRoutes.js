@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authController');
 const authMiddleware = require('../middlewares/auth');
-const { isAdmin, isInstructor, isAprendiz } = require('../middlewares/roleGuard');
+const { isAdmin, isEntrenador, isAprendiz } = require('../middlewares/roleGuard');
 
 // ── Rutas públicas (sin autenticación) ──────────────────────
 router.post('/login',         authController.login);
@@ -16,13 +16,13 @@ router.get('/me', authMiddleware, (req, res) => {
   res.json({ user: req.user });
 });
 
-// Ver fichas antropométricas (instructor y admin)
-router.get('/fichas', authMiddleware, isInstructor, (req, res) => {
+// Ver fichas antropométricas (entrenador y admin)
+router.get('/fichas', authMiddleware, isEntrenador, (req, res) => {
   res.json({ message: `Fichas disponibles para ${req.user.role}` });
 });
 
-// Registrar resultados de pruebas (instructor)
-router.post('/pruebas', authMiddleware, isInstructor, (req, res) => {
+// Registrar resultados de pruebas (entrenador)
+router.post('/pruebas', authMiddleware, isEntrenador, (req, res) => {
   res.json({ message: 'Prueba registrada', user: req.user });
 });
 

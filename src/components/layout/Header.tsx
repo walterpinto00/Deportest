@@ -4,7 +4,7 @@
 import React from "react";
 import { Activity, ShieldCheck } from "lucide-react";
 
-type Role = "INSTRUCTOR" | "APRENDIZ";
+type Role = "ENTRENADOR" | "APRENDIZ";
 
 interface HeaderProps {
   role: Role;
@@ -100,7 +100,7 @@ export function Header({ role, onRoleChange }: HeaderProps) {
               outline: "none",
             }}
           >
-            <option value="INSTRUCTOR" style={{ background: "#1a2236" }}>Instructor</option>
+            <option value="ENTRENADOR" style={{ background: "#1a2236" }}>Entrenador</option>
             <option value="APRENDIZ" style={{ background: "#1a2236" }}>Aprendiz</option>
           </select>
         </div>

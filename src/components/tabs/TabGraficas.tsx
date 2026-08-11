@@ -48,8 +48,8 @@ export function TabGraficas({ role }: TabGraficasProps) {
 
   return (
     <div className="animate-fade-in" style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-      {/* Busqueda instructor */}
-      {role === "INSTRUCTOR" && (
+      {/* Busqueda entrenador */}
+      {role === "ENTRENADOR" && (
         <div className="glass" style={{ padding: 20, display: "flex", alignItems: "flex-end", gap: 12 }}>
           <Input label="Documento del Aprendiz" placeholder="Ingrese la identificación a consultar..." style={{ maxWidth: 320 }} />
           <button className="btn btn-primary">

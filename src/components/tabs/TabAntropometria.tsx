@@ -36,7 +36,7 @@ export function TabAntropometria({ role, onSave }: TabAntropometriaProps) {
             <p style={{ fontSize: "0.72rem", color: "var(--color-text-secondary)", marginTop: 2 }}>Registro y seguimiento de medidas corporales.</p>
           </div>
         </div>
-        {role === "INSTRUCTOR" && (
+        {role === "ENTRENADOR" && (
           <div style={{ display: "flex", alignItems: "flex-end", gap: 10, flexWrap: "wrap" }}>
             <Input label="Documento Aprendiz" placeholder="ID..." style={{ width: 160 }} />
             <button className="btn btn-secondary" style={{ marginBottom: 0 }}>
@@ -81,7 +81,7 @@ export function TabAntropometria({ role, onSave }: TabAntropometriaProps) {
               <Input label="Fecha" type="date" style={{ width: 160 }} />
             </div>
             <div style={{ display: "grid", gap: 16 }}>
-              <Input label="Evaluador" placeholder="Nombre del instructor" />
+              <Input label="Evaluador" placeholder="Nombre del entrenador" />
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16 }}>
                 <Input label="Edad (años)" type="number" placeholder="—" />
                 <Input label="Talla (m)" type="number" step="0.01" placeholder="1.70" />

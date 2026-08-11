@@ -14,20 +14,22 @@ import { TabAntropometria } from "./components/tabs/TabAntropometria";
 import { TabPruebas }       from "./components/tabs/TabPruebas";
 import { TabNutricionAI }   from "./components/tabs/TabNutricionAI";
 import { TabGraficas }      from "./components/tabs/TabGraficas";
+import { Login }            from "./components/auth/Login";
 
-type Role   = "INSTRUCTOR" | "APRENDIZ";
+type Role   = "ENTRENADOR" | "APRENDIZ";
 type TabId  = "usuarios" | "antropometria" | "pruebas" | "ia" | "graficas";
 
 const ALL_TABS: TabConfig[] = [
-  { id: "usuarios",      icon: Users,       label: "Usuarios & Roles",        color: "var(--color-green)",  allowedRoles: ["INSTRUCTOR"] },
-  { id: "antropometria", icon: FileText,     label: "Ficha Antropométrica",    color: "var(--color-teal)",   allowedRoles: ["INSTRUCTOR", "APRENDIZ"] },
-  { id: "pruebas",       icon: Activity,    label: "Pruebas Físicas",          color: "var(--color-rose)",   allowedRoles: ["INSTRUCTOR", "APRENDIZ"] },
-  { id: "ia",            icon: BrainCircuit,label: "IA · Nutrición",           color: "var(--color-purple)", allowedRoles: ["INSTRUCTOR", "APRENDIZ"] },
-  { id: "graficas",      icon: BarChart2,   label: "Gráficas de Salud",        color: "var(--color-blue)",   allowedRoles: ["INSTRUCTOR", "APRENDIZ"] },
+  { id: "usuarios",      icon: Users,       label: "Usuarios & Roles",        color: "var(--color-green)",  allowedRoles: ["ENTRENADOR"] },
+  { id: "antropometria", icon: FileText,     label: "Ficha Antropométrica",    color: "var(--color-teal)",   allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
+  { id: "pruebas",       icon: Activity,    label: "Pruebas Físicas",          color: "var(--color-rose)",   allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
+  { id: "ia",            icon: BrainCircuit,label: "IA · Nutrición",           color: "var(--color-purple)", allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
+  { id: "graficas",      icon: BarChart2,   label: "Gráficas de Salud",        color: "var(--color-blue)",   allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
 ];
 
 export default function App() {
-  const [role, setRole]         = useState<Role>("INSTRUCTOR");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [role, setRole]         = useState<Role>("ENTRENADOR");
   const [activeTab, setActiveTab] = useState<TabId>("antropometria");
   const [toast, setToast]       = useState<string | null>(null);
 
@@ -40,6 +42,21 @@ export default function App() {
     setRole(r);
     setActiveTab("antropometria");
   };
+
+  const handleLogin = (r: Role) => {
+    setRole(r);
+    setIsAuthenticated(true);
+  };
+
+  if (!isAuthenticated) {
+    return (
+      <AnimatePresence mode="wait">
+        <motion.div key="login" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+          <Login onLogin={handleLogin} />
+        </motion.div>
+      </AnimatePresence>
+    );
+  }
 
   return (
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>

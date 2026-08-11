@@ -20,14 +20,14 @@ const roleGuard = (allowedRoles) => {
 
 // Middlewares específicos para cada rol del sistema DEPORTEST
 const isAdmin        = roleGuard(['administrador']);
-const isInstructor   = roleGuard(['administrador', 'instructor']);
+const isEntrenador   = roleGuard(['administrador', 'entrenador']);
 const isBienestar    = roleGuard(['administrador', 'bienestar']);
-const isAprendiz     = roleGuard(['administrador', 'instructor', 'aprendiz']);
+const isAprendiz     = roleGuard(['administrador', 'entrenador', 'aprendiz']);
 
 module.exports = {
   roleGuard,
   isAdmin,
-  isInstructor,
+  isEntrenador,
   isBienestar,
   isAprendiz
 };
