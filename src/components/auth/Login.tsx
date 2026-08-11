@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Lock, Mail, Activity, ArrowRight, ShieldCheck, User, Zap } from "lucide-react";
+import { Lock, Mail, Activity, ArrowRight, ShieldCheck, User, Zap, TrendingUp, Users } from "lucide-react";
 
 interface LoginProps {
   onLogin: (role: "ENTRENADOR" | "APRENDIZ") => void;
@@ -239,23 +239,69 @@ export function Login({ onLogin }: LoginProps) {
           opacity: 0.7,
         }} />
 
-        {/* Mensaje Inspiracional */}
-        <div style={{ position: "relative", zIndex: 1, textAlign: "center", padding: 40, maxWidth: 500 }}>
-          <div style={{ 
-            width: 80, height: 80, margin: "0 auto 32px", borderRadius: 24, 
-            background: "linear-gradient(135deg, rgba(34,197,94,0.15), rgba(16,185,129,0.05))", 
-            border: "1px solid rgba(34,197,94,0.3)", display: "flex", alignItems: "center", justifyContent: "center",
-            boxShadow: "0 16px 32px rgba(34,197,94,0.15)"
-          }}>
-            <Activity size={40} color="var(--color-green)" strokeWidth={2.5} />
+        {/* Floating Cards / Widgets (Dashboard feel) */}
+        <motion.div
+          animate={{ y: [-15, 15, -15] }}
+          transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+          style={{
+            position: "absolute", top: "25%", left: "10%",
+            background: "rgba(255,255,255,0.03)", backdropFilter: "blur(12px)",
+            border: "1px solid rgba(255,255,255,0.08)", padding: "16px 20px",
+            borderRadius: 20, display: "flex", alignItems: "center", gap: 14,
+            boxShadow: "0 20px 40px rgba(0,0,0,0.3)"
+          }}
+        >
+          <div style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(34,197,94,0.15)", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid rgba(34,197,94,0.3)" }}>
+            <TrendingUp size={22} color="var(--color-green)" />
           </div>
-          <h2 style={{ fontSize: "2.5rem", fontWeight: 800, color: "#fff", letterSpacing: "-0.03em", marginBottom: 20, lineHeight: 1.1 }}>
+          <div>
+            <p style={{ fontSize: "0.75rem", color: "var(--color-text-muted)", fontWeight: 600, letterSpacing: "0.02em" }}>Desempeño Global</p>
+            <p style={{ fontSize: "1.2rem", fontWeight: 800, color: "#fff" }}>+24.5%</p>
+          </div>
+        </motion.div>
+
+        <motion.div
+          animate={{ y: [15, -15, 15] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          style={{
+            position: "absolute", bottom: "25%", right: "10%",
+            background: "rgba(255,255,255,0.03)", backdropFilter: "blur(12px)",
+            border: "1px solid rgba(255,255,255,0.08)", padding: "16px 20px",
+            borderRadius: 20, display: "flex", alignItems: "center", gap: 14,
+            boxShadow: "0 20px 40px rgba(0,0,0,0.3)"
+          }}
+        >
+          <div style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(168,85,247,0.15)", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid rgba(168,85,247,0.3)" }}>
+            <Users size={22} color="var(--color-purple)" />
+          </div>
+          <div>
+            <p style={{ fontSize: "0.75rem", color: "var(--color-text-muted)", fontWeight: 600, letterSpacing: "0.02em" }}>Atletas Activos</p>
+            <p style={{ fontSize: "1.2rem", fontWeight: 800, color: "#fff" }}>1,248</p>
+          </div>
+        </motion.div>
+
+        {/* Mensaje Inspiracional central */}
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          style={{ position: "relative", zIndex: 1, textAlign: "center", padding: 40, maxWidth: 500 }}
+        >
+          <div style={{ 
+            width: 84, height: 84, margin: "0 auto 32px", borderRadius: 28, 
+            background: "linear-gradient(135deg, rgba(34,197,94,0.15), rgba(16,185,129,0.05))", 
+            border: "1px solid rgba(34,197,94,0.4)", display: "flex", alignItems: "center", justifyContent: "center",
+            boxShadow: "0 16px 40px rgba(34,197,94,0.2), inset 0 2px 0 rgba(255,255,255,0.1)"
+          }}>
+            <Activity size={44} color="var(--color-green)" strokeWidth={2.5} />
+          </div>
+          <h2 style={{ fontSize: "3rem", fontWeight: 900, color: "#fff", letterSpacing: "-0.03em", marginBottom: 20, lineHeight: 1.05 }}>
             Rendimiento al<br />Máximo Nivel
           </h2>
-          <p style={{ color: "rgba(255,255,255,0.6)", fontSize: "1.1rem", lineHeight: 1.6, fontWeight: 500 }}>
-            Plataforma inteligente para el control y seguimiento deportivo de aprendices.
+          <p style={{ color: "rgba(255,255,255,0.7)", fontSize: "1.15rem", lineHeight: 1.6, fontWeight: 500 }}>
+            Plataforma inteligente para el control, análisis y seguimiento deportivo de atletas élite y aprendices.
           </p>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
