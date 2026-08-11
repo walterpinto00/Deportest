@@ -40,7 +40,38 @@ export function TabUsuarios({ onSave }: TabUsuariosProps) {
   const [bgColor, setBgColor] = useState("b6e3f4");
   const [copied, setCopied]   = useState(false);
 
+  // Form State
+  const [formData, setFormData] = useState({
+    email: "", password: "", rol: "APRENDIZ", 
+    tipoDoc: "Cédula de Ciudadanía (CC)", numDoc: "", 
+    nombres: "", apellidos: "", genero: "Masculino", fechaNacimiento: ""
+  });
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
   const avatarUrl = `https://api.dicebear.com/9.x/${style}/svg?seed=${seed}&backgroundColor=${bgColor}`;
+
+  const handleChange = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+    if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: "" }));
+    }
+  };
+
+  const handleSave = () => {
+    const newErrors: Record<string, string> = {};
+    if (!formData.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = "Correo inválido";
+    if (!formData.password || formData.password.length < 6) newErrors.password = "Mínimo 6 caracteres";
+    if (!formData.numDoc || !/^\d+$/.test(formData.numDoc)) newErrors.numDoc = "Solo números requeridos";
+    if (!formData.nombres) newErrors.nombres = "Campo requerido";
+    if (!formData.apellidos) newErrors.apellidos = "Campo requerido";
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+    // Si todo es válido
+    onSave();
+  };
 
   const randomize = () => {
     const randomSeed  = Math.random().toString(36).slice(2, 10);
@@ -86,9 +117,9 @@ export function TabUsuarios({ onSave }: TabUsuariosProps) {
           <div style={{ gridColumn: "1 / -1" }}>
             <p className="section-title">Credenciales de Acceso</p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16 }}>
-              <Input label="Correo Electrónico" type="email" placeholder="usuario@correo.com" />
-              <Input label="Contraseña" type="password" placeholder="••••••••" />
-              <Select label="Rol en el Sistema">
+              <Input label="Correo Electrónico" type="email" placeholder="usuario@correo.com" value={formData.email} onChange={(e) => handleChange("email", e.target.value)} error={errors.email} />
+              <Input label="Contraseña" type="password" placeholder="••••••••" value={formData.password} onChange={(e) => handleChange("password", e.target.value)} error={errors.password} />
+              <Select label="Rol en el Sistema" value={formData.rol} onChange={(e) => handleChange("rol", e.target.value)}>
                 <option>APRENDIZ</option>
                 <option>ENTRENADOR</option>
                 <option>ADMINISTRADOR</option>
@@ -101,20 +132,20 @@ export function TabUsuarios({ onSave }: TabUsuariosProps) {
           <div style={{ gridColumn: "1 / -1" }}>
             <p className="section-title">Datos Personales</p>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
-              <Select label="Tipo de Identificación">
+              <Select label="Tipo de Identificación" value={formData.tipoDoc} onChange={(e) => handleChange("tipoDoc", e.target.value)}>
                 <option>Cédula de Ciudadanía (CC)</option>
                 <option>Tarjeta de Identidad (TI)</option>
                 <option>Cédula de Extranjería (CE)</option>
               </Select>
-              <Input label="Número de Identificación" placeholder="Ej: 1001234567" />
-              <Input label="Nombres" placeholder="Ej: Juan" />
-              <Input label="Apellidos" placeholder="Ej: Pérez" />
-              <Select label="Género">
+              <Input label="Número de Identificación" placeholder="Ej: 1001234567" value={formData.numDoc} onChange={(e) => handleChange("numDoc", e.target.value)} error={errors.numDoc} />
+              <Input label="Nombres" placeholder="Ej: Juan" value={formData.nombres} onChange={(e) => handleChange("nombres", e.target.value)} error={errors.nombres} />
+              <Input label="Apellidos" placeholder="Ej: Pérez" value={formData.apellidos} onChange={(e) => handleChange("apellidos", e.target.value)} error={errors.apellidos} />
+              <Select label="Género" value={formData.genero} onChange={(e) => handleChange("genero", e.target.value)}>
                 <option>Masculino</option>
                 <option>Femenino</option>
                 <option>Otro</option>
               </Select>
-              <Input label="Fecha de Nacimiento" type="date" />
+              <Input label="Fecha de Nacimiento" type="date" value={formData.fechaNacimiento} onChange={(e) => handleChange("fechaNacimiento", e.target.value)} />
             </div>
           </div>
 
@@ -319,7 +350,7 @@ export function TabUsuarios({ onSave }: TabUsuariosProps) {
         </div>
 
         <div style={{ marginTop: 32, paddingTop: 24, borderTop: "1px solid var(--color-border)", display: "flex", justifyContent: "flex-end" }}>
-          <button className="btn btn-primary" onClick={onSave}>
+          <button className="btn btn-primary" onClick={handleSave}>
             <Save size={15} />
             Registrar Usuario
           </button>

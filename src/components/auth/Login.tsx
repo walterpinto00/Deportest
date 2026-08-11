@@ -16,9 +16,20 @@ export function Login({ onLogin }: LoginProps) {
     if (e) e.preventDefault();
     setError("");
 
-    if (!forceRole && (!email || !password)) {
-      setError("Por favor completa ambos campos.");
-      return;
+    if (!forceRole) {
+      if (!email || !password) {
+        setError("Por favor completa ambos campos.");
+        return;
+      }
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        setError("Por favor ingresa un correo electrónico válido (ej: usuario@sena.edu.co).");
+        return;
+      }
+      if (password.length < 6) {
+        setError("La contraseña debe tener al menos 6 caracteres por seguridad.");
+        return;
+      }
     }
 
     setLoading(true);

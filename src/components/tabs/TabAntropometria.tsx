@@ -23,6 +23,33 @@ const SUB_TABS: { id: SubTab; label: string; color: string }[] = [
 export function TabAntropometria({ role, onSave }: TabAntropometriaProps) {
   const [subTab, setSubTab] = useState<SubTab>("datos");
 
+  // Estado para cálculo de IMC
+  const [peso, setPeso] = useState("");
+  const [talla, setTalla] = useState("");
+
+  const pesoNum = parseFloat(peso);
+  const tallaNum = parseFloat(talla);
+  let imc = 0;
+  if (pesoNum > 0 && tallaNum > 0) {
+    imc = parseFloat((pesoNum / (tallaNum * tallaNum)).toFixed(1));
+  }
+
+  let imcClass = "Sin datos";
+  let imcColor = "var(--color-text-muted)";
+  let imcBg = "rgba(255,255,255,0.05)";
+  
+  if (imc > 0) {
+    if (imc < 18.5) {
+      imcClass = "Bajo Peso"; imcColor = "#38bdf8"; imcBg = "rgba(56, 189, 248, 0.2)";
+    } else if (imc < 25) {
+      imcClass = "Peso Normal"; imcColor = "var(--color-green)"; imcBg = "rgba(34, 197, 94, 0.2)";
+    } else if (imc < 30) {
+      imcClass = "Sobrepeso"; imcColor = "var(--color-amber)"; imcBg = "rgba(245, 158, 11, 0.2)";
+    } else {
+      imcClass = "Obesidad"; imcColor = "var(--color-rose)"; imcBg = "rgba(244, 63, 94, 0.2)";
+    }
+  }
+
   // Decorator Card Component
   const MetricCard = ({ label, icon: Icon, color, children }: any) => (
     <div style={{
@@ -108,18 +135,18 @@ export function TabAntropometria({ role, onSave }: TabAntropometriaProps) {
 
             <MetricCard label="Composición Básica" icon={Weight} color="var(--color-green)">
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-                <Input label="Edad (años)" type="number" placeholder="—" />
-                <Input label="Talla (m)" type="number" step="0.01" placeholder="1.70" />
+                <Input label="Edad (años)" type="number" min="0" placeholder="—" />
+                <Input label="Talla (m)" type="number" min="0" step="0.01" placeholder="Ej: 1.70" value={talla} onChange={(e) => setTalla(e.target.value)} />
               </div>
-              <Input label="Peso Total (kg)" type="number" step="0.1" placeholder="68.5" />
+              <Input label="Peso Total (kg)" type="number" min="0" step="0.1" placeholder="Ej: 68.5" value={peso} onChange={(e) => setPeso(e.target.value)} />
               
               <div style={{ marginTop: 8, padding: 16, borderRadius: 12, background: "linear-gradient(135deg, rgba(20,184,166,0.1), rgba(20,184,166,0.02))", border: "1px solid rgba(20,184,166,0.2)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <div>
                   <p style={{ fontSize: "0.7rem", color: "var(--color-teal)", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em" }}>Índice de Masa Corporal</p>
-                  <p style={{ fontSize: "2rem", fontWeight: 900, color: "#fff", lineHeight: 1 }}>24.5</p>
+                  <p style={{ fontSize: "2rem", fontWeight: 900, color: "#fff", lineHeight: 1 }}>{imc > 0 ? imc : "--"}</p>
                 </div>
-                <div style={{ padding: "6px 12px", background: "rgba(34,197,94,0.2)", color: "var(--color-green)", borderRadius: 8, fontSize: "0.75rem", fontWeight: 700 }}>
-                  Peso Normal
+                <div style={{ padding: "6px 12px", background: imcBg, color: imcColor, borderRadius: 8, fontSize: "0.75rem", fontWeight: 700, transition: "all 0.3s" }}>
+                  {imcClass}
                 </div>
               </div>
             </MetricCard>
@@ -136,7 +163,7 @@ export function TabAntropometria({ role, onSave }: TabAntropometriaProps) {
               {["Hombro", "Tórax", "Cintura", "Cadera", "Brazo Derecho", "Brazo Izquierdo", "Muslo Superior", "Muslo Medio", "Muslo Inferior", "Pierna"].map(
                 (m) => (
                   <div key={m} style={{ position: "relative" }}>
-                    <Input label={m} type="number" placeholder="0.0" />
+                    <Input label={m} type="number" min="0" step="0.1" placeholder="0.0" />
                     <div style={{ position: "absolute", right: 12, top: 38, fontSize: "0.7rem", color: "var(--color-text-muted)", fontWeight: 600 }}>cm</div>
                   </div>
                 )
@@ -155,7 +182,7 @@ export function TabAntropometria({ role, onSave }: TabAntropometriaProps) {
               {["Bicipital", "Tricipital", "Subescapular", "Suprailiaco", "Abdominal", "Muslo", "Pantorrilla"].map(
                 (m) => (
                   <div key={m} style={{ position: "relative" }}>
-                    <Input label={m} type="number" placeholder="0.0" />
+                    <Input label={m} type="number" min="0" step="0.1" placeholder="0.0" />
                     <div style={{ position: "absolute", right: 12, top: 38, fontSize: "0.7rem", color: "var(--color-text-muted)", fontWeight: 600 }}>mm</div>
                   </div>
                 )
@@ -168,10 +195,10 @@ export function TabAntropometria({ role, onSave }: TabAntropometriaProps) {
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 32, maxWidth: 900, margin: "0 auto" }}>
             <MetricCard label="Signos Vitales e Índices" icon={HeartPulse} color="var(--color-rose)">
               <Input label="Tensión Arterial (mmHg)" placeholder="Ej: 120/80" />
-              <Input label="Frecuencia Cardíaca (bpm)" type="number" placeholder="Ej: 72" />
+              <Input label="Frecuencia Cardíaca (bpm)" type="number" min="0" placeholder="Ej: 72" />
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-                <Input label="Peso Ideal (kg)" type="number" />
-                <Input label="Índ. Obesidad" type="number" />
+                <Input label="Peso Ideal (kg)" type="number" min="0" />
+                <Input label="Índ. Obesidad" type="number" min="0" step="0.1" />
               </div>
             </MetricCard>
 
