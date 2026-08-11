@@ -179,11 +179,11 @@ export function Login({ onLogin }: LoginProps) {
             <p style={{ fontSize: "0.75rem", color: "var(--color-text-muted)", display: "flex", alignItems: "center", gap: 6, marginBottom: 12 }}>
               <ShieldCheck size={14} /> Acceso Rápido (Demo)
             </p>
-            <div style={{ display: "flex", gap: 12 }}>
+            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
               <button
                 onClick={() => handleQuickLogin("ENTRENADOR")}
                 className="btn btn-ghost"
-                style={{ flex: 1, justifyContent: "center", padding: "8px", fontSize: "0.8rem", background: "rgba(255,255,255,0.03)", borderRadius: 8 }}
+                style={{ flex: 1, justifyContent: "center", padding: "10px", fontSize: "0.8rem", background: "rgba(255,255,255,0.03)", borderRadius: 8 }}
                 disabled={loading}
               >
                 <User size={14} /> Entrenador
@@ -191,10 +191,18 @@ export function Login({ onLogin }: LoginProps) {
               <button
                 onClick={() => handleQuickLogin("APRENDIZ")}
                 className="btn btn-ghost"
-                style={{ flex: 1, justifyContent: "center", padding: "8px", fontSize: "0.8rem", background: "rgba(255,255,255,0.03)", borderRadius: 8 }}
+                style={{ flex: 1, justifyContent: "center", padding: "10px", fontSize: "0.8rem", background: "rgba(255,255,255,0.03)", borderRadius: 8 }}
                 disabled={loading}
               >
                 <User size={14} /> Aprendiz
+              </button>
+              <button
+                onClick={() => handleQuickLogin("ENTRENADOR")}
+                className="btn btn-ghost"
+                style={{ flex: 1, justifyContent: "center", padding: "10px", fontSize: "0.8rem", background: "rgba(255,255,255,0.03)", borderRadius: 8 }}
+                disabled={loading}
+              >
+                <ShieldCheck size={14} /> Administrador
               </button>
             </div>
           </div>
@@ -217,9 +225,9 @@ export function Login({ onLogin }: LoginProps) {
           style={{ width: "100%", height: "100%" }}
         >
           <img
-            src="/login-cover.jpg"
+            src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop"
             alt="Sports Analytics"
-            style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.6 }}
+            style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.75 }}
           />
           {/* Overlay Gradient para integrar la imagen con el fondo oscuro */}
           <div style={{
