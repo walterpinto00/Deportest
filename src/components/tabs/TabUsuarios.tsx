@@ -2,7 +2,8 @@
 // Tab: Usuarios & Roles
 // ─────────────────────────────────────────────
 import React, { useState } from "react";
-import { Users, Save, Shuffle, Check, Palette, Type } from "lucide-react";
+import { Users, Save, Shuffle, Check, Palette, Type, Sparkles } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Input } from "../ui/Input";
 import { Select } from "../ui/Select";
 
@@ -118,174 +119,198 @@ export function TabUsuarios({ onSave }: TabUsuariosProps) {
           </div>
 
           {/* ── AVATAR PICKER MEJORADO ── */}
-          <div style={{ gridColumn: "1 / -1" }}>
-            <p className="section-title">Personalizar Avatar</p>
+          <div style={{ gridColumn: "1 / -1", marginTop: 12 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20 }}>
+              <Sparkles size={16} color="var(--color-green)" />
+              <p className="section-title" style={{ marginBottom: 0 }}>Generador de Avatar IA</p>
+            </div>
 
             <div style={{
               display: "grid",
-              gridTemplateColumns: "200px 1fr",
-              gap: 28,
-              background: "rgba(255,255,255,0.02)",
-              border: "1px solid var(--color-border)",
-              borderRadius: 18,
-              overflow: "hidden",
+              gridTemplateColumns: "minmax(240px, 1fr) 2fr",
+              gap: 24,
+              background: "rgba(15,23,42,0.4)",
+              border: "1px solid rgba(255,255,255,0.06)",
+              borderRadius: 24,
+              padding: 6,
+              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.05), 0 20px 40px rgba(0,0,0,0.4)",
             }}>
 
               {/* Preview panel izquierdo */}
               <div style={{
                 display: "flex", flexDirection: "column", alignItems: "center",
-                justifyContent: "center", gap: 20,
-                padding: 28,
-                background: `#${bgColor}22`,
-                borderRight: "1px solid var(--color-border)",
+                justifyContent: "center", gap: 24,
+                padding: "32px 24px",
+                background: `linear-gradient(135deg, #${bgColor}11, #${bgColor}33)`,
+                borderRadius: 20,
                 position: "relative",
+                overflow: "hidden",
+                border: "1px solid rgba(255,255,255,0.03)",
               }}>
-                {/* Avatar grande */}
-                <div style={{
-                  width: 128, height: 128, borderRadius: "50%",
-                  background: `#${bgColor}`,
-                  border: "4px solid rgba(255,255,255,0.15)",
-                  overflow: "hidden",
-                  boxShadow: `0 0 0 8px #${bgColor}44, 0 16px 48px rgba(0,0,0,0.4)`,
-                  transition: "box-shadow 0.3s",
-                }}>
-                  <img
-                    src={avatarUrl}
-                    alt="Avatar Preview"
-                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                  />
-                </div>
+                {/* Decoración fondo */}
+                <motion.div
+                  animate={{ scale: [1, 1.2, 1], rotate: [0, 90, 0] }}
+                  transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                  style={{
+                    position: "absolute", width: 300, height: 300,
+                    background: `radial-gradient(circle, #${bgColor}44 0%, transparent 70%)`,
+                    filter: "blur(40px)", zIndex: 0
+                  }}
+                />
 
-                {/* Botón aleatorio */}
-                <button
-                  onClick={randomize}
-                  className="btn btn-ghost"
-                  style={{ width: "100%", justifyContent: "center", fontSize: "0.78rem" }}
-                >
-                  <Shuffle size={13} /> Aleatorio
-                </button>
+                {/* Avatar grande animado */}
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={avatarUrl}
+                    initial={{ scale: 0.8, opacity: 0, rotate: -10 }}
+                    animate={{ scale: 1, opacity: 1, rotate: 0 }}
+                    exit={{ scale: 0.8, opacity: 0, rotate: 10 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                    style={{
+                      width: 140, height: 140, borderRadius: "50%",
+                      background: `#${bgColor}`,
+                      border: "4px solid rgba(255,255,255,0.2)",
+                      overflow: "hidden",
+                      boxShadow: `0 0 0 10px #${bgColor}22, 0 20px 40px rgba(0,0,0,0.5), inset 0 4px 12px rgba(255,255,255,0.4)`,
+                      zIndex: 1,
+                      display: "flex", alignItems: "center", justifyContent: "center"
+                    }}
+                  >
+                    <img
+                      src={avatarUrl}
+                      alt="Avatar Preview"
+                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    />
+                  </motion.div>
+                </AnimatePresence>
 
-                {/* Seed actual */}
-                <div style={{
-                  fontSize: "0.65rem", color: "var(--color-text-muted)",
-                  textAlign: "center", wordBreak: "break-all",
-                  fontFamily: "var(--font-mono)",
-                  background: "rgba(0,0,0,0.2)",
-                  padding: "4px 10px", borderRadius: 6,
-                }}>
-                  seed: {seed}
+                <div style={{ zIndex: 1, display: "flex", flexDirection: "column", gap: 12, width: "100%" }}>
+                  <button
+                    onClick={randomize}
+                    className="btn btn-primary"
+                    style={{ width: "100%", justifyContent: "center", fontSize: "0.8rem", padding: "10px", background: "rgba(255,255,255,0.1)", color: "#fff", border: "1px solid rgba(255,255,255,0.1)", boxShadow: "none" }}
+                  >
+                    <Shuffle size={14} /> Mix Aleatorio
+                  </button>
+                  <div style={{
+                    fontSize: "0.65rem", color: "rgba(255,255,255,0.5)",
+                    textAlign: "center", wordBreak: "break-all",
+                    fontFamily: "var(--font-mono)", background: "rgba(0,0,0,0.3)",
+                    padding: "6px 12px", borderRadius: 8, border: "1px solid rgba(255,255,255,0.05)"
+                  }}>
+                    ID: {seed}
+                  </div>
                 </div>
               </div>
 
               {/* Panel derecho de configuración */}
-              <div style={{ padding: 28, display: "flex", flexDirection: "column", gap: 24 }}>
-
+              <div style={{ padding: "32px 32px 32px 16px", display: "flex", flexDirection: "column", gap: 28 }}>
+                
                 {/* Galería de estilos */}
                 <div>
-                  <label className="dp-label" style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 12 }}>
-                    <Palette size={12} /> Estilo del Avatar
+                  <label className="dp-label" style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
+                    <Palette size={14} color="var(--color-green)" /> Elige un Estilo Base
                   </label>
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(80px, 1fr))", gap: 10 }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(90px, 1fr))", gap: 12 }}>
                     {AVATAR_STYLES.map((s) => {
                       const previewUrl = `https://api.dicebear.com/9.x/${s.value}/svg?seed=${seed}&backgroundColor=${bgColor}`;
                       const active = style === s.value;
                       return (
-                        <button
+                        <motion.button
+                          whileHover={{ scale: 1.05, y: -2 }}
+                          whileTap={{ scale: 0.95 }}
                           key={s.value}
                           onClick={() => setStyle(s.value)}
                           title={s.label}
                           style={{
-                            display: "flex", flexDirection: "column", alignItems: "center", gap: 6,
-                            padding: "10px 6px", borderRadius: 12, cursor: "pointer", border: "none",
-                            background: active ? "rgba(34,197,94,0.12)" : "rgba(255,255,255,0.03)",
-                            outline: active ? "2px solid var(--color-green)" : "1px solid rgba(255,255,255,0.06)",
-                            outlineOffset: active ? 2 : 0,
-                            transition: "all 0.2s",
-                            position: "relative",
+                            display: "flex", flexDirection: "column", alignItems: "center", gap: 8,
+                            padding: "12px 8px", borderRadius: 16, cursor: "pointer", border: "none",
+                            background: active ? "rgba(34,197,94,0.1)" : "rgba(255,255,255,0.02)",
+                            boxShadow: active ? "inset 0 0 0 2px var(--color-green), 0 8px 16px rgba(34,197,94,0.15)" : "inset 0 0 0 1px rgba(255,255,255,0.05)",
+                            position: "relative", overflow: "hidden"
                           }}
                         >
                           {active && (
-                            <div style={{
-                              position: "absolute", top: 4, right: 4,
-                              width: 16, height: 16, borderRadius: "50%",
-                              background: "var(--color-green)",
-                              display: "flex", alignItems: "center", justifyContent: "center",
-                            }}>
-                              <Check size={9} color="#fff" strokeWidth={3} />
-                            </div>
+                            <motion.div layoutId="active-style-indicator" style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, background: "linear-gradient(180deg, rgba(34,197,94,0.1) 0%, transparent 100%)", borderRadius: 16 }} />
                           )}
                           <div style={{
-                            width: 48, height: 48, borderRadius: "50%",
+                            width: 52, height: 52, borderRadius: "50%",
                             overflow: "hidden", background: `#${bgColor}`,
                             border: `2px solid ${active ? "var(--color-green)" : "rgba(255,255,255,0.1)"}`,
-                            flexShrink: 0,
+                            flexShrink: 0, position: "relative", zIndex: 1,
+                            boxShadow: active ? "0 4px 12px rgba(0,0,0,0.3)" : "none"
                           }}>
                             <img src={previewUrl} alt={s.label} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                           </div>
                           <span style={{
-                            fontSize: "0.62rem", fontWeight: active ? 700 : 500,
+                            fontSize: "0.68rem", fontWeight: active ? 700 : 500,
                             color: active ? "var(--color-green)" : "var(--color-text-muted)",
-                            letterSpacing: "0.02em",
+                            letterSpacing: "0.02em", position: "relative", zIndex: 1
                           }}>
                             {s.label}
                           </span>
-                        </button>
+                        </motion.button>
                       );
                     })}
                   </div>
                 </div>
 
-                {/* Selector de color de fondo */}
-                <div>
-                  <label className="dp-label" style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 12 }}>
-                    <Palette size={12} /> Color de Fondo
-                  </label>
-                  <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-                    {BG_COLORS.map((c) => (
-                      <button
-                        key={c.hex}
-                        onClick={() => setBgColor(c.hex)}
-                        title={c.label}
-                        style={{
-                          width: 32, height: 32, borderRadius: "50%",
-                          background: `#${c.hex}`,
-                          border: "none", cursor: "pointer",
-                          outline: bgColor === c.hex ? "3px solid var(--color-green)" : "2px solid rgba(255,255,255,0.1)",
-                          outlineOffset: bgColor === c.hex ? 2 : 0,
-                          transition: "all 0.15s",
-                          transform: bgColor === c.hex ? "scale(1.2)" : "scale(1)",
-                          boxShadow: bgColor === c.hex ? `0 0 16px #${c.hex}88` : "none",
-                        }}
-                      />
-                    ))}
+                <div style={{ display: "flex", gap: 32, flexWrap: "wrap" }}>
+                  {/* Selector de color */}
+                  <div style={{ flex: 1, minWidth: 200 }}>
+                    <label className="dp-label" style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
+                      <Palette size={14} color="var(--color-blue)" /> Tono de Fondo
+                    </label>
+                    <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+                      {BG_COLORS.map((c) => (
+                        <motion.button
+                          whileHover={{ scale: 1.15 }}
+                          whileTap={{ scale: 0.9 }}
+                          key={c.hex}
+                          onClick={() => setBgColor(c.hex)}
+                          title={c.label}
+                          style={{
+                            width: 36, height: 36, borderRadius: "50%",
+                            background: `#${c.hex}`, border: "none", cursor: "pointer",
+                            boxShadow: bgColor === c.hex ? `0 0 0 3px #0f172a, 0 0 0 5px #${c.hex}, 0 10px 20px #${c.hex}66` : "0 4px 8px rgba(0,0,0,0.3)",
+                            transform: bgColor === c.hex ? "scale(1.1)" : "scale(1)",
+                            transition: "all 0.2s",
+                          }}
+                        />
+                      ))}
+                    </div>
                   </div>
-                </div>
 
-                {/* Seed / nombre */}
-                <div>
-                  <label className="dp-label" style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
-                    <Type size={12} /> Nombre o Descripción
-                  </label>
-                  <div style={{ display: "flex", gap: 8 }}>
-                    <input
-                      className="dp-input"
-                      style={{ flex: 1 }}
-                      value={seed}
-                      onChange={(e) => setSeed(e.target.value)}
-                      placeholder="Escribe un nombre para generar el avatar..."
-                    />
-                    <button
-                      className="btn btn-ghost"
-                      onClick={randomize}
-                      title="Generar aleatorio"
-                      style={{ flexShrink: 0 }}
-                    >
-                      <Shuffle size={14} />
-                    </button>
+                  {/* Seed input */}
+                  <div style={{ flex: 1, minWidth: 240 }}>
+                    <label className="dp-label" style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
+                      <Type size={14} color="var(--color-purple)" /> Generador de Patrón
+                    </label>
+                    <div style={{ position: "relative" }}>
+                      <input
+                        className="dp-input"
+                        value={seed}
+                        onChange={(e) => setSeed(e.target.value)}
+                        placeholder="Escribe tu nombre..."
+                        style={{ padding: "12px 48px 12px 16px", background: "rgba(0,0,0,0.2)", borderRadius: 12 }}
+                      />
+                      <button
+                        onClick={randomize}
+                        style={{
+                          position: "absolute", right: 6, top: 6, bottom: 6,
+                          width: 32, background: "rgba(255,255,255,0.05)", border: "none", borderRadius: 8,
+                          display: "flex", alignItems: "center", justifyContent: "center", color: "var(--color-text-muted)",
+                          cursor: "pointer", transition: "all 0.2s"
+                        }}
+                        title="Randomizar"
+                      >
+                        <Shuffle size={14} />
+                      </button>
+                    </div>
+                    <p style={{ fontSize: "0.68rem", color: "var(--color-text-muted)", marginTop: 8 }}>
+                      Escribe cualquier cosa. La IA generará un rostro único en tiempo real.
+                    </p>
                   </div>
-                  <p style={{ fontSize: "0.7rem", color: "var(--color-text-muted)", marginTop: 6 }}>
-                    El avatar cambia en tiempo real según el texto que escribas.
-                  </p>
                 </div>
 
               </div>
