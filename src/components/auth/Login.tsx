@@ -244,7 +244,7 @@ export function Login({ onLogin }: LoginProps) {
           animate={{ y: [-15, 15, -15] }}
           transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
           style={{
-            position: "absolute", top: "25%", left: "10%", maxWidth: 280,
+            position: "absolute", top: "12%", left: "6%", maxWidth: 280,
             background: "rgba(255,255,255,0.03)", backdropFilter: "blur(12px)",
             border: "1px solid rgba(255,255,255,0.08)", padding: "16px 20px",
             borderRadius: 20, display: "flex", alignItems: "center", gap: 14,
@@ -264,7 +264,7 @@ export function Login({ onLogin }: LoginProps) {
           animate={{ y: [15, -15, 15] }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 1 }}
           style={{
-            position: "absolute", bottom: "25%", right: "8%", maxWidth: 280,
+            position: "absolute", bottom: "12%", right: "6%", maxWidth: 280,
             background: "rgba(255,255,255,0.03)", backdropFilter: "blur(12px)",
             border: "1px solid rgba(255,255,255,0.08)", padding: "16px 20px",
             borderRadius: 20, display: "flex", alignItems: "center", gap: 14,
@@ -285,7 +285,7 @@ export function Login({ onLogin }: LoginProps) {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          style={{ position: "relative", zIndex: 1, textAlign: "center", padding: 40, maxWidth: 500 }}
+          style={{ position: "relative", zIndex: 1, textAlign: "center", padding: "40px 20px", maxWidth: 460 }}
         >
           <div style={{ 
             width: 84, height: 84, margin: "0 auto 32px", borderRadius: 28, 
