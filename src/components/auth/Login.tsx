@@ -225,7 +225,7 @@ export function Login({ onLogin }: LoginProps) {
           style={{ width: "100%", height: "100%" }}
         >
           <img
-            src="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?q=80&w=1470&auto=format&fit=crop"
+            src="https://images.unsplash.com/photo-1551280336-6218d6db3648?q=80&w=1470&auto=format&fit=crop"
             alt="Sports Analytics"
             style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.75 }}
           />
