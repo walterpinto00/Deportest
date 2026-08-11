@@ -9,9 +9,10 @@ type Role = "ENTRENADOR" | "APRENDIZ";
 interface HeaderProps {
   role: Role;
   onRoleChange: (r: Role) => void;
+  onLogout: () => void;
 }
 
-export function Header({ role, onRoleChange }: HeaderProps) {
+export function Header({ role, onRoleChange, onLogout }: HeaderProps) {
   return (
     <header
       style={{
@@ -103,6 +104,25 @@ export function Header({ role, onRoleChange }: HeaderProps) {
             <option value="ENTRENADOR" style={{ background: "#1a2236" }}>Entrenador</option>
             <option value="APRENDIZ" style={{ background: "#1a2236" }}>Aprendiz</option>
           </select>
+          <button 
+            onClick={onLogout}
+            style={{
+              background: "transparent",
+              border: "none",
+              color: "var(--color-rose)",
+              cursor: "pointer",
+              padding: "4px",
+              marginLeft: 8,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              borderRadius: "50%",
+              transition: "background 0.2s"
+            }}
+            title="Cerrar sesión"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          </button>
         </div>
       </div>
     </header>
