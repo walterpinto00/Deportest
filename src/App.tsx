@@ -3,7 +3,7 @@
 // ─────────────────────────────────────────────
 import React, { useState } from "react";
 import {
-  Users, Activity, FileText, BarChart2, BrainCircuit, Check,
+  Users, Activity, FileText, BarChart2, BrainCircuit, Check, LayoutDashboard
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -14,23 +14,25 @@ import { TabAntropometria } from "./components/tabs/TabAntropometria";
 import { TabPruebas }       from "./components/tabs/TabPruebas";
 import { TabNutricionAI }   from "./components/tabs/TabNutricionAI";
 import { TabGraficas }      from "./components/tabs/TabGraficas";
+import { TabDashboard }     from "./components/tabs/TabDashboard";
 import { Login }            from "./components/auth/Login";
 
 type Role   = "ENTRENADOR" | "APRENDIZ";
-type TabId  = "usuarios" | "antropometria" | "pruebas" | "ia" | "graficas";
+type TabId  = "dashboard" | "usuarios" | "antropometria" | "pruebas" | "ia" | "graficas";
 
 const ALL_TABS: TabConfig[] = [
+  { id: "dashboard",     icon: LayoutDashboard, label: "Dashboard General",      color: "var(--color-blue)",   allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
   { id: "usuarios",      icon: Users,       label: "Usuarios & Roles",        color: "var(--color-green)",  allowedRoles: ["ENTRENADOR"] },
   { id: "antropometria", icon: FileText,     label: "Ficha Antropométrica",    color: "var(--color-teal)",   allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
   { id: "pruebas",       icon: Activity,    label: "Pruebas Físicas",          color: "var(--color-rose)",   allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
   { id: "ia",            icon: BrainCircuit,label: "IA · Nutrición",           color: "var(--color-purple)", allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
-  { id: "graficas",      icon: BarChart2,   label: "Gráficas de Salud",        color: "var(--color-blue)",   allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
+  { id: "graficas",      icon: BarChart2,   label: "Gráficas de Salud",        color: "var(--color-amber)",  allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
 ];
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [role, setRole]         = useState<Role>("ENTRENADOR");
-  const [activeTab, setActiveTab] = useState<TabId>("antropometria");
+  const [activeTab, setActiveTab] = useState<TabId>("dashboard");
   const [toast, setToast]       = useState<string | null>(null);
 
   const notify = (msg: string) => {
@@ -40,7 +42,7 @@ export default function App() {
 
   const handleRoleChange = (r: Role) => {
     setRole(r);
-    setActiveTab("antropometria");
+    setActiveTab("dashboard");
   };
 
   const handleLogin = (r: Role) => {
@@ -74,6 +76,7 @@ export default function App() {
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
           >
+            {activeTab === "dashboard"     && <TabDashboard />}
             {activeTab === "usuarios"      && <TabUsuarios      onSave={() => notify("✓ Usuario registrado correctamente.")} />}
             {activeTab === "antropometria" && <TabAntropometria role={role} onSave={() => notify("✓ Ficha antropométrica guardada.")} />}
             {activeTab === "pruebas"       && <TabPruebas       role={role} onSave={() => notify("✓ Resultado de prueba registrado.")} />}
