@@ -6,3 +6,9 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Scripts locales (no subir)
+commit_script.js
+make_commits.ps1
+metadata.json
+seguridad/
