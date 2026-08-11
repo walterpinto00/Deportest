@@ -209,7 +209,7 @@ export function Login({ onLogin }: LoginProps) {
         </motion.div>
       </div>
 
-      {/* ── LADO DERECHO: IMAGEN DE PORTADA ── */}
+      {/* ── LADO DERECHO: DISEÑO ABSTRACTO (Sencillo pero bonito) ── */}
       <div style={{
         position: "relative",
         display: "flex",
@@ -217,24 +217,45 @@ export function Login({ onLogin }: LoginProps) {
         justifyContent: "center",
         overflow: "hidden",
         borderLeft: "1px solid rgba(255,255,255,0.05)",
+        background: "linear-gradient(135deg, #020617 0%, #0f172a 100%)",
       }}>
-        <motion.div
-          initial={{ opacity: 0, scale: 1.05 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.2, ease: "easeOut" }}
-          style={{ width: "100%", height: "100%" }}
-        >
-          <img
-            src="https://images.unsplash.com/photo-1551280336-6218d6db3648?q=80&w=1470&auto=format&fit=crop"
-            alt="Sports Analytics"
-            style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.75 }}
-          />
-          {/* Overlay Gradient para integrar la imagen con el fondo oscuro */}
-          <div style={{
-            position: "absolute", inset: 0,
-            background: "linear-gradient(to right, #020617 0%, transparent 40%, rgba(2,6,23,0.4) 100%)",
-          }} />
-        </motion.div>
+        {/* Glows */}
+        <div style={{
+          position: "absolute", top: "15%", left: "15%", width: 500, height: 500,
+          background: "radial-gradient(circle, rgba(34,197,94,0.12) 0%, transparent 70%)",
+          filter: "blur(80px)", borderRadius: "50%",
+        }} />
+        <div style={{
+          position: "absolute", bottom: "10%", right: "10%", width: 600, height: 600,
+          background: "radial-gradient(circle, rgba(56,189,248,0.08) 0%, transparent 70%)",
+          filter: "blur(100px)", borderRadius: "50%",
+        }} />
+        
+        {/* Grid pattern */}
+        <div style={{
+          position: "absolute", inset: 0,
+          backgroundImage: "linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)",
+          backgroundSize: "40px 40px",
+          opacity: 0.7,
+        }} />
+
+        {/* Mensaje Inspiracional */}
+        <div style={{ position: "relative", zIndex: 1, textAlign: "center", padding: 40, maxWidth: 500 }}>
+          <div style={{ 
+            width: 80, height: 80, margin: "0 auto 32px", borderRadius: 24, 
+            background: "linear-gradient(135deg, rgba(34,197,94,0.15), rgba(16,185,129,0.05))", 
+            border: "1px solid rgba(34,197,94,0.3)", display: "flex", alignItems: "center", justifyContent: "center",
+            boxShadow: "0 16px 32px rgba(34,197,94,0.15)"
+          }}>
+            <Activity size={40} color="var(--color-green)" strokeWidth={2.5} />
+          </div>
+          <h2 style={{ fontSize: "2.5rem", fontWeight: 800, color: "#fff", letterSpacing: "-0.03em", marginBottom: 20, lineHeight: 1.1 }}>
+            Rendimiento al<br />Máximo Nivel
+          </h2>
+          <p style={{ color: "rgba(255,255,255,0.6)", fontSize: "1.1rem", lineHeight: 1.6, fontWeight: 500 }}>
+            Plataforma inteligente para el control y seguimiento deportivo de aprendices.
+          </p>
+        </div>
       </div>
     </div>
   );
