@@ -1,6 +1,5 @@
 // ─────────────────────────────────────────────────────────────
-// Login.tsx — Inicio de Sesión Institucional DEPORTEST PRO
-// Rediseño de alta gama, sobrio, confiable y profesional
+// Login.tsx — Inicio de Sesión DEPORTEST PRO (Sencillo, Visual y Limpio)
 // ─────────────────────────────────────────────────────────────
 import React, { useState } from "react";
 import { motion } from "framer-motion";
@@ -11,10 +10,9 @@ import {
   ShieldCheck,
   User,
   Activity,
-  FileText,
-  Award,
-  Sparkles,
+  Flame,
   CheckCircle2,
+  TrendingUp,
 } from "lucide-react";
 
 interface LoginProps {
@@ -33,16 +31,16 @@ export function Login({ onLogin }: LoginProps) {
 
     if (!forceRole) {
       if (!email || !password) {
-        setError("Por favor completa las credenciales de acceso.");
+        setError("Por favor completa los dos campos para ingresar.");
         return;
       }
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
-        setError("Ingresa un correo institucional válido (ej: usuario@sena.edu.co).");
+        setError("Ingresa un correo válido (ej: usuario@sena.edu.co).");
         return;
       }
       if (password.length < 6) {
-        setError("La contraseña debe tener un mínimo de 6 caracteres.");
+        setError("La contraseña debe tener mínimo 6 caracteres.");
         return;
       }
     }
@@ -58,7 +56,7 @@ export function Login({ onLogin }: LoginProps) {
       } else {
         onLogin("APRENDIZ");
       }
-    }, 700);
+    }, 600);
   };
 
   const handleQuickLogin = (role: "ENTRENADOR" | "APRENDIZ") => {
@@ -72,49 +70,48 @@ export function Login({ onLogin }: LoginProps) {
       style={{
         minHeight: "100vh",
         display: "grid",
-        gridTemplateColumns: "1fr 1fr",
+        gridTemplateColumns: "1.1fr 0.9fr",
         background: "var(--color-bg)",
         position: "relative",
       }}
     >
-      {/* ── COLUMNA IZQUIERDA: FORMULARIO DE ACCESO ── */}
+      {/* ── COLUMNA IZQUIERDA: FORMULARIO LIMPIO ── */}
       <div
         style={{
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          padding: "48px 32px",
+          padding: "40px",
           position: "relative",
           zIndex: 2,
         }}
       >
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          style={{ width: "100%", maxWidth: 410 }}
+          transition={{ duration: 0.4 }}
+          style={{ width: "100%", maxWidth: 390 }}
         >
-          {/* Cabecera / Identidad */}
-          <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 36 }}>
+          {/* Logo y Nombre */}
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 32 }}>
             <div
               style={{
                 width: 44,
                 height: 44,
                 borderRadius: 12,
-                background: "linear-gradient(135deg, rgba(16,185,129,0.2), rgba(16,185,129,0.06))",
-                border: "1px solid rgba(16,185,129,0.3)",
+                background: "linear-gradient(135deg, var(--color-green), #059669)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                color: "var(--color-green)",
-                boxShadow: "0 6px 20px rgba(16,185,129,0.15)",
+                color: "#ffffff",
+                boxShadow: "0 6px 20px rgba(16,185,129,0.3)",
               }}
             >
               <Activity size={22} />
             </div>
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <h1 style={{ fontSize: "1.25rem", fontWeight: 800, letterSpacing: "-0.03em" }}>
+                <h1 style={{ fontSize: "1.2rem", fontWeight: 800, letterSpacing: "-0.02em" }}>
                   DEPORTEST
                 </h1>
                 <span
@@ -122,53 +119,48 @@ export function Login({ onLogin }: LoginProps) {
                     fontSize: "0.65rem",
                     padding: "2px 7px",
                     borderRadius: 99,
-                    background: "rgba(16, 185, 129, 0.12)",
+                    background: "rgba(16, 185, 129, 0.15)",
                     color: "var(--color-green)",
                     fontWeight: 700,
-                    letterSpacing: "0.06em",
-                    border: "1px solid rgba(16, 185, 129, 0.25)",
                   }}
                 >
-                  PRO
+                  SENA
                 </span>
               </div>
-              <p style={{ fontSize: "0.72rem", color: "var(--color-text-secondary)", letterSpacing: "0.02em" }}>
-                Plataforma de Alto Rendimiento · SENA
+              <p style={{ fontSize: "0.74rem", color: "var(--color-text-secondary)" }}>
+                Plataforma Deportiva Escolar
               </p>
             </div>
           </div>
 
-          <div style={{ marginBottom: 28 }}>
-            <h2 style={{ fontSize: "1.65rem", fontWeight: 800, letterSpacing: "-0.03em", marginBottom: 6 }}>
+          <div style={{ marginBottom: 24 }}>
+            <h2 style={{ fontSize: "1.5rem", fontWeight: 800, letterSpacing: "-0.02em", color: "#ffffff", marginBottom: 4 }}>
               Iniciar Sesión
             </h2>
-            <p style={{ fontSize: "0.83rem", color: "var(--color-text-secondary)" }}>
-              Ingresa tus credenciales autorizadas para acceder al portal.
+            <p style={{ fontSize: "0.82rem", color: "var(--color-text-secondary)" }}>
+              Ingresa al sistema para gestionar o consultar registros.
             </p>
           </div>
 
-          {/* Formulario */}
-          <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+          <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             {error && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
+              <div
                 style={{
-                  background: "rgba(244, 63, 94, 0.08)",
-                  border: "1px solid rgba(244, 63, 94, 0.25)",
-                  borderRadius: 10,
-                  padding: "10px 14px",
+                  background: "rgba(244, 63, 94, 0.1)",
+                  border: "1px solid rgba(244, 63, 94, 0.3)",
+                  borderRadius: 8,
+                  padding: "10px 12px",
                   color: "var(--color-rose)",
                   fontSize: "0.78rem",
                   fontWeight: 600,
                 }}
               >
                 {error}
-              </motion.div>
+              </div>
             )}
 
             <div>
-              <label className="dp-label">Correo Electrónico Institucional</label>
+              <label className="dp-label" style={{ marginBottom: 6 }}>Correo Institucional</label>
               <div style={{ position: "relative" }}>
                 <div style={{ position: "absolute", left: 14, top: 12, color: "var(--color-text-muted)" }}>
                   <Mail size={16} />
@@ -188,7 +180,7 @@ export function Login({ onLogin }: LoginProps) {
             <div>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
                 <label className="dp-label" style={{ marginBottom: 0 }}>Contraseña</label>
-                <a href="#" style={{ fontSize: "0.72rem", color: "var(--color-green)", textDecoration: "none", fontWeight: 600 }}>
+                <a href="#" style={{ fontSize: "0.72rem", color: "var(--color-green)", textDecoration: "none" }}>
                   ¿Olvidaste tu contraseña?
                 </a>
               </div>
@@ -221,7 +213,7 @@ export function Login({ onLogin }: LoginProps) {
               }}
             >
               {loading ? (
-                <span>Validando credenciales...</span>
+                <span>Ingresando...</span>
               ) : (
                 <>
                   Entrar a la Plataforma <ArrowRight size={15} />
@@ -230,24 +222,16 @@ export function Login({ onLogin }: LoginProps) {
             </button>
           </form>
 
-          {/* Acceso Rápido / Roles de Prueba */}
-          <div style={{ marginTop: 32, paddingTop: 20, borderTop: "1px solid var(--color-border)" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 12 }}>
-              <ShieldCheck size={14} color="var(--color-green)" />
-              <span style={{ fontSize: "0.72rem", color: "var(--color-text-muted)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em" }}>
-                Accesos de Demostración Rápida
-              </span>
-            </div>
-
+          {/* Accesos rápidos de prueba */}
+          <div style={{ marginTop: 28, paddingTop: 18, borderTop: "1px solid var(--color-border)" }}>
+            <span style={{ fontSize: "0.7rem", color: "var(--color-text-muted)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", display: "block", marginBottom: 10 }}>
+              Acceso Rápido (Demostración)
+            </span>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
               <button
                 onClick={() => handleQuickLogin("ENTRENADOR")}
                 className="btn btn-secondary"
-                style={{
-                  justifyContent: "center",
-                  fontSize: "0.78rem",
-                  padding: "9px 12px",
-                }}
+                style={{ justifyContent: "center", fontSize: "0.78rem", padding: "8px 12px" }}
                 disabled={loading}
               >
                 <User size={13} color="var(--color-green)" /> Rol Entrenador
@@ -255,11 +239,7 @@ export function Login({ onLogin }: LoginProps) {
               <button
                 onClick={() => handleQuickLogin("APRENDIZ")}
                 className="btn btn-secondary"
-                style={{
-                  justifyContent: "center",
-                  fontSize: "0.78rem",
-                  padding: "9px 12px",
-                }}
+                style={{ justifyContent: "center", fontSize: "0.78rem", padding: "8px 12px" }}
                 disabled={loading}
               >
                 <User size={13} color="var(--color-text-secondary)" /> Rol Aprendiz
@@ -269,137 +249,189 @@ export function Login({ onLogin }: LoginProps) {
         </motion.div>
       </div>
 
-      {/* ── COLUMNA DERECHA: PANEL INSTITUCIONAL Y DE CONFIANZA ── */}
+      {/* ── COLUMNA DERECHA: TARJETA VISUAL ATRACTIVA (CERO TEXTOS LARGOS) ── */}
       <div
         style={{
           position: "relative",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          padding: "48px",
+          padding: "40px",
           borderLeft: "1px solid var(--color-border)",
-          background: "linear-gradient(135deg, #090e1a 0%, #070a12 100%)",
+          background: "linear-gradient(135deg, #090e1a 0%, #060911 100%)",
           overflow: "hidden",
         }}
       >
-        {/* Glow ambiental de fondo */}
+        {/* Glow sutil */}
         <div
           style={{
             position: "absolute",
-            width: 450,
-            height: 450,
+            width: 380,
+            height: 380,
             borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(16,185,129,0.08) 0%, transparent 70%)",
-            filter: "blur(60px)",
+            background: "radial-gradient(circle, rgba(16,185,129,0.12) 0%, transparent 70%)",
+            filter: "blur(50px)",
             pointerEvents: "none",
           }}
         />
 
-        {/* Tarjeta central ejecutiva */}
+        {/* Tarjeta de Atleta / Ficha de Ejemplo (Visual, limpia y atractiva) */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.96 }}
+          initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.4 }}
           className="glass-elevated"
           style={{
-            maxWidth: 460,
-            padding: 36,
+            width: "100%",
+            maxWidth: 380,
+            padding: "28px",
             borderRadius: 20,
-            position: "relative",
-            zIndex: 1,
+            border: "1px solid rgba(16, 185, 129, 0.25)",
+            boxShadow: "0 16px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(16, 185, 129, 0.08)",
             display: "flex",
             flexDirection: "column",
-            gap: 24,
+            gap: 20,
+            position: "relative",
+            zIndex: 1,
           }}
         >
-          <div>
-            <div
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 6,
-                padding: "4px 10px",
-                borderRadius: 99,
-                background: "rgba(16, 185, 129, 0.1)",
-                border: "1px solid rgba(16, 185, 129, 0.2)",
-                fontSize: "0.72rem",
-                color: "var(--color-green)",
-                fontWeight: 600,
-                marginBottom: 16,
-              }}
-            >
-              <Sparkles size={12} />
-              <span>Sistema Oficial de Acondicionamiento Físico</span>
+          {/* Header de la tarjeta */}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <div
+                style={{
+                  width: 44,
+                  height: 44,
+                  borderRadius: "50%",
+                  background: "linear-gradient(135deg, #10b981, #06b6d4)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "#070a12",
+                  fontWeight: 800,
+                  fontSize: "1rem",
+                }}
+              >
+                JR
+              </div>
+              <div>
+                <h3 style={{ fontSize: "0.95rem", fontWeight: 700, color: "#ffffff" }}>
+                  Juan Camilo R.
+                </h3>
+                <p style={{ fontSize: "0.72rem", color: "var(--color-text-secondary)" }}>
+                  Grado 10°B · Atletismo Escolar
+                </p>
+              </div>
             </div>
 
-            <h3 style={{ fontSize: "1.65rem", fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.25, marginBottom: 12 }}>
-              Precisión Atlética y Salud Integral para Aprendices
-            </h3>
-
-            <p style={{ fontSize: "0.84rem", color: "var(--color-text-secondary)", lineHeight: 1.65 }}>
-              Centraliza las evaluaciones antropométricas, pruebas físicas estandarizadas y pautas de nutrición en un entorno clínico digital diseñado para instructores y deportistas.
-            </p>
+            <span
+              style={{
+                fontSize: "0.68rem",
+                padding: "3px 8px",
+                borderRadius: 99,
+                background: "rgba(16, 185, 129, 0.15)",
+                color: "var(--color-green)",
+                fontWeight: 700,
+                border: "1px solid rgba(16, 185, 129, 0.3)",
+              }}
+            >
+              Apto ✓
+            </span>
           </div>
 
-          {/* Indicadores institucionales */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            {[
-              {
-                icon: FileText,
-                titulo: "Fichas Antropométricas Clínicas",
-                desc: "Medición de perímetros, pliegues y cálculo automático de IMC según la OMS.",
-              },
-              {
-                icon: Award,
-                titulo: "Baremos y Pruebas Físicas",
-                desc: "Evaluación continua de tests atléticos (Cooper, Ruffier, Velocidad y Salto).",
-              },
-              {
-                icon: CheckCircle2,
-                titulo: "Reportes Exportables para Padres y Directivas",
-                desc: "Generación de informes estructurados listos para imprimir o archivar en PDF.",
-              },
-            ].map((item, i) => {
-              const Icon = item.icon;
-              return (
-                <div
-                  key={i}
-                  style={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                    gap: 14,
-                    padding: "12px 14px",
-                    borderRadius: 10,
-                    background: "rgba(255, 255, 255, 0.02)",
-                    border: "1px solid rgba(255, 255, 255, 0.05)",
-                  }}
-                >
-                  <div
-                    style={{
-                      width: 32,
-                      height: 32,
-                      borderRadius: 8,
-                      background: "rgba(16, 185, 129, 0.1)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      color: "var(--color-green)",
-                      flexShrink: 0,
-                    }}
-                  >
-                    <Icon size={16} />
-                  </div>
-                  <div>
-                    <div style={{ fontSize: "0.82rem", fontWeight: 700, color: "var(--color-text-primary)" }}>
-                      {item.titulo}
-                    </div>
-                    <div style={{ fontSize: "0.73rem", color: "var(--color-text-muted)", marginTop: 2 }}>
-                      {item.desc}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+          {/* Puntaje Grande y Visual */}
+          <div
+            style={{
+              padding: "16px 20px",
+              borderRadius: 14,
+              background: "rgba(255, 255, 255, 0.03)",
+              border: "1px solid rgba(255, 255, 255, 0.07)",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <div>
+              <span style={{ fontSize: "0.7rem", color: "var(--color-text-muted)", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 600 }}>
+                Aptitud Física General
+              </span>
+              <div style={{ fontSize: "1.85rem", fontWeight: 900, color: "#ffffff", letterSpacing: "-0.02em", marginTop: 2 }}>
+                88 <span style={{ fontSize: "1rem", color: "var(--color-green)", fontWeight: 700 }}>/ 100 pts</span>
+              </div>
+            </div>
+
+            <div
+              style={{
+                width: 42,
+                height: 42,
+                borderRadius: 12,
+                background: "rgba(16, 185, 129, 0.12)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "var(--color-green)",
+              }}
+            >
+              <TrendingUp size={20} />
+            </div>
+          </div>
+
+          {/* 3 Métricas Claras y Fáciles de Leer */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
+            <div
+              style={{
+                padding: "12px 10px",
+                borderRadius: 10,
+                background: "rgba(255, 255, 255, 0.02)",
+                border: "1px solid rgba(255, 255, 255, 0.05)",
+                textAlign: "center",
+              }}
+            >
+              <div style={{ fontSize: "1.05rem", fontWeight: 800, color: "#ffffff" }}>2.450m</div>
+              <div style={{ fontSize: "0.65rem", color: "var(--color-text-muted)", marginTop: 2 }}>Resistencia</div>
+            </div>
+
+            <div
+              style={{
+                padding: "12px 10px",
+                borderRadius: 10,
+                background: "rgba(255, 255, 255, 0.02)",
+                border: "1px solid rgba(255, 255, 255, 0.05)",
+                textAlign: "center",
+              }}
+            >
+              <div style={{ fontSize: "1.05rem", fontWeight: 800, color: "#ffffff" }}>48 reps</div>
+              <div style={{ fontSize: "0.65rem", color: "var(--color-text-muted)", marginTop: 2 }}>Flexiones</div>
+            </div>
+
+            <div
+              style={{
+                padding: "12px 10px",
+                borderRadius: 10,
+                background: "rgba(255, 255, 255, 0.02)",
+                border: "1px solid rgba(255, 255, 255, 0.05)",
+                textAlign: "center",
+              }}
+            >
+              <div style={{ fontSize: "1.05rem", fontWeight: 800, color: "var(--color-green)" }}>21.0</div>
+              <div style={{ fontSize: "0.65rem", color: "var(--color-text-muted)", marginTop: 2 }}>IMC Saludable</div>
+            </div>
+          </div>
+
+          {/* Pie de la tarjeta */}
+          <div
+            style={{
+              paddingTop: 14,
+              borderTop: "1px solid rgba(255, 255, 255, 0.06)",
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              fontSize: "0.74rem",
+              color: "var(--color-text-secondary)",
+            }}
+          >
+            <CheckCircle2 size={14} color="var(--color-green)" />
+            <span>Ficha antropométrica y pruebas al día (2026)</span>
           </div>
         </motion.div>
       </div>
