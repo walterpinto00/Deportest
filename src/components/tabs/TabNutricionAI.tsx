@@ -1,8 +1,9 @@
 // ─────────────────────────────────────────────────────────────
 // TabNutricionAI.tsx — Orientación Nutricional & Hábitos Saludables
-// Rediseño institucional, sobrio, profesional y adaptado a colegios/SENA
+// Diseño vivo, interactivo, fácil, atractivo y de alto impacto visual (Estilo Apple Health / Whoop)
 // ─────────────────────────────────────────────────────────────
 import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Sparkles,
   Save,
@@ -15,11 +16,13 @@ import {
   Activity,
   Dumbbell,
   FileText,
-  UserCheck,
-  Flame,
-  ShieldCheck,
+  Printer,
   ChevronRight,
-  Printer
+  ShieldCheck,
+  Flame,
+  Check,
+  SlidersHorizontal,
+  Zap,
 } from "lucide-react";
 import { Select } from "../ui/Select";
 import { Input } from "../ui/Input";
@@ -28,7 +31,7 @@ interface TabNutricionAIProps {
   onSave: () => void;
 }
 
-// ── Datos estructurados realistas (Enfoque Escolar / Formativo) ──────
+// Datos completos conservados (sin quitar ninguna función)
 const PLAN_DATA = {
   perfil: {
     nombre: "Juan Camilo Rodríguez",
@@ -36,117 +39,125 @@ const PLAN_DATA = {
     somatotipo: "Mesomorfo",
     peso: "62.0 kg",
     talla: "1.72 m",
-    imc: "21.0 (Saludable)",
+    imc: "21.0 (Rango Saludable)",
     evaluacionFisica: {
-      navette: { label: "Aceptable", valor: "Período 6.5", estado: "normal" },
-      flexibilidad: { label: "Bueno", valor: "+3 cm (Wells)", estado: "bueno" },
-      abdominales: { label: "Satisfactorio", valor: "28 en 1 min", estado: "bueno" },
+      navette: { label: "Aceptable", valor: "Período 6.5" },
+      flexibilidad: { label: "Bueno", valor: "+3 cm (Wells)" },
+      abdominales: { label: "Satisfactorio", valor: "28 reps / min" },
     },
-    objetivo: "Hábitos Saludables y Condición Física Escolar",
+    objetivo: "Hábitos Saludables & Rendimiento Escolar",
     calorias: 2200,
     macros: { carbs: 55, protein: 20, fat: 25 },
   },
   nutricion: {
     calorias: 2200,
     distribucion: [
-      { macro: "Carbohidratos complejos", pct: 55, gramos: "302 g", nota: "Avena, frutas, arroz, legumbres" },
-      { macro: "Proteínas naturales", pct: 20, gramos: "110 g", nota: "Huevos, pescado, pollo, lácteos" },
-      { macro: "Grasas saludables", pct: 25, gramos: "61 g", nota: "Aguacate, frutos secos, aceite de oliva" },
+      { macro: "Carbohidratos", pct: 55, gramos: "302 g", color: "#10b981" },
+      { macro: "Proteínas", pct: 20, gramos: "110 g", color: "#06b6d4" },
+      { macro: "Grasas Saludables", pct: 25, gramos: "61 g", color: "#3b82f6" },
     ],
     comidas: [
       {
+        id: "desayuno",
         momento: "Desayuno en Casa",
         hora: "06:30 am",
         kcal: 500,
-        enfoque: "Energía sostenida y concentración escolar",
+        enfoque: "Energía sostenida y concentración en clase",
         alimentos: [
           "Porción de avena cocida en leche descremada con canela",
-          "1 huevo revuelto o cocido (preparado con poco aceite)",
-          "1 porción de fruta fresca (papaya, banano o manzana)",
-          "Vaso de agua natural",
+          "1 huevo revuelto o cocido con poco aceite",
+          "1 porción de fruta fresca (banano, papaya o manzana)",
+          "Vaso grande de agua natural",
         ],
       },
       {
+        id: "lonchera",
         momento: "Refrigerio / Lonchera Escolar",
         hora: "09:45 am",
         kcal: 250,
         enfoque: "Pausa activa saludable (sin ultraprocesados)",
         alimentos: [
-          "1 fruta entera de temporada con piel lavada",
-          "Puñado pequeño de frutos secos naturales (maní, nueces)",
+          "1 fruta entera de temporada lavada (manzana o pera)",
+          "Puñado de frutos secos naturales (maní sin sal, almendras)",
           "Botella de agua (500 ml) para recargar en la jornada",
         ],
       },
       {
+        id: "almuerzo",
         momento: "Almuerzo Balanceado",
         hora: "01:15 pm",
         kcal: 750,
-        enfoque: "Plato del Buen Comer (1/2 vegetales, 1/4 proteína, 1/4 carbohidrato)",
+        enfoque: "Plato del Buen Comer (50% vegetales, 25% proteína, 25% carbohidratos)",
         alimentos: [
           "120 g de pechuga de pollo, pescado o carne magra a la plancha",
-          "1 taza mediana de arroz o papa cocida con cáscara",
-          "Ensalada fresca abundante (zanahoria, tomate, pepino con limón)",
-          "Porción de legumbres (lentejas o frijoles, 2-3 veces por semana)",
+          "1 taza mediana de arroz o papa cocida",
+          "Ensalada fresca abundante (tomate, zanahoria, pepino y limón)",
+          "Porción de legumbres (frijoles o lentejas, 2 a 3 veces por semana)",
         ],
       },
       {
+        id: "merienda",
         momento: "Merienda Pre-Actividad",
         hora: "04:30 pm",
         kcal: 250,
-        enfoque: "Energía antes de educación física o recreación",
+        enfoque: "Energía antes de entrenar o jugar",
         alimentos: [
-          "1 yogur natural o leche descremada",
+          "1 yogur natural o vaso de leche descremada",
           "1 tostada o galleta integral con queso bajo en grasa",
-          "Hidratación continua con agua",
+          "Hidratación continua con agua pura",
         ],
       },
       {
+        id: "cena",
         momento: "Cena Ligera",
         hora: "07:30 pm",
         kcal: 450,
-        enfoque: "Digestión fácil para un sueño profundo y reparador",
+        enfoque: "Digestión fácil para un sueño reparador",
         alimentos: [
           "Tortilla francesa de 2 huevos con espinacas o champiñones",
-          "Porción moderada de vegetales al vapor o ensalada verde",
+          "Porción generosa de vegetales al vapor o ensalada verde",
           "Infusión aromática natural tibia (sin azúcar añadida)",
         ],
       },
     ],
   },
   actividadFisica: {
-    frecuencia: "3 a 4 días / semana",
-    enfoque: "Educación Física Formativa, Resistencia & Fuerza Funcional",
+    frecuencia: "3 a 4 días por semana",
+    enfoque: "Educación Física Formativa & Fuerza Funcional",
     sesiones: [
       {
-        dia: "Sesión 1 — Movilidad & Coordinación",
-        categoria: "Acondicionamiento General",
+        dia: "Sesión 1",
+        nombre: "Movilidad & Coordinación",
         duracion: "45 min",
+        intensidad: 65,
         actividades: [
-          { nombre: "Calentamiento articular dinámico", detalle: "10 min — tobillos, rodillas, cadera, hombros" },
-          { nombre: "Circuito de coordinación y escalera de agilidad", detalle: "3 series × 4 repeticiones a ritmo moderado" },
-          { nombre: "Juegos deportivos grupales (fútbol, baloncesto)", detalle: "20 min continuos" },
-          { nombre: "Vuelta a la calma y estiramiento muscular", detalle: "5 min — respiración consciente" },
+          { ej: "Calentamiento articular dinámico", detalle: "10 min — tobillos, rodillas, cadera y hombros" },
+          { ej: "Escalera de agilidad y coordinación", detalle: "3 series × 4 repeticiones a ritmo moderado" },
+          { ej: "Juegos deportivos cooperativos (fútbol, baloncesto)", detalle: "20 min continuos" },
+          { ej: "Vuelta a la calma y estiramiento muscular", detalle: "5 min — respiración guiada" },
         ],
       },
       {
-        dia: "Sesión 2 — Fuerza con Peso Corporal (Calistenia)",
-        categoria: "Desarrollo Muscular Formativo",
+        dia: "Sesión 2",
+        nombre: "Fuerza con Peso Corporal (Calistenia)",
         duracion: "40 min",
+        intensidad: 80,
         actividades: [
-          { nombre: "Sentadillas libres con técnica guiada", detalle: "3 series × 12 repeticiones" },
-          { nombre: "Flexiones de pecho (apoyo en rodillas si se requiere)", detalle: "3 series × 8-10 repeticiones" },
-          { nombre: "Plancha estática isométrica", detalle: "3 series × 30 segundos de contracción abdominal" },
-          { nombre: "Zancadas alternadas en el sitio", detalle: "3 series × 10 por pierna" },
+          { ej: "Sentadillas libres con técnica guiada", detalle: "3 series × 12 repeticiones" },
+          { ej: "Flexiones de pecho (apoyo en rodillas si se requiere)", detalle: "3 series × 8-10 repeticiones" },
+          { ej: "Plancha estática isométrica", detalle: "3 series × 30 segundos de contracción" },
+          { ej: "Zancadas alternadas en el sitio", detalle: "3 series × 10 por pierna" },
         ],
       },
       {
-        dia: "Sesión 3 — Capacidad Aeróbica & Recreación",
-        categoria: "Salud Cardiovascular",
+        dia: "Sesión 3",
+        nombre: "Capacidad Aeróbica & Recreación",
         duracion: "50 min",
+        intensidad: 75,
         actividades: [
-          { nombre: "Trote suave continuo o marcha deportiva", detalle: "15 min a ritmo conversacional" },
-          { nombre: "Prueba formativa de velocidad 30 metros", detalle: "3 repeticiones con recuperación amplia" },
-          { nombre: "Deporte recreativo al aire libre", detalle: "25 min de actividad continua" },
+          { ej: "Trote suave continuo o marcha deportiva", detalle: "15 min a ritmo conversacional" },
+          { ej: "Prueba formativa de velocidad 30 metros", detalle: "3 repeticiones con recuperación amplia" },
+          { ej: "Deporte recreativo al aire libre", detalle: "25 min de juego continuo" },
         ],
       },
     ],
@@ -154,39 +165,53 @@ const PLAN_DATA = {
   pautasSaludables: [
     {
       titulo: "Hidratación Constante con Agua",
-      descripcion: "Consumir al menos 2 litros de agua potable al día. Evitar bebidas energizantes, gaseosas y jugos ultraprocesados de caja.",
+      descripcion: "Consumir al menos 2 litros de agua pura al día. Evitar gaseosas, bebidas energizantes y refrescos azucarados.",
       icono: Droplets,
+      meta: "2.0 Litros / Día",
     },
     {
-      titulo: "Higiene del Sueño (8 a 9 horas)",
-      descripcion: "Dormir lo suficiente es vital para el crecimiento, la memoria escolar y la recuperación neuromuscular.",
+      titulo: "Higiene del Sueño Escolar",
+      descripcion: "Dormir de 8 a 9 horas diarias es fundamental para la memoria, la concentración en clase y el crecimiento físico.",
       icono: Moon,
+      meta: "8.5 Horas / Noche",
     },
     {
-      titulo: "Límite de Tiempo en Pantallas",
-      descripcion: "Limitar el uso de celular y videojuegos a un máximo de 2 horas recreativas al día para reducir el sedentarismo.",
+      titulo: "Control de Tiempo en Pantallas",
+      descripcion: "Limitar el uso recreativo de celular, televisión y videojuegos a un máximo de 2 horas al día para evitar el sedentarismo.",
       icono: Activity,
+      meta: "Máx. 2 Horas / Día",
     },
     {
-      titulo: "Revisión y Seguimiento Periódico",
-      descripcion: "Medir peso y talla al final de cada período académico para asegurar una curva de crecimiento saludable.",
+      titulo: "Control Periódico de Salud",
+      descripcion: "Verificar peso, talla y perímetro abdominal al cierre de cada período académico para asegurar una curva positiva.",
       icono: Heart,
+      meta: "Cada Período",
     },
   ],
 };
 
 export function TabNutricionAI({ onSave }: TabNutricionAIProps) {
   const [generating, setGenerating] = useState(false);
-  const [generated, setGenerated] = useState(true); // Inicializado listo para mostrar directamente
   const [activeTab, setActiveTab] = useState<"nutricion" | "actividad" | "habitos">("nutricion");
+  const [showConfig, setShowConfig] = useState(false);
   const [savedOk, setSavedOk] = useState(false);
+  const [activeSesion, setActiveSesion] = useState(0);
+  const [completedMeals, setCompletedMeals] = useState<Record<string, boolean>>({
+    desayuno: true,
+    lonchera: true,
+  });
+
+  const plan = PLAN_DATA;
+
+  const toggleMeal = (id: string) => {
+    setCompletedMeals((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
 
   const handleGenerate = () => {
     setGenerating(true);
     setTimeout(() => {
       setGenerating(false);
-      setGenerated(true);
-    }, 1200);
+    }, 1000);
   };
 
   const handleSave = () => {
@@ -195,266 +220,255 @@ export function TabNutricionAI({ onSave }: TabNutricionAIProps) {
     setTimeout(() => setSavedOk(false), 2500);
   };
 
-  const handlePrint = () => {
-    window.print();
-  };
-
-  const plan = PLAN_DATA;
-
   return (
-    <div className="animate-fade-in" style={{ display: "flex", gap: 24, alignItems: "flex-start" }}>
-
-      {/* ─── PANEL LATERAL: CONFIGURACIÓN Y PERFIL ─── */}
+    <div className="animate-fade-in" style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+      {/* ── 1. HERO BANNER VIVO: DASHBOARD DE BIENESTAR & CALORÍAS (Estilo Apple Fitness / Whoop) ── */}
       <div
         className="glass-elevated"
         style={{
-          width: 310,
-          flexShrink: 0,
-          display: "flex",
-          flexDirection: "column",
-          gap: 18,
-          padding: 22,
-          borderRadius: 14,
-          border: "1px solid rgba(255, 255, 255, 0.08)",
+          padding: "24px 28px",
+          borderRadius: 20,
+          background: "linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(6, 182, 212, 0.04) 50%, rgba(13, 18, 31, 0.95) 100%)",
+          border: "1px solid rgba(16, 185, 129, 0.2)",
+          boxShadow: "0 12px 36px rgba(0, 0, 0, 0.35), 0 0 24px rgba(16, 185, 129, 0.08)",
+          position: "relative",
+          overflow: "hidden",
         }}
       >
-        {/* Encabezado del módulo */}
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <div
-            style={{
-              width: 38,
-              height: 38,
-              borderRadius: 10,
-              background: "rgba(34, 197, 94, 0.12)",
-              border: "1px solid rgba(34, 197, 94, 0.25)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <ShieldCheck size={20} color="var(--color-green)" />
-          </div>
-          <div>
-            <h2 style={{ fontSize: "0.95rem", fontWeight: 700, letterSpacing: "-0.01em" }}>
-              Orientación y Salud
-            </h2>
-            <p style={{ fontSize: "0.72rem", color: "var(--color-text-secondary)" }}>
-              Guía de Hábitos & Actividad
-            </p>
-          </div>
-        </div>
-
-        <p style={{ fontSize: "0.78rem", color: "var(--color-text-secondary)", lineHeight: 1.6 }}>
-          Asistente inteligente para la generación de pautas saludables y actividad física en entorno escolar y formativo.
-        </p>
-
-        {/* Búsqueda / Selección de Alumno */}
-        <div>
-          <Input label="Identificación / Código Estudiantil" defaultValue="1001234567" />
-        </div>
-
-        {/* Ficha Resumen del Estudiante */}
+        {/* Glow de fondo */}
         <div
           style={{
-            background: "rgba(255, 255, 255, 0.02)",
-            border: "1px solid rgba(255, 255, 255, 0.06)",
-            borderRadius: 10,
-            padding: "14px 16px",
+            position: "absolute",
+            top: -60,
+            right: 40,
+            width: 260,
+            height: 260,
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, transparent 70%)",
+            filter: "blur(40px)",
+            pointerEvents: "none",
           }}
-        >
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
-            <span style={{ fontSize: "0.78rem", fontWeight: 700, color: "var(--color-text-primary)" }}>
-              {plan.perfil.nombre}
-            </span>
-            <span
+        />
+
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 20, position: "relative", zIndex: 1 }}>
+          {/* Identidad del Atleta / Estudiante */}
+          <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
+            <div
               style={{
-                fontSize: "0.68rem",
-                padding: "2px 8px",
-                borderRadius: 99,
-                background: "rgba(34, 197, 94, 0.15)",
-                color: "var(--color-green)",
-                fontWeight: 600,
+                width: 56,
+                height: 56,
+                borderRadius: 16,
+                background: "linear-gradient(135deg, var(--color-green), #059669)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "#ffffff",
+                boxShadow: "0 8px 24px rgba(16, 185, 129, 0.35)",
+                flexShrink: 0,
               }}
             >
-              {plan.perfil.grado}
-            </span>
+              <Zap size={28} />
+            </div>
+
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+                <h2 style={{ fontSize: "1.35rem", fontWeight: 800, letterSpacing: "-0.02em" }}>
+                  {plan.perfil.nombre}
+                </h2>
+                <span
+                  style={{
+                    fontSize: "0.7rem",
+                    padding: "3px 10px",
+                    borderRadius: 99,
+                    background: "rgba(16, 185, 129, 0.15)",
+                    color: "var(--color-green)",
+                    fontWeight: 700,
+                    border: "1px solid rgba(16, 185, 129, 0.3)",
+                  }}
+                >
+                  {plan.perfil.grado}
+                </span>
+                <span
+                  style={{
+                    fontSize: "0.7rem",
+                    padding: "3px 10px",
+                    borderRadius: 99,
+                    background: "rgba(255, 255, 255, 0.05)",
+                    color: "var(--color-text-secondary)",
+                    fontWeight: 600,
+                  }}
+                >
+                  {plan.perfil.somatotipo} · {plan.perfil.peso}
+                </span>
+              </div>
+
+              <p style={{ fontSize: "0.82rem", color: "var(--color-text-secondary)", marginTop: 4 }}>
+                Diagnóstico OMS: <strong style={{ color: "var(--color-green)" }}>{plan.perfil.imc}</strong> · Objetivo: <strong>{plan.perfil.objetivo}</strong>
+              </p>
+            </div>
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: 6, fontSize: "0.75rem" }}>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <span style={{ color: "var(--color-text-muted)" }}>Peso / Talla:</span>
-              <span style={{ fontWeight: 600 }}>{plan.perfil.peso} · {plan.perfil.talla}</span>
+          {/* Medidores Vivos (Calorías & Macros en tarjeta visual compacta) */}
+          <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
+            {/* Medidor Circular de Energía */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 14,
+                padding: "10px 18px",
+                borderRadius: 14,
+                background: "rgba(255, 255, 255, 0.03)",
+                border: "1px solid rgba(255, 255, 255, 0.08)",
+              }}
+            >
+              <div
+                style={{
+                  width: 44,
+                  height: 44,
+                  borderRadius: 12,
+                  background: "rgba(16, 185, 129, 0.15)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "var(--color-green)",
+                }}
+              >
+                <Flame size={22} />
+              </div>
+              <div>
+                <div style={{ fontSize: "1.45rem", fontWeight: 800, color: "#ffffff", lineHeight: 1 }}>
+                  ~{plan.nutricion.calorias.toLocaleString()}
+                </div>
+                <div style={{ fontSize: "0.68rem", color: "var(--color-text-muted)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", marginTop: 2 }}>
+                  kcal recomendadas / día
+                </div>
+              </div>
             </div>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <span style={{ color: "var(--color-text-muted)" }}>Diagnóstico IMC:</span>
-              <span style={{ fontWeight: 600, color: "var(--color-green)" }}>{plan.perfil.imc}</span>
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <span style={{ color: "var(--color-text-muted)" }}>Test Navette:</span>
-              <span style={{ fontWeight: 600 }}>{plan.perfil.evaluacionFisica.navette.valor}</span>
-            </div>
+
+            {/* Botón para abrir configuración de parámetros */}
+            <button
+              className="btn btn-secondary"
+              onClick={() => setShowConfig(!showConfig)}
+              style={{
+                padding: "10px 16px",
+                fontSize: "0.8rem",
+                borderRadius: 10,
+                borderColor: showConfig ? "var(--color-green)" : "rgba(255, 255, 255, 0.1)",
+                color: showConfig ? "var(--color-green)" : "var(--color-text-primary)",
+              }}
+            >
+              <SlidersHorizontal size={14} />
+              <span>{showConfig ? "Ocultar Parámetros" : "Ajustar Parámetros"}</span>
+            </button>
           </div>
         </div>
 
-        {/* Selectores de configuración */}
-        <Select label="Objetivo Pedagógico / Físico">
-          <option>Hábitos Saludables y Condición General</option>
-          <option>Acondicionamiento Físico Escolar</option>
-          <option>Prevención de Sedentarismo (Pausas Activas)</option>
-          <option>Rendimiento en Torneos Intercolegiados</option>
-        </Select>
+        {/* Barra de Distribución Nutricional Viva (Carbs, Proteína, Grasas) */}
+        <div style={{ marginTop: 20, paddingTop: 18, borderTop: "1px solid rgba(255, 255, 255, 0.06)" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+            <span style={{ fontSize: "0.74rem", fontWeight: 700, color: "var(--color-text-secondary)", letterSpacing: "0.04em", textTransform: "uppercase" }}>
+              Balance Óptimo de Macronutrientes
+            </span>
+            <div style={{ display: "flex", gap: 16 }}>
+              {plan.nutricion.distribucion.map((m) => (
+                <div key={m.macro} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: "0.74rem" }}>
+                  <div style={{ width: 8, height: 8, borderRadius: "50%", background: m.color }} />
+                  <span style={{ color: "var(--color-text-secondary)" }}>{m.macro}:</span>
+                  <strong style={{ color: "#ffffff" }}>{m.pct}% ({m.gramos})</strong>
+                </div>
+              ))}
+            </div>
+          </div>
 
-        <Select label="Nivel de Actividad en la Semana">
-          <option>Moderado (Clases de educación física + recreación)</option>
-          <option>Ligero (Mayormente sedentario fuera de clases)</option>
-          <option>Activo (Entrenamientos extracurriculares 3+ días)</option>
-        </Select>
-
-        {/* Botón de Asistente Inteligente */}
-        <button
-          className="btn"
-          style={{
-            background: "rgba(34, 197, 94, 0.15)",
-            border: "1px solid rgba(34, 197, 94, 0.35)",
-            color: "var(--color-green-light)",
-            justifyContent: "center",
-            padding: "11px 16px",
-            fontSize: "0.85rem",
-            fontWeight: 600,
-            borderRadius: 8,
-            transition: "all 0.2s",
-          }}
-          onClick={handleGenerate}
-          disabled={generating}
-        >
-          {generating ? (
-            <>
-              <RefreshCw size={15} style={{ animation: "spin 1s linear infinite" }} />
-              Actualizando recomendaciones...
-            </>
-          ) : (
-            <>
-              <Sparkles size={15} />
-              Reevaluar Pautas con Asistente
-            </>
-          )}
-        </button>
-
-        {/* Botones de acción */}
-        <div style={{ display: "flex", gap: 8, marginTop: 4 }}>
-          <button
-            className="btn btn-ghost"
-            style={{
-              flex: 1,
-              justifyContent: "center",
-              fontSize: "0.78rem",
-              padding: "9px 12px",
-              border: savedOk ? "1px solid var(--color-green)" : "1px solid rgba(255, 255, 255, 0.08)",
-              color: savedOk ? "var(--color-green)" : "var(--color-text-secondary)",
-            }}
-            onClick={handleSave}
-          >
-            {savedOk ? (
-              <><CheckCircle2 size={13} /> Guardado</>
-            ) : (
-              <><Save size={13} /> Guardar Ficha</>
-            )}
-          </button>
-
-          <button
-            className="btn btn-ghost"
-            style={{
-              flex: 1,
-              justifyContent: "center",
-              fontSize: "0.78rem",
-              padding: "9px 12px",
-              border: "1px solid rgba(255, 255, 255, 0.08)",
-              color: "var(--color-text-secondary)",
-            }}
-            onClick={handlePrint}
-            title="Imprimir boletín escolar"
-          >
-            <Printer size={13} /> Imprimir
-          </button>
+          {/* Barra segmentada brillante */}
+          <div style={{ height: 8, borderRadius: 99, background: "rgba(255, 255, 255, 0.06)", display: "flex", overflow: "hidden" }}>
+            <div style={{ width: "55%", background: "linear-gradient(90deg, #059669, #10b981)", transition: "width 0.4s ease" }} />
+            <div style={{ width: "20%", background: "linear-gradient(90deg, #0891b2, #06b6d4)", transition: "width 0.4s ease" }} />
+            <div style={{ width: "25%", background: "linear-gradient(90deg, #2563eb, #3b82f6)", transition: "width 0.4s ease" }} />
+          </div>
         </div>
       </div>
 
-      {/* ─── PANEL CENTRAL DE CONTENIDO ─── */}
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 18, minWidth: 0 }}>
-
-        {/* Resumen Principal Superior */}
-        <div
-          className="glass-elevated"
-          style={{
-            padding: "20px 24px",
-            borderRadius: 14,
-            border: "1px solid rgba(255, 255, 255, 0.08)",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            flexWrap: "wrap",
-            gap: 16,
-          }}
-        >
-          <div>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-              <span
-                style={{
-                  display: "inline-block",
-                  width: 8,
-                  height: 8,
-                  borderRadius: "50%",
-                  background: "var(--color-green)",
-                }}
-              />
-              <h3 style={{ fontSize: "1rem", fontWeight: 700, letterSpacing: "-0.01em" }}>
-                Guía de Bienestar & Rendimiento Integral
-              </h3>
+      {/* ── PANEL DESPLEGABLE DE AJUSTE (Si el usuario quiere editar) ── */}
+      <AnimatePresence>
+        {showConfig && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="glass"
+            style={{
+              padding: "20px 24px",
+              borderRadius: 16,
+              border: "1px solid rgba(16, 185, 129, 0.25)",
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr 1fr auto",
+              gap: 16,
+              alignItems: "flex-end",
+            }}
+          >
+            <div>
+              <Input label="Código del Estudiante" defaultValue="1001234567" />
             </div>
-            <p style={{ fontSize: "0.78rem", color: "var(--color-text-secondary)" }}>
-              Enfoque pedagógico: <strong style={{ color: "var(--color-text-primary)" }}>{plan.perfil.objetivo}</strong> · Requerimiento estimado: <strong>~{plan.nutricion.calorias} kcal/día</strong>
-            </p>
-          </div>
-
-          {/* Balance de Macronutrientes Limpio y Sobrio */}
-          <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
-            {plan.nutricion.distribucion.map((m) => (
-              <div
-                key={m.macro}
-                style={{
-                  padding: "8px 14px",
-                  borderRadius: 8,
-                  background: "rgba(255, 255, 255, 0.03)",
-                  border: "1px solid rgba(255, 255, 255, 0.06)",
-                  textAlign: "center",
-                }}
+            <div>
+              <Select label="Objetivo Formativo">
+                <option>Hábitos Saludables & Rendimiento Escolar</option>
+                <option>Acondicionamiento Físico General</option>
+                <option>Prevención de Sedentarismo (Pausas Activas)</option>
+                <option>Preparación Torneos Intercolegiados</option>
+              </Select>
+            </div>
+            <div>
+              <Select label="Nivel de Actividad Semanal">
+                <option>Moderado (Clases regulares + recreación)</option>
+                <option>Ligero (Baja actividad fuera del aula)</option>
+                <option>Activo (Entrena 3+ días extracurriculares)</option>
+              </Select>
+            </div>
+            <div>
+              <button
+                className="btn btn-primary"
+                onClick={handleGenerate}
+                disabled={generating}
+                style={{ padding: "10px 18px", fontSize: "0.82rem" }}
               >
-                <div style={{ fontSize: "0.95rem", fontWeight: 700, color: "var(--color-text-primary)" }}>
-                  {m.pct}%
-                </div>
-                <div style={{ fontSize: "0.68rem", color: "var(--color-text-muted)", marginTop: 2 }}>
-                  {m.macro.split(" ")[0]} ({m.gramos})
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+                {generating ? (
+                  <RefreshCw size={14} style={{ animation: "spin 1s linear infinite" }} />
+                ) : (
+                  <Sparkles size={14} />
+                )}
+                <span>Recalcular Plan</span>
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-        {/* Pestañas de Navegación del Módulo */}
+      {/* ── 2. SELECTOR DE PESTAÑAS TIPO SEGMENTED CONTROL (Sencillo, limpio, fácil) ── */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: 12,
+        }}
+      >
         <div
           style={{
-            display: "flex",
-            gap: 6,
-            background: "rgba(255, 255, 255, 0.02)",
+            display: "inline-flex",
+            background: "rgba(255, 255, 255, 0.04)",
+            border: "1px solid rgba(255, 255, 255, 0.08)",
+            borderRadius: 12,
             padding: 4,
-            borderRadius: 10,
-            border: "1px solid rgba(255, 255, 255, 0.06)",
+            gap: 4,
           }}
         >
           {[
-            { id: "nutricion", label: "Horarios & Hábitos de Alimentación", icon: Heart },
-            { id: "actividad", label: "Plan de Educación Física & Movimiento", icon: Dumbbell },
-            { id: "habitos", label: "Pautas de Salud Escolar", icon: ShieldCheck },
+            { id: "nutricion", label: "Horarios & Lonchera Saludable", icon: Heart },
+            { id: "actividad", label: "Plan de Actividad Física Escolar", icon: Dumbbell },
+            { id: "habitos", label: "Pautas de Salud & Bienestar", icon: ShieldCheck },
           ].map((tab) => {
             const Icon = tab.icon;
             const isSelected = activeTab === tab.id;
@@ -463,304 +477,434 @@ export function TabNutricionAI({ onSave }: TabNutricionAIProps) {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
                 style={{
-                  flex: 1,
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "center",
                   gap: 8,
-                  padding: "10px 14px",
+                  padding: "9px 18px",
                   borderRadius: 8,
                   border: "none",
                   cursor: "pointer",
                   fontFamily: "var(--font-sans)",
                   fontSize: "0.82rem",
-                  fontWeight: isSelected ? 600 : 500,
-                  background: isSelected ? "rgba(255, 255, 255, 0.08)" : "transparent",
-                  color: isSelected ? "var(--color-text-primary)" : "var(--color-text-secondary)",
-                  transition: "all 0.15s ease",
+                  fontWeight: isSelected ? 700 : 500,
+                  background: isSelected ? "var(--color-green)" : "transparent",
+                  color: isSelected ? "#070a12" : "var(--color-text-secondary)",
+                  boxShadow: isSelected ? "0 4px 14px rgba(16, 185, 129, 0.3)" : "none",
+                  transition: "all 0.2s ease",
                 }}
               >
-                <Icon size={15} color={isSelected ? "var(--color-green)" : "currentColor"} />
-                {tab.label}
+                <Icon size={14} />
+                <span>{tab.label}</span>
               </button>
             );
           })}
         </div>
 
-        {/* ── SECCIÓN 1: ALIMENTACIÓN Y LONCHERA ── */}
-        {activeTab === "nutricion" && (
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            {plan.nutricion.comidas.map((comida, idx) => (
-              <div
-                key={comida.momento}
+        {/* Acciones Rápidas */}
+        <div style={{ display: "flex", gap: 10 }}>
+          <button
+            className="btn btn-ghost"
+            onClick={handleSave}
+            style={{
+              padding: "8px 14px",
+              fontSize: "0.78rem",
+              borderRadius: 8,
+              color: savedOk ? "var(--color-green)" : "var(--color-text-secondary)",
+              borderColor: savedOk ? "var(--color-green)" : "rgba(255, 255, 255, 0.08)",
+            }}
+          >
+            {savedOk ? <CheckCircle2 size={13} /> : <Save size={13} />}
+            <span>{savedOk ? "Ficha Guardada" : "Guardar Ficha"}</span>
+          </button>
+
+          <button
+            className="btn btn-ghost"
+            onClick={() => window.print()}
+            style={{
+              padding: "8px 14px",
+              fontSize: "0.78rem",
+              borderRadius: 8,
+            }}
+            title="Imprimir informe oficial para padres o acudientes"
+          >
+            <Printer size={13} />
+            <span>Imprimir Boletín</span>
+          </button>
+        </div>
+      </div>
+
+      {/* ── 3. CONTENIDO: SECCIÓN DE ALIMENTACIÓN & LONCHERA (Visual, limpia, interactiva) ── */}
+      {activeTab === "nutricion" && (
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: 16 }}>
+          {plan.nutricion.comidas.map((comida, idx) => {
+            const isDone = completedMeals[comida.id];
+            return (
+              <motion.div
+                key={comida.id}
+                whileHover={{ y: -2 }}
+                transition={{ duration: 0.15 }}
                 className="glass"
                 style={{
-                  padding: "16px 20px",
-                  borderRadius: 12,
-                  border: "1px solid rgba(255, 255, 255, 0.06)",
+                  padding: "20px 22px",
+                  borderRadius: 16,
+                  border: isDone ? "1px solid rgba(16, 185, 129, 0.25)" : "1px solid rgba(255, 255, 255, 0.06)",
+                  background: isDone ? "linear-gradient(135deg, rgba(16, 185, 129, 0.03), rgba(13, 18, 31, 0.8))" : "rgba(13, 18, 31, 0.7)",
                   display: "flex",
                   flexDirection: "column",
-                  gap: 12,
+                  gap: 14,
+                  position: "relative",
                 }}
               >
-                {/* Cabecera de la comida */}
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 8 }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                    <div
-                      style={{
-                        width: 24,
-                        height: 24,
-                        borderRadius: "50%",
-                        background: "rgba(255, 255, 255, 0.06)",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontSize: "0.72rem",
-                        fontWeight: 700,
-                        color: "var(--color-text-muted)",
-                      }}
-                    >
-                      {idx + 1}
+                {/* Cabecera de la Comida */}
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 10 }}>
+                  <div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 3 }}>
+                      <span style={{ fontSize: "0.7rem", color: "var(--color-green)", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                        Momento {idx + 1}
+                      </span>
+                      <span style={{ fontSize: "0.7rem", color: "var(--color-text-muted)" }}>•</span>
+                      <span style={{ display: "flex", alignItems: "center", gap: 4, fontSize: "0.7rem", color: "var(--color-text-muted)" }}>
+                        <Clock size={11} /> {comida.hora}
+                      </span>
                     </div>
-                    <div>
-                      <h4 style={{ fontSize: "0.88rem", fontWeight: 700 }}>
-                        {comida.momento}
-                      </h4>
-                      <p style={{ fontSize: "0.72rem", color: "var(--color-text-secondary)" }}>
-                        {comida.enfoque}
-                      </p>
-                    </div>
+
+                    <h4 style={{ fontSize: "0.95rem", fontWeight: 700, color: "#ffffff" }}>
+                      {comida.momento}
+                    </h4>
+                    <p style={{ fontSize: "0.74rem", color: "var(--color-text-secondary)", marginTop: 2 }}>
+                      {comida.enfoque}
+                    </p>
                   </div>
 
-                  <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                    <span style={{ display: "flex", alignItems: "center", gap: 4, fontSize: "0.72rem", color: "var(--color-text-muted)" }}>
-                      <Clock size={12} /> {comida.hora}
-                    </span>
-                    <span
-                      style={{
-                        padding: "3px 10px",
-                        borderRadius: 6,
-                        background: "rgba(255, 255, 255, 0.04)",
-                        border: "1px solid rgba(255, 255, 255, 0.08)",
-                        fontSize: "0.72rem",
-                        fontWeight: 600,
-                        color: "var(--color-text-secondary)",
-                      }}
-                    >
-                      ~{comida.kcal} kcal
-                    </span>
+                  <div
+                    style={{
+                      padding: "4px 10px",
+                      borderRadius: 8,
+                      background: "rgba(16, 185, 129, 0.1)",
+                      border: "1px solid rgba(16, 185, 129, 0.2)",
+                      fontSize: "0.75rem",
+                      fontWeight: 700,
+                      color: "var(--color-green)",
+                      flexShrink: 0,
+                    }}
+                  >
+                    ~{comida.kcal} kcal
                   </div>
                 </div>
 
-                {/* Lista de alimentos sugeridos */}
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-                    gap: "8px 16px",
-                    background: "rgba(255, 255, 255, 0.01)",
-                    padding: "10px 14px",
-                    borderRadius: 8,
-                    border: "1px solid rgba(255, 255, 255, 0.04)",
-                  }}
-                >
+                {/* Lista de Alimentos Claros en Bloques Limpios */}
+                <div style={{ display: "flex", flexDirection: "column", gap: 8, paddingTop: 4 }}>
                   {comida.alimentos.map((alim, i) => (
                     <div
                       key={i}
                       style={{
                         display: "flex",
                         alignItems: "flex-start",
-                        gap: 8,
+                        gap: 10,
+                        padding: "8px 12px",
+                        borderRadius: 8,
+                        background: "rgba(255, 255, 255, 0.02)",
                         fontSize: "0.77rem",
                         color: "var(--color-text-secondary)",
                       }}
                     >
                       <ChevronRight size={13} color="var(--color-green)" style={{ flexShrink: 0, marginTop: 2 }} />
-                      <span>{alim}</span>
+                      <span style={{ lineHeight: 1.4 }}>{alim}</span>
                     </div>
                   ))}
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
 
-        {/* ── SECCIÓN 2: PLAN DE EDUCACIÓN FÍSICA Y MOVIMIENTO ── */}
-        {activeTab === "actividad" && (
-          <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-            <div
-              style={{
-                padding: "12px 18px",
-                borderRadius: 10,
-                background: "rgba(34, 197, 94, 0.05)",
-                border: "1px solid rgba(34, 197, 94, 0.15)",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                fontSize: "0.78rem",
-              }}
-            >
-              <span style={{ color: "var(--color-text-secondary)" }}>
-                Frecuencia sugerida: <strong style={{ color: "var(--color-text-primary)" }}>{plan.actividadFisica.frecuencia}</strong>
-              </span>
-              <span style={{ color: "var(--color-green)", fontWeight: 600 }}>
-                {plan.actividadFisica.enfoque}
-              </span>
-            </div>
+                {/* Botón de cumplimiento interactivo */}
+                <div style={{ marginTop: "auto", paddingTop: 8, display: "flex", justifyContent: "flex-end" }}>
+                  <button
+                    onClick={() => toggleMeal(comida.id)}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 6,
+                      background: isDone ? "rgba(16, 185, 129, 0.12)" : "rgba(255, 255, 255, 0.03)",
+                      border: "1px solid",
+                      borderColor: isDone ? "rgba(16, 185, 129, 0.3)" : "rgba(255, 255, 255, 0.08)",
+                      color: isDone ? "var(--color-green)" : "var(--color-text-muted)",
+                      padding: "6px 12px",
+                      borderRadius: 6,
+                      fontSize: "0.72rem",
+                      fontWeight: 600,
+                      cursor: "pointer",
+                      transition: "all 0.15s ease",
+                    }}
+                  >
+                    <Check size={12} />
+                    <span>{isDone ? "Pauta Cumplida" : "Marcar como Guía Activa"}</span>
+                  </button>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+      )}
 
-            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-              {plan.actividadFisica.sesiones.map((sesion, idx) => (
-                <div
-                  key={sesion.dia}
-                  className="glass"
+      {/* ── 4. CONTENIDO: SECCIÓN DE ACTIVIDAD FÍSICA ESCOLAR (Dinámica & Visual) ── */}
+      {activeTab === "actividad" && (
+        <div style={{ display: "grid", gridTemplateColumns: "240px 1fr", gap: 20 }}>
+          {/* Selector de Sesiones */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            <span style={{ fontSize: "0.72rem", fontWeight: 700, color: "var(--color-text-muted)", textTransform: "uppercase", letterSpacing: "0.05em", paddingLeft: 4 }}>
+              Sesiones de la Semana
+            </span>
+            {plan.actividadFisica.sesiones.map((ses, i) => {
+              const isSelected = activeSesion === i;
+              return (
+                <button
+                  key={ses.dia}
+                  onClick={() => setActiveSesion(i)}
                   style={{
-                    padding: "18px 20px",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-start",
+                    padding: "14px 16px",
                     borderRadius: 12,
-                    border: "1px solid rgba(255, 255, 255, 0.06)",
+                    border: "1px solid",
+                    borderColor: isSelected ? "var(--color-green)" : "rgba(255, 255, 255, 0.06)",
+                    background: isSelected ? "rgba(16, 185, 129, 0.08)" : "rgba(255, 255, 255, 0.02)",
+                    cursor: "pointer",
+                    textAlign: "left",
+                    transition: "all 0.15s ease",
+                    fontFamily: "var(--font-sans)",
                   }}
                 >
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
-                    <div>
-                      <h4 style={{ fontSize: "0.88rem", fontWeight: 700 }}>
-                        {sesion.dia}
-                      </h4>
-                      <p style={{ fontSize: "0.72rem", color: "var(--color-text-muted)" }}>
-                        {sesion.categoria}
-                      </p>
-                    </div>
-                    <span
-                      style={{
-                        padding: "3px 10px",
-                        borderRadius: 6,
-                        background: "rgba(255, 255, 255, 0.04)",
-                        fontSize: "0.72rem",
-                        fontWeight: 600,
-                        color: "var(--color-text-secondary)",
-                      }}
-                    >
-                      {sesion.duracion}
+                  <div style={{ display: "flex", justifyContent: "space-between", width: "100%", alignItems: "center" }}>
+                    <span style={{ fontSize: "0.7rem", fontWeight: 700, color: isSelected ? "var(--color-green)" : "var(--color-text-muted)", textTransform: "uppercase" }}>
+                      {ses.dia}
+                    </span>
+                    <span style={{ fontSize: "0.68rem", color: "var(--color-text-muted)" }}>
+                      {ses.duracion}
                     </span>
                   </div>
+                  <span style={{ fontSize: "0.82rem", fontWeight: 600, color: isSelected ? "#ffffff" : "var(--color-text-secondary)", marginTop: 4 }}>
+                    {ses.nombre}
+                  </span>
+                </button>
+              );
+            })}
 
-                  <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                    {sesion.actividades.map((act, i) => (
-                      <div
-                        key={i}
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                          padding: "8px 12px",
-                          borderRadius: 6,
-                          background: "rgba(255, 255, 255, 0.02)",
-                          fontSize: "0.77rem",
-                        }}
-                      >
-                        <span style={{ fontWeight: 600, color: "var(--color-text-primary)" }}>
-                          {act.nombre}
-                        </span>
-                        <span style={{ color: "var(--color-text-muted)", fontSize: "0.73rem" }}>
-                          {act.detalle}
-                        </span>
+            <div
+              style={{
+                marginTop: 10,
+                padding: "14px 16px",
+                borderRadius: 12,
+                background: "rgba(255, 255, 255, 0.02)",
+                border: "1px solid rgba(255, 255, 255, 0.05)",
+                fontSize: "0.74rem",
+                color: "var(--color-text-secondary)",
+                lineHeight: 1.6,
+              }}
+            >
+              <strong style={{ color: "var(--color-text-primary)" }}>Frecuencia recomendada:</strong><br />
+              {plan.actividadFisica.frecuencia} de actividad física guiada.
+            </div>
+          </div>
+
+          {/* Detalle de la Sesión Seleccionada */}
+          <div
+            className="glass"
+            style={{
+              padding: "24px 28px",
+              borderRadius: 16,
+              display: "flex",
+              flexDirection: "column",
+              gap: 20,
+            }}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid rgba(255, 255, 255, 0.06)", paddingBottom: 16 }}>
+              <div>
+                <span style={{ fontSize: "0.7rem", color: "var(--color-green)", fontWeight: 700, textTransform: "uppercase" }}>
+                  {plan.actividadFisica.sesiones[activeSesion].dia}
+                </span>
+                <h3 style={{ fontSize: "1.1rem", fontWeight: 700, color: "#ffffff", marginTop: 2 }}>
+                  {plan.actividadFisica.sesiones[activeSesion].nombre}
+                </h3>
+              </div>
+
+              <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+                <span
+                  style={{
+                    padding: "4px 10px",
+                    borderRadius: 6,
+                    background: "rgba(255, 255, 255, 0.04)",
+                    fontSize: "0.74rem",
+                    color: "var(--color-text-secondary)",
+                    fontWeight: 600,
+                  }}
+                >
+                  Duración: {plan.actividadFisica.sesiones[activeSesion].duracion}
+                </span>
+                <span
+                  style={{
+                    padding: "4px 10px",
+                    borderRadius: 6,
+                    background: "rgba(16, 185, 129, 0.12)",
+                    color: "var(--color-green)",
+                    fontSize: "0.74rem",
+                    fontWeight: 700,
+                  }}
+                >
+                  Intensidad: {plan.actividadFisica.sesiones[activeSesion].intensidad}%
+                </span>
+              </div>
+            </div>
+
+            {/* Lista de Actividades de la Sesión */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {plan.actividadFisica.sesiones[activeSesion].actividades.map((act, idx) => (
+                <div
+                  key={idx}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    padding: "12px 16px",
+                    borderRadius: 10,
+                    background: "rgba(255, 255, 255, 0.02)",
+                    border: "1px solid rgba(255, 255, 255, 0.05)",
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                    <div
+                      style={{
+                        width: 24,
+                        height: 24,
+                        borderRadius: 6,
+                        background: "rgba(16, 185, 129, 0.15)",
+                        color: "var(--color-green)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: "0.72rem",
+                        fontWeight: 700,
+                      }}
+                    >
+                      {idx + 1}
+                    </div>
+                    <div>
+                      <div style={{ fontSize: "0.82rem", fontWeight: 600, color: "var(--color-text-primary)" }}>
+                        {act.ej}
                       </div>
-                    ))}
+                      <div style={{ fontSize: "0.72rem", color: "var(--color-text-muted)", marginTop: 2 }}>
+                        {act.detalle}
+                      </div>
+                    </div>
                   </div>
+
+                  <span style={{ fontSize: "0.68rem", color: "var(--color-green)", fontWeight: 600 }}>
+                    Guiado
+                  </span>
                 </div>
               ))}
             </div>
           </div>
-        )}
+        </div>
+      )}
 
-        {/* ── SECCIÓN 3: PAUTAS Y HÁBITOS DE SALUD ESCOLAR ── */}
-        {activeTab === "habitos" && (
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
-            {plan.pautasSaludables.map((pauta) => {
-              const Icon = pauta.icono;
-              return (
+      {/* ── 5. CONTENIDO: SECCIÓN DE PAUTAS DE SALUD & HÁBITOS ── */}
+      {activeTab === "habitos" && (
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+          {plan.pautasSaludables.map((pauta) => {
+            const Icon = pauta.icono;
+            return (
+              <div
+                key={pauta.titulo}
+                className="glass"
+                style={{
+                  padding: "22px 24px",
+                  borderRadius: 16,
+                  border: "1px solid rgba(255, 255, 255, 0.06)",
+                  display: "flex",
+                  gap: 16,
+                  alignItems: "flex-start",
+                }}
+              >
                 <div
-                  key={pauta.titulo}
-                  className="glass"
                   style={{
-                    padding: "20px 22px",
+                    width: 44,
+                    height: 44,
                     borderRadius: 12,
-                    border: "1px solid rgba(255, 255, 255, 0.06)",
+                    background: "rgba(16, 185, 129, 0.1)",
+                    border: "1px solid rgba(16, 185, 129, 0.25)",
                     display: "flex",
-                    gap: 16,
-                    alignItems: "flex-start",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "var(--color-green)",
+                    flexShrink: 0,
                   }}
                 >
-                  <div
-                    style={{
-                      width: 36,
-                      height: 36,
-                      borderRadius: 10,
-                      background: "rgba(255, 255, 255, 0.05)",
-                      border: "1px solid rgba(255, 255, 255, 0.08)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      flexShrink: 0,
-                    }}
-                  >
-                    <Icon size={18} color="var(--color-green)" />
-                  </div>
-                  <div>
-                    <h4 style={{ fontSize: "0.85rem", fontWeight: 700, marginBottom: 6 }}>
+                  <Icon size={20} />
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+                    <h4 style={{ fontSize: "0.88rem", fontWeight: 700, color: "#ffffff" }}>
                       {pauta.titulo}
                     </h4>
-                    <p style={{ fontSize: "0.76rem", color: "var(--color-text-secondary)", lineHeight: 1.6 }}>
-                      {pauta.descripcion}
-                    </p>
+                    <span
+                      style={{
+                        fontSize: "0.68rem",
+                        padding: "2px 8px",
+                        borderRadius: 6,
+                        background: "rgba(16, 185, 129, 0.12)",
+                        color: "var(--color-green)",
+                        fontWeight: 700,
+                      }}
+                    >
+                      {pauta.meta}
+                    </span>
                   </div>
+                  <p style={{ fontSize: "0.78rem", color: "var(--color-text-secondary)", lineHeight: 1.6 }}>
+                    {pauta.descripcion}
+                  </p>
                 </div>
-              );
-            })}
-
-            {/* Cuadro Institucional para el Docente / Orientador */}
-            <div
-              className="glass"
-              style={{
-                gridColumn: "1 / -1",
-                padding: "18px 22px",
-                borderRadius: 12,
-                background: "rgba(34, 197, 94, 0.04)",
-                border: "1px solid rgba(34, 197, 94, 0.18)",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                flexWrap: "wrap",
-                gap: 12,
-              }}
-            >
-              <div>
-                <h4 style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--color-green-light)", marginBottom: 4 }}>
-                  Recomendación para el Docente / Instructor
-                </h4>
-                <p style={{ fontSize: "0.76rem", color: "var(--color-text-secondary)" }}>
-                  Este informe puede ser socializado con los padres de familia y el departamento de bienestar escolar para dar seguimiento formativo.
-                </p>
               </div>
-              <button
-                className="btn btn-ghost"
-                style={{
-                  fontSize: "0.76rem",
-                  padding: "7px 14px",
-                  border: "1px solid rgba(34, 197, 94, 0.3)",
-                  color: "var(--color-green-light)",
-                }}
-                onClick={handlePrint}
-              >
-                <FileText size={14} /> Descargar Informe Escolar
-              </button>
+            );
+          })}
+
+          {/* Tarjeta de Resumen Pedagógico */}
+          <div
+            className="glass"
+            style={{
+              gridColumn: "1 / -1",
+              padding: "20px 24px",
+              borderRadius: 14,
+              background: "rgba(16, 185, 129, 0.04)",
+              border: "1px solid rgba(16, 185, 129, 0.18)",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              flexWrap: "wrap",
+              gap: 16,
+            }}
+          >
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                <CheckCircle2 size={16} color="var(--color-green)" />
+                <h4 style={{ fontSize: "0.88rem", fontWeight: 700, color: "var(--color-green-light)" }}>
+                  Recomendaciones para el Docente e Informe a Padres
+                </h4>
+              </div>
+              <p style={{ fontSize: "0.76rem", color: "var(--color-text-secondary)" }}>
+                Estas pautas formativas están preparadas para ser emitidas en el boletín escolar oficial y socializadas en comités de evaluación.
+              </p>
             </div>
+
+            <button
+              className="btn btn-primary"
+              onClick={() => window.print()}
+              style={{ fontSize: "0.78rem", padding: "8px 16px" }}
+            >
+              <FileText size={14} />
+              <span>Emitir Informe Oficial</span>
+            </button>
           </div>
-        )}
-
-      </div>
-
-      <style>{`
-        @keyframes spin { to { transform: rotate(360deg); } }
-      `}</style>
+        </div>
+      )}
     </div>
   );
 }
