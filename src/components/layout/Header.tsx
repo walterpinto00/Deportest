@@ -1,6 +1,6 @@
 // ─────────────────────────────────────────────────────────────
 // Header.tsx — Barra de navegación superior ejecutiva e institucional
-// Diseñada para docentes: incluye selector de tema (Claro/Oscuro) y acceso directo a Google Gemini
+// Diseñada para docentes: ultracompacta, 100% responsiva, sin traslapes
 // ─────────────────────────────────────────────────────────────
 import React from "react";
 import { Activity, ShieldCheck, LogOut, Sun, Moon, Sparkles, Search } from "lucide-react";
@@ -35,74 +35,87 @@ export function Header({
         top: 0,
         zIndex: 100,
         boxShadow: "var(--shadow-sm)",
+        height: 64,
+        display: "flex",
+        alignItems: "center",
       }}
     >
       <div
         style={{
           maxWidth: 1320,
           margin: "0 auto",
-          padding: "0 24px",
-          height: 66,
+          padding: "0 20px",
+          width: "100%",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          flexWrap: "wrap",
+          flexWrap: "nowrap",
           gap: 12,
         }}
       >
-        {/* Identidad / Marca SENA */}
-        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+        {/* 1. Marca SENA & Logo (Compacto) */}
+        <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
           <div
             style={{
-              width: 44,
-              height: 44,
-              borderRadius: 12,
+              width: 38,
+              height: 38,
+              borderRadius: 10,
               background: "linear-gradient(135deg, var(--color-green-dark), var(--color-green))",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              boxShadow: "0 4px 16px rgba(16, 185, 129, 0.35)",
+              boxShadow: "0 4px 12px rgba(16, 185, 129, 0.35)",
               color: "#ffffff",
               flexShrink: 0,
             }}
           >
-            <Activity size={24} />
+            <Activity size={20} />
           </div>
           <div>
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <h1
+            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              <span
                 style={{
-                  fontSize: "1.2rem",
-                  fontWeight: 800,
+                  fontSize: "1.05rem",
+                  fontWeight: 900,
                   letterSpacing: "-0.02em",
                   color: "var(--color-text-primary)",
+                  whiteSpace: "nowrap",
                 }}
               >
                 DEPORTEST PRO
-              </h1>
+              </span>
               <span
                 style={{
-                  fontSize: "0.72rem",
-                  padding: "2px 8px",
-                  borderRadius: 99,
+                  fontSize: "0.68rem",
+                  padding: "1px 6px",
+                  borderRadius: 6,
                   background: "rgba(16, 185, 129, 0.15)",
                   color: "var(--color-green)",
                   fontWeight: 800,
                   border: "1px solid rgba(16, 185, 129, 0.35)",
-                  letterSpacing: "0.05em",
+                  letterSpacing: "0.04em",
                 }}
               >
                 SENA
               </span>
             </div>
-            <p style={{ fontSize: "0.78rem", color: "var(--color-text-muted)", fontWeight: 500 }}>
-              Sistema Institucional de Rendimiento Atlético & Salud
+            <p
+              style={{
+                fontSize: "0.7rem",
+                color: "var(--color-text-muted)",
+                fontWeight: 500,
+                margin: 0,
+                whiteSpace: "nowrap",
+                lineHeight: 1.1,
+              }}
+            >
+              Rendimiento Atlético & Salud
             </p>
           </div>
         </div>
 
-        {/* Buscador Inteligente Global */}
-        <div style={{ flex: "1 1 240px", maxWidth: 360, margin: "0 12px" }}>
+        {/* 2. Buscador Inteligente Global (Compacto y Central) */}
+        <div style={{ flex: "0 1 240px", minWidth: 150 }}>
           <button
             type="button"
             onClick={onOpenSearch}
@@ -110,8 +123,8 @@ export function Header({
             style={{
               width: "100%",
               justifyContent: "space-between",
-              padding: "8px 14px",
-              borderRadius: 12,
+              padding: "7px 12px",
+              borderRadius: 10,
               background: "var(--color-bg-card)",
               border: "1.5px solid var(--color-border)",
               boxShadow: "none",
@@ -119,17 +132,17 @@ export function Header({
             }}
             title="Abrir Buscador Inteligente (Ctrl + K)"
           >
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <Search size={15} color="var(--color-green)" />
-              <span style={{ fontSize: "0.82rem", color: "var(--color-text-secondary)", fontWeight: 500 }}>
-                Buscador Inteligente...
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <Search size={14} color="var(--color-green)" />
+              <span style={{ fontSize: "0.78rem", color: "var(--color-text-secondary)", fontWeight: 600, whiteSpace: "nowrap" }}>
+                Buscar...
               </span>
             </div>
             <kbd
               style={{
-                fontSize: "0.68rem",
-                padding: "2px 6px",
-                borderRadius: 6,
+                fontSize: "0.65rem",
+                padding: "1px 5px",
+                borderRadius: 4,
                 background: "var(--color-bg-surface)",
                 border: "1px solid var(--color-border)",
                 color: "var(--color-text-muted)",
@@ -142,25 +155,26 @@ export function Header({
           </button>
         </div>
 
-        {/* Acciones de la Barra Superior */}
-        <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
-          {/* Botón Destacado: Asistente Google Gemini / AI Studio */}
+        {/* 3. Acciones de la Barra Superior (Fila Única, Nunca se traslapa) */}
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0, flexWrap: "nowrap" }}>
+          {/* Botón Asistente Google Gemini */}
           <button
             onClick={onOpenGemini}
             className="btn"
             style={{
               background: "linear-gradient(135deg, #4285F4 0%, #9B51E0 50%, #34A853 100%)",
               color: "#ffffff",
-              padding: "8px 16px",
-              fontSize: "0.82rem",
+              padding: "7px 12px",
+              fontSize: "0.78rem",
               borderRadius: 10,
-              boxShadow: "0 4px 14px rgba(66, 133, 244, 0.3)",
+              boxShadow: "0 3px 10px rgba(66, 133, 244, 0.25)",
               gap: 6,
+              whiteSpace: "nowrap",
             }}
             title="Abrir Asistente Pedagógico con Google Gemini"
           >
-            <Sparkles size={16} />
-            <span>Asistente IA Docente</span>
+            <Sparkles size={14} />
+            <span>Asistente IA</span>
           </button>
 
           {/* Selector de Tema Claro / Oscuro */}
@@ -168,23 +182,24 @@ export function Header({
             onClick={onToggleTheme}
             className="btn btn-secondary"
             style={{
-              padding: "8px 14px",
+              padding: "7px 10px",
               borderRadius: 10,
-              fontSize: "0.82rem",
-              gap: 6,
+              fontSize: "0.78rem",
+              gap: 5,
               cursor: "pointer",
+              whiteSpace: "nowrap",
             }}
             title={theme === "light" ? "Cambiar a Modo Oscuro" : "Cambiar a Modo Claro"}
           >
             {theme === "light" ? (
               <>
-                <Moon size={15} color="#64748b" />
-                <span>Modo Oscuro</span>
+                <Moon size={14} color="#64748b" />
+                <span style={{ display: "inline-block" }}>Oscuro</span>
               </>
             ) : (
               <>
-                <Sun size={15} color="#f59e0b" />
-                <span>Modo Claro</span>
+                <Sun size={14} color="#f59e0b" />
+                <span style={{ display: "inline-block" }}>Claro</span>
               </>
             )}
           </button>
@@ -194,17 +209,15 @@ export function Header({
             style={{
               display: "flex",
               alignItems: "center",
-              gap: 8,
+              gap: 6,
               background: "var(--color-bg-card)",
               border: "1px solid var(--color-border)",
               borderRadius: 10,
-              padding: "6px 12px",
+              padding: "5px 10px",
+              whiteSpace: "nowrap",
             }}
           >
-            <ShieldCheck size={16} color="var(--color-green)" />
-            <span style={{ fontSize: "0.76rem", color: "var(--color-text-muted)", fontWeight: 700 }}>
-              ROL:
-            </span>
+            <ShieldCheck size={14} color="var(--color-green)" />
             <select
               value={role}
               onChange={(e) => onRoleChange(e.target.value as Role)}
@@ -214,13 +227,13 @@ export function Header({
                 color: "var(--color-text-primary)",
                 fontFamily: "var(--font-sans)",
                 fontWeight: 700,
-                fontSize: "0.82rem",
+                fontSize: "0.78rem",
                 cursor: "pointer",
                 outline: "none",
               }}
             >
-              <option value="ENTRENADOR">Entrenador / Instructor</option>
-              <option value="APRENDIZ">Aprendiz / Deportista</option>
+              <option value="ENTRENADOR">Entrenador</option>
+              <option value="APRENDIZ">Aprendiz</option>
             </select>
           </div>
 
@@ -232,18 +245,19 @@ export function Header({
               border: "1px solid rgba(244, 63, 94, 0.25)",
               color: "#e11d48",
               cursor: "pointer",
-              padding: "8px 14px",
+              padding: "7px 10px",
               borderRadius: 10,
-              fontSize: "0.82rem",
+              fontSize: "0.78rem",
               fontWeight: 700,
               display: "flex",
               alignItems: "center",
-              gap: 6,
+              gap: 5,
+              whiteSpace: "nowrap",
               transition: "all 0.2s ease",
             }}
             title="Cerrar sesión"
           >
-            <LogOut size={15} />
+            <LogOut size={14} />
             <span>Salir</span>
           </button>
         </div>
