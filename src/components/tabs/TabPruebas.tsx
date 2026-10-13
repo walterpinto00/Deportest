@@ -1,6 +1,6 @@
 // ─────────────────────────────────────────────────────────────
 // TabPruebas.tsx — Pruebas Físicas & Calificación Instantánea de Baremos
-// Diseño espacioso, sin elementos pegados, con tabla de baremos explicativa
+// Diseño amigable para docentes: claro, con botones visibles y escala explicativa
 // ─────────────────────────────────────────────────────────────
 import React, { useState } from "react";
 import { motion } from "framer-motion";
@@ -10,14 +10,6 @@ import {
   Save,
   CheckCircle2,
   TrendingUp,
-  User,
-  Clock,
-  Sparkles,
-  Search,
-  PlusCircle,
-  HelpCircle,
-  ChevronRight,
-  Flame,
   Minus,
   Plus,
 } from "lucide-react";
@@ -36,21 +28,21 @@ const PRUEBAS_DISPONIBLES = [
     sub: "Resistencia Aeróbica (12 min)",
     unidad: "metros",
     placeholder: "Ej: 2400",
-    color: "#f59e0b",
+    color: "#d97706",
     step: 50,
     min: 1000,
     max: 3200,
     escalas: [
       { nivel: "Excelente / Sobresaliente", rango: "≥ 2.500 m", pts: 95, color: "#10b981" },
-      { nivel: "Bueno / Saludable", rango: "2.200 - 2.499 m", pts: 85, color: "#34d399" },
-      { nivel: "Aceptable / Promedio", rango: "1.800 - 2.199 m", pts: 70, color: "#f59e0b" },
-      { nivel: "Bajo / En Acondicionamiento", rango: "< 1.800 m", pts: 50, color: "#f43f5e" },
+      { nivel: "Bueno / Saludable", rango: "2.200 - 2.499 m", pts: 85, color: "#059669" },
+      { nivel: "Aceptable / Promedio", rango: "1.800 - 2.199 m", pts: 70, color: "#d97706" },
+      { nivel: "Bajo / En Acondicionamiento", rango: "< 1.800 m", pts: 50, color: "#e11d48" },
     ],
     evaluar: (m: number) => {
       if (m >= 2500) return { pts: 95, nivel: "Excelente / Sobresaliente", color: "#10b981", index: 0 };
-      if (m >= 2200) return { pts: 85, nivel: "Bueno / Saludable", color: "#34d399", index: 1 };
-      if (m >= 1800) return { pts: 70, nivel: "Aceptable / Promedio", color: "#f59e0b", index: 2 };
-      return { pts: 50, nivel: "Bajo / Requiere Acondicionamiento", color: "#f43f5e", index: 3 };
+      if (m >= 2200) return { pts: 85, nivel: "Bueno / Saludable", color: "#059669", index: 1 };
+      if (m >= 1800) return { pts: 70, nivel: "Aceptable / Promedio", color: "#d97706", index: 2 };
+      return { pts: 50, nivel: "Bajo / Requiere Acondicionamiento", color: "#e11d48", index: 3 };
     },
   },
   {
@@ -65,15 +57,15 @@ const PRUEBAS_DISPONIBLES = [
     max: 14,
     escalas: [
       { nivel: "Excelente / Élite Escolar", rango: "≥ Palier 9.0", pts: 95, color: "#10b981" },
-      { nivel: "Bueno / Zona Saludable", rango: "Palier 7.0 - 8.5", pts: 85, color: "#34d399" },
-      { nivel: "Aceptable", rango: "Palier 5.0 - 6.5", pts: 70, color: "#f59e0b" },
-      { nivel: "Bajo", rango: "< Palier 5.0", pts: 50, color: "#f43f5e" },
+      { nivel: "Bueno / Zona Saludable", rango: "Palier 7.0 - 8.5", pts: 85, color: "#059669" },
+      { nivel: "Aceptable", rango: "Palier 5.0 - 6.5", pts: 70, color: "#d97706" },
+      { nivel: "Bajo", rango: "< Palier 5.0", pts: 50, color: "#e11d48" },
     ],
     evaluar: (m: number) => {
       if (m >= 9) return { pts: 95, nivel: "Excelente / Élite Escolar", color: "#10b981", index: 0 };
-      if (m >= 7) return { pts: 85, nivel: "Bueno / Zona Saludable", color: "#34d399", index: 1 };
-      if (m >= 5) return { pts: 70, nivel: "Aceptable", color: "#f59e0b", index: 2 };
-      return { pts: 50, nivel: "Bajo", color: "#f43f5e", index: 3 };
+      if (m >= 7) return { pts: 85, nivel: "Bueno / Zona Saludable", color: "#059669", index: 1 };
+      if (m >= 5) return { pts: 70, nivel: "Aceptable", color: "#d97706", index: 2 };
+      return { pts: 50, nivel: "Bajo", color: "#e11d48", index: 3 };
     },
   },
   {
@@ -82,67 +74,67 @@ const PRUEBAS_DISPONIBLES = [
     sub: "Fuerza Tren Superior (1 min)",
     unidad: "repeticiones",
     placeholder: "Ej: 35",
-    color: "#06b6d4",
+    color: "#0891b2",
     step: 1,
     min: 0,
     max: 60,
     escalas: [
       { nivel: "Excelente", rango: "≥ 40 repeticiones", pts: 95, color: "#10b981" },
-      { nivel: "Bueno / Aceptable", rango: "28 - 39 repeticiones", pts: 85, color: "#34d399" },
-      { nivel: "Aceptable / Promedio", rango: "18 - 27 repeticiones", pts: 70, color: "#f59e0b" },
-      { nivel: "Bajo", rango: "< 18 repeticiones", pts: 45, color: "#f43f5e" },
+      { nivel: "Bueno / Aceptable", rango: "28 - 39 repeticiones", pts: 85, color: "#059669" },
+      { nivel: "Aceptable / Promedio", rango: "18 - 27 repeticiones", pts: 70, color: "#d97706" },
+      { nivel: "Bajo", rango: "< 18 repeticiones", pts: 45, color: "#e11d48" },
     ],
     evaluar: (m: number) => {
       if (m >= 40) return { pts: 95, nivel: "Excelente", color: "#10b981", index: 0 };
-      if (m >= 28) return { pts: 85, nivel: "Bueno", color: "#34d399", index: 1 };
-      if (m >= 18) return { pts: 70, nivel: "Aceptable", color: "#f59e0b", index: 2 };
-      return { pts: 45, nivel: "Bajo", color: "#f43f5e", index: 3 };
+      if (m >= 28) return { pts: 85, nivel: "Bueno", color: "#059669", index: 1 };
+      if (m >= 18) return { pts: 70, nivel: "Aceptable", color: "#d97706", index: 2 };
+      return { pts: 45, nivel: "Bajo", color: "#e11d48", index: 3 };
     },
   },
   {
     id: "velocidad",
     nombre: "Velocidad 50 Metros",
-    sub: "Aceleración y Potencia",
-    unidad: "segundos",
-    placeholder: "Ej: 7.5",
-    color: "#f97316",
+    sub: "Rapidez y Aceleración",
+    unidad: "segundos (s)",
+    placeholder: "Ej: 7.8",
+    color: "#ea580c",
     step: 0.1,
-    min: 6,
-    max: 12,
+    min: 5.5,
+    max: 12.0,
     escalas: [
-      { nivel: "Excelente / Muy Rápido", rango: "≤ 7.2 segundos", pts: 95, color: "#10b981" },
-      { nivel: "Bueno / Aceptable", rango: "7.3 - 8.2 segundos", pts: 85, color: "#34d399" },
-      { nivel: "Promedio", rango: "8.3 - 9.2 segundos", pts: 70, color: "#f59e0b" },
-      { nivel: "Lento", rango: "> 9.2 segundos", pts: 50, color: "#f43f5e" },
+      { nivel: "Muy Rápido / Élite", rango: "≤ 7.2 s", pts: 95, color: "#10b981" },
+      { nivel: "Bueno / Promedio Alto", rango: "7.3 - 8.2 s", pts: 85, color: "#059669" },
+      { nivel: "Aceptable", rango: "8.3 - 9.4 s", pts: 70, color: "#d97706" },
+      { nivel: "Lento / En Proceso", rango: "> 9.4 s", pts: 45, color: "#e11d48" },
     ],
     evaluar: (m: number) => {
-      if (m <= 7.2) return { pts: 95, nivel: "Excelente / Muy Rápido", color: "#10b981", index: 0 };
-      if (m <= 8.2) return { pts: 85, nivel: "Bueno / Aceptable", color: "#34d399", index: 1 };
-      if (m <= 9.2) return { pts: 70, nivel: "Promedio", color: "#f59e0b", index: 2 };
-      return { pts: 50, nivel: "Lento", color: "#f43f5e", index: 3 };
+      if (m <= 7.2) return { pts: 95, nivel: "Muy Rápido / Élite", color: "#10b981", index: 0 };
+      if (m <= 8.2) return { pts: 85, nivel: "Bueno / Promedio Alto", color: "#059669", index: 1 };
+      if (m <= 9.4) return { pts: 70, nivel: "Aceptable", color: "#d97706", index: 2 };
+      return { pts: 45, nivel: "Lento / En Proceso", color: "#e11d48", index: 3 };
     },
   },
   {
     id: "salto",
-    nombre: "Salto Largo",
-    sub: "Potencia de Tren Inferior",
-    unidad: "centímetros",
+    nombre: "Salto Largo sin Impulso",
+    sub: "Potencia Tren Inferior",
+    unidad: "centímetros (cm)",
     placeholder: "Ej: 210",
-    color: "#8b5cf6",
+    color: "#7c3aed",
     step: 5,
     min: 100,
     max: 280,
     escalas: [
       { nivel: "Excelente", rango: "≥ 220 cm", pts: 95, color: "#10b981" },
-      { nivel: "Bueno", rango: "190 - 219 cm", pts: 85, color: "#34d399" },
-      { nivel: "Promedio", rango: "160 - 189 cm", pts: 70, color: "#f59e0b" },
-      { nivel: "Bajo", rango: "< 160 cm", pts: 45, color: "#f43f5e" },
+      { nivel: "Bueno", rango: "190 - 219 cm", pts: 85, color: "#059669" },
+      { nivel: "Promedio", rango: "160 - 189 cm", pts: 70, color: "#d97706" },
+      { nivel: "Bajo", rango: "< 160 cm", pts: 45, color: "#e11d48" },
     ],
     evaluar: (m: number) => {
       if (m >= 220) return { pts: 95, nivel: "Excelente", color: "#10b981", index: 0 };
-      if (m >= 190) return { pts: 85, nivel: "Bueno", color: "#34d399", index: 1 };
-      if (m >= 160) return { pts: 70, nivel: "Promedio", color: "#f59e0b", index: 2 };
-      return { pts: 45, nivel: "Bajo", color: "#f43f5e", index: 3 };
+      if (m >= 190) return { pts: 85, nivel: "Bueno", color: "#059669", index: 1 };
+      if (m >= 160) return { pts: 70, nivel: "Promedio", color: "#d97706", index: 2 };
+      return { pts: 45, nivel: "Bajo", color: "#e11d48", index: 3 };
     },
   },
   {
@@ -151,26 +143,25 @@ const PRUEBAS_DISPONIBLES = [
     sub: "Elasticidad Isquiotibial",
     unidad: "cm (+ / -)",
     placeholder: "Ej: +4",
-    color: "#14b8a6",
+    color: "#0d9488",
     step: 1,
     min: -15,
     max: 20,
     escalas: [
       { nivel: "Muy Flexible", rango: "≥ +6 cm", pts: 95, color: "#10b981" },
-      { nivel: "Normal / Bueno", rango: "+1 a +5 cm", pts: 85, color: "#34d399" },
-      { nivel: "Límite Aceptable", rango: "-4 a 0 cm", pts: 70, color: "#f59e0b" },
-      { nivel: "Baja Flexibilidad", rango: "< -4 cm", pts: 45, color: "#f43f5e" },
+      { nivel: "Normal / Bueno", rango: "+1 a +5 cm", pts: 85, color: "#059669" },
+      { nivel: "Límite Aceptable", rango: "-4 a 0 cm", pts: 70, color: "#d97706" },
+      { nivel: "Baja Flexibilidad", rango: "< -4 cm", pts: 45, color: "#e11d48" },
     ],
     evaluar: (m: number) => {
       if (m >= 6) return { pts: 95, nivel: "Muy Flexible", color: "#10b981", index: 0 };
-      if (m >= 1) return { pts: 85, nivel: "Normal / Bueno", color: "#34d399", index: 1 };
-      if (m >= -4) return { pts: 70, nivel: "Límite Aceptable", color: "#f59e0b", index: 2 };
-      return { pts: 45, nivel: "Baja Flexibilidad", color: "#f43f5e", index: 3 };
+      if (m >= 1) return { pts: 85, nivel: "Normal / Bueno", color: "#059669", index: 1 };
+      if (m >= -4) return { pts: 70, nivel: "Límite Aceptable", color: "#d97706", index: 2 };
+      return { pts: 45, nivel: "Baja Flexibilidad", color: "#e11d48", index: 3 };
     },
   },
 ];
 
-// Registros de ejemplo recientes
 const REGISTROS_EJEMPLO = [
   { id: 1, alumno: "Juan Camilo Rodríguez", prueba: "Test Cooper", marca: "2.450 m", pts: 88, estado: "Destacado" },
   { id: 2, alumno: "Valentina Gómez", prueba: "Flexiones", marca: "32 reps", pts: 90, estado: "Excelente" },
@@ -212,13 +203,13 @@ export function TabPruebas({ role, onSave }: TabPruebasProps) {
 
   return (
     <div className="animate-fade-in" style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-      {/* ── 1. SELECTOR DE PRUEBA ATLÉTICA ESPACIOSO (En pastillas claras) ── */}
+      {/* ── 1. SELECTOR DE PRUEBA ATLÉTICA ESPACIOSO ── */}
       <div>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-          <span style={{ fontSize: "0.85rem", fontWeight: 800, color: "#ffffff", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+          <span style={{ fontSize: "0.85rem", fontWeight: 800, color: "var(--color-text-primary)", textTransform: "uppercase", letterSpacing: "0.04em" }}>
             Batería de Pruebas Físicas Oficiales
           </span>
-          <span style={{ fontSize: "0.82rem", color: "#cbd5e1" }}>
+          <span style={{ fontSize: "0.82rem", color: "var(--color-text-muted)" }}>
             Selecciona la prueba a evaluar en clase
           </span>
         </div>
@@ -249,12 +240,11 @@ export function TabPruebas({ role, onSave }: TabPruebasProps) {
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "flex-start",
-                  padding: "14px 20px",
+                  padding: "13px 18px",
                   borderRadius: 14,
-                  background: isSelected ? `${p.color}25` : "rgba(255, 255, 255, 0.04)",
-                  border: "1px solid",
-                  borderColor: isSelected ? p.color : "rgba(255, 255, 255, 0.1)",
-                  boxShadow: isSelected ? `0 4px 18px ${p.color}35` : "none",
+                  background: isSelected ? `${p.color}18` : "var(--color-bg-surface)",
+                  border: "1.5px solid",
+                  borderColor: isSelected ? p.color : "var(--color-border)",
                   cursor: "pointer",
                   whiteSpace: "nowrap",
                   transition: "all 0.15s ease",
@@ -262,10 +252,10 @@ export function TabPruebas({ role, onSave }: TabPruebasProps) {
                   minWidth: 160,
                 }}
               >
-                <span style={{ fontSize: "0.96rem", fontWeight: 800, color: isSelected ? "#ffffff" : "#e2e8f0" }}>
+                <span style={{ fontSize: "0.94rem", fontWeight: 800, color: isSelected ? p.color : "var(--color-text-primary)" }}>
                   {p.nombre}
                 </span>
-                <span style={{ fontSize: "0.82rem", color: isSelected ? p.color : "#cbd5e1", marginTop: 3, fontWeight: 600 }}>
+                <span style={{ fontSize: "0.78rem", color: "var(--color-text-muted)", marginTop: 2, fontWeight: 600 }}>
                   {p.sub}
                 </span>
               </button>
@@ -274,46 +264,44 @@ export function TabPruebas({ role, onSave }: TabPruebasProps) {
         </div>
       </div>
 
-      {/* ── 2. GRID PRINCIPAL: FORMULARIO Y BAREMO EN VIVO CON TABLA DE REFERENCIA ── */}
+      {/* ── 2. GRID PRINCIPAL: FORMULARIO Y BAREMO EN VIVO ── */}
       <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1.3fr", gap: 26, alignItems: "stretch" }}>
-        {/* Panel Izquierdo: Formulario de Toma de Marca con Espacio Cómodo */}
+        {/* Panel Izquierdo: Formulario de Toma de Marca */}
         <div
           className="glass-elevated"
           style={{
-            padding: "28px 32px",
+            padding: "26px 30px",
             borderRadius: 20,
             display: "flex",
             flexDirection: "column",
-            gap: 22,
+            gap: 20,
           }}
         >
-          {/* Encabezado del Formulario */}
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid rgba(255, 255, 255, 0.08)", paddingBottom: 16 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid var(--color-border)", paddingBottom: 14 }}>
             <div>
-              <span style={{ fontSize: "0.82rem", color: pruebaActiva.color, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.06em" }}>
+              <span style={{ fontSize: "0.78rem", color: pruebaActiva.color, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.05em" }}>
                 Registro en Tiempo Real
               </span>
-              <h3 style={{ fontSize: "1.35rem", fontWeight: 800, color: "#ffffff", marginTop: 2 }}>
+              <h3 style={{ fontSize: "1.3rem", fontWeight: 800, color: "var(--color-text-primary)", marginTop: 2 }}>
                 {pruebaActiva.nombre}
               </h3>
             </div>
             <span
               style={{
-                fontSize: "0.85rem",
-                padding: "6px 14px",
-                borderRadius: 10,
-                background: `${pruebaActiva.color}20`,
-                border: `1px solid ${pruebaActiva.color}45`,
-                color: "#ffffff",
-                fontWeight: 700,
+                fontSize: "0.82rem",
+                padding: "5px 12px",
+                borderRadius: 8,
+                background: `${pruebaActiva.color}15`,
+                border: `1px solid ${pruebaActiva.color}40`,
+                color: pruebaActiva.color,
+                fontWeight: 800,
               }}
             >
               Unidad: {pruebaActiva.unidad}
             </span>
           </div>
 
-          {/* Campos con Espaciado Generoso (Sin amontonamiento) */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
             <div>
               <Input
                 label="Estudiante a Calificar"
@@ -322,7 +310,7 @@ export function TabPruebas({ role, onSave }: TabPruebasProps) {
               />
             </div>
 
-            {/* Input de Marca Grande con Botones Rápidos */}
+            {/* Input de Marca Grande con Botones Rápidos (Colores nítidos) */}
             <div>
               <label className="dp-label">Marca Lograda ({pruebaActiva.unidad})</label>
               <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
@@ -330,7 +318,7 @@ export function TabPruebas({ role, onSave }: TabPruebasProps) {
                   type="button"
                   onClick={() => ajustarMarca(-pruebaActiva.step)}
                   className="btn btn-secondary"
-                  style={{ padding: "12px 16px", borderRadius: 10, color: "#ffffff" }}
+                  style={{ padding: "12px 16px", borderRadius: 10, color: "var(--color-text-primary)" }}
                   title="Disminuir marca"
                 >
                   <Minus size={16} />
@@ -343,14 +331,14 @@ export function TabPruebas({ role, onSave }: TabPruebasProps) {
                   placeholder={pruebaActiva.placeholder}
                   value={marcaStr}
                   onChange={(e) => setMarcaStr(e.target.value)}
-                  style={{ fontSize: "1.4rem", fontWeight: 800, color: "#ffffff", textAlign: "center" }}
+                  style={{ fontSize: "1.4rem", fontWeight: 800, textAlign: "center" }}
                 />
 
                 <button
                   type="button"
                   onClick={() => ajustarMarca(pruebaActiva.step)}
                   className="btn btn-secondary"
-                  style={{ padding: "12px 16px", borderRadius: 10, color: "#ffffff" }}
+                  style={{ padding: "12px 16px", borderRadius: 10, color: "var(--color-text-primary)" }}
                   title="Aumentar marca"
                 >
                   <Plus size={16} />
@@ -359,7 +347,7 @@ export function TabPruebas({ role, onSave }: TabPruebasProps) {
             </div>
 
             <div>
-              <Input label="Fecha de Toma" type="date" defaultValue="2026-10-12" />
+              <Input label="Fecha de Toma" type="date" defaultValue="2026-10-13" />
             </div>
           </div>
 
@@ -376,29 +364,28 @@ export function TabPruebas({ role, onSave }: TabPruebasProps) {
           </div>
         </div>
 
-        {/* Panel Derecho: Baremo Calculado & Tabla de Referencia Pedagógica */}
+        {/* Panel Derecho: Baremo Calculado & Tabla de Referencia */}
         <div
           className="glass-elevated"
           style={{
-            padding: "28px 32px",
+            padding: "26px 30px",
             borderRadius: 20,
             display: "flex",
             flexDirection: "column",
-            gap: 22,
-            border: `1px solid ${pruebaActiva.color}35`,
+            gap: 20,
+            borderLeft: `4px solid ${resultado.color}`,
           }}
         >
-          {/* Puntaje Grande y Nivel */}
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", borderBottom: "1px solid rgba(255, 255, 255, 0.08)", paddingBottom: 16 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", borderBottom: "1px solid var(--color-border)", paddingBottom: 14 }}>
             <div>
-              <span style={{ fontSize: "0.82rem", color: "#cbd5e1", textTransform: "uppercase", fontWeight: 700, letterSpacing: "0.05em" }}>
+              <span style={{ fontSize: "0.78rem", color: "var(--color-text-muted)", textTransform: "uppercase", fontWeight: 700, letterSpacing: "0.04em" }}>
                 Puntuación de Baremo Asignada
               </span>
               <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginTop: 4 }}>
-                <span style={{ fontSize: "3.2rem", fontWeight: 900, color: "#ffffff", lineHeight: 1 }}>
+                <span style={{ fontSize: "3.2rem", fontWeight: 900, color: "var(--color-text-primary)", lineHeight: 1 }}>
                   {resultado.pts}
                 </span>
-                <span style={{ fontSize: "1.1rem", color: "#cbd5e1", fontWeight: 700 }}>
+                <span style={{ fontSize: "1.1rem", color: "var(--color-text-muted)", fontWeight: 700 }}>
                   / 100 pts
                 </span>
               </div>
@@ -408,11 +395,11 @@ export function TabPruebas({ role, onSave }: TabPruebasProps) {
               style={{
                 padding: "8px 16px",
                 borderRadius: 12,
-                background: `${resultado.color}25`,
+                background: "var(--color-bg-surface)",
                 color: resultado.color,
                 fontSize: "0.92rem",
-                fontWeight: 800,
-                border: `1px solid ${resultado.color}55`,
+                fontWeight: 900,
+                border: `2px solid ${resultado.color}`,
               }}
             >
               {resultado.nivel}
@@ -421,23 +408,23 @@ export function TabPruebas({ role, onSave }: TabPruebasProps) {
 
           {/* Barra de Progreso Visual */}
           <div>
-            <div style={{ height: 10, borderRadius: 99, background: "rgba(255, 255, 255, 0.08)", overflow: "hidden" }}>
+            <div style={{ height: 10, borderRadius: 99, background: "var(--color-border)", overflow: "hidden" }}>
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${resultado.pts}%` }}
-                transition={{ duration: 0.4 }}
+                transition={{ duration: 0.3 }}
                 style={{
                   height: "100%",
-                  background: `linear-gradient(90deg, ${resultado.color}, #34d399)`,
+                  background: `linear-gradient(90deg, ${resultado.color}, #10b981)`,
                   borderRadius: 99,
                 }}
               />
             </div>
           </div>
 
-          {/* Tabla de Baremos Oficiales (Elimina toda confusión) */}
+          {/* Tabla de Baremos Oficiales */}
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            <span style={{ fontSize: "0.84rem", fontWeight: 800, color: "#ffffff", textTransform: "uppercase", letterSpacing: "0.04em" }}>
+            <span style={{ fontSize: "0.82rem", fontWeight: 800, color: "var(--color-text-secondary)", textTransform: "uppercase", letterSpacing: "0.04em" }}>
               Escala de Baremos Oficiales ({pruebaActiva.nombre})
             </span>
 
@@ -453,21 +440,21 @@ export function TabPruebas({ role, onSave }: TabPruebasProps) {
                       alignItems: "center",
                       padding: "10px 14px",
                       borderRadius: 10,
-                      background: esFilaActual ? `${esc.color}20` : "rgba(255, 255, 255, 0.03)",
-                      border: "1px solid",
-                      borderColor: esFilaActual ? esc.color : "rgba(255, 255, 255, 0.06)",
-                      transition: "all 0.2s ease",
+                      background: esFilaActual ? `${esc.color}15` : "var(--color-bg-card)",
+                      border: "1.5px solid",
+                      borderColor: esFilaActual ? esc.color : "var(--color-border)",
+                      transition: "all 0.15s ease",
                     }}
                   >
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                       <div style={{ width: 8, height: 8, borderRadius: "50%", background: esc.color }} />
-                      <span style={{ fontSize: "0.88rem", fontWeight: esFilaActual ? 800 : 600, color: esFilaActual ? "#ffffff" : "#cbd5e1" }}>
+                      <span style={{ fontSize: "0.88rem", fontWeight: esFilaActual ? 800 : 600, color: esFilaActual ? esc.color : "var(--color-text-primary)" }}>
                         {esc.nivel}
                       </span>
                     </div>
 
                     <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-                      <span style={{ fontSize: "0.86rem", color: "#e2e8f0", fontWeight: 700 }}>
+                      <span style={{ fontSize: "0.86rem", color: "var(--color-text-secondary)", fontWeight: 700 }}>
                         {esc.rango}
                       </span>
                       <span
@@ -491,16 +478,16 @@ export function TabPruebas({ role, onSave }: TabPruebasProps) {
         </div>
       </div>
 
-      {/* ── 3. HISTORIAL RÁPIDO DE CLASE (Compacto y sin desbordar la pantalla) ── */}
-      <div className="glass-elevated" style={{ padding: "24px 28px", borderRadius: 18, display: "flex", flexDirection: "column", gap: 16 }}>
+      {/* ── 3. HISTORIAL RÁPIDO DE CLASE ── */}
+      <div className="glass-elevated" style={{ padding: "22px 26px", borderRadius: 18, display: "flex", flexDirection: "column", gap: 14 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <Award size={18} color="#10b981" />
-            <h4 style={{ fontSize: "1.05rem", fontWeight: 800, color: "#ffffff" }}>
+            <Award size={18} color="var(--color-green)" />
+            <h4 style={{ fontSize: "1.02rem", fontWeight: 800, color: "var(--color-text-primary)" }}>
               Últimas Pruebas Registradas en Clase
             </h4>
           </div>
-          <span style={{ fontSize: "0.82rem", color: "#cbd5e1", fontWeight: 600 }}>
+          <span style={{ fontSize: "0.8rem", color: "var(--color-text-muted)", fontWeight: 600 }}>
             {registros.length} evaluaciones registradas
           </span>
         </div>
@@ -515,14 +502,14 @@ export function TabPruebas({ role, onSave }: TabPruebasProps) {
                 alignItems: "center",
                 padding: "12px 16px",
                 borderRadius: 12,
-                background: "rgba(255, 255, 255, 0.04)",
-                border: "1px solid rgba(255, 255, 255, 0.08)",
+                background: "var(--color-bg-card)",
+                border: "1px solid var(--color-border)",
               }}
             >
               <div>
-                <div style={{ fontSize: "0.92rem", fontWeight: 700, color: "#ffffff" }}>{r.alumno}</div>
-                <div style={{ fontSize: "0.8rem", color: "#cbd5e1", marginTop: 2 }}>
-                  {r.prueba} · <strong style={{ color: "#34d399" }}>{r.marca}</strong>
+                <div style={{ fontSize: "0.92rem", fontWeight: 700, color: "var(--color-text-primary)" }}>{r.alumno}</div>
+                <div style={{ fontSize: "0.8rem", color: "var(--color-text-muted)", marginTop: 2 }}>
+                  {r.prueba} · <strong style={{ color: "var(--color-green)" }}>{r.marca}</strong>
                 </div>
               </div>
 
@@ -530,11 +517,11 @@ export function TabPruebas({ role, onSave }: TabPruebasProps) {
                 style={{
                   padding: "4px 10px",
                   borderRadius: 8,
-                  background: "rgba(16, 185, 129, 0.15)",
-                  color: "#34d399",
+                  background: "rgba(16, 185, 129, 0.12)",
+                  color: "var(--color-green)",
                   fontWeight: 800,
                   fontSize: "0.82rem",
-                  border: "1px solid rgba(16, 185, 129, 0.3)",
+                  border: "1px solid rgba(16, 185, 129, 0.25)",
                 }}
               >
                 {r.pts} pts

@@ -317,15 +317,15 @@ export function TabNutricionAI({ onSave }: TabNutricionAIProps) {
 
   return (
     <div className="animate-fade-in" style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-      {/* ── 1. HERO BANNER PRINCIPAL: FICHA DEL ESTUDIANTE & CALORÍAS CON ALTO CONTRASTE ── */}
+      {/* ── 1. HERO BANNER PRINCIPAL: FICHA DEL ESTUDIANTE & CALORÍAS (Limpio y Alto Contraste) ── */}
       <div
         className="glass-elevated"
         style={{
           padding: "26px 30px",
-          borderRadius: 22,
-          background: "linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(6, 182, 212, 0.08) 50%, rgba(15, 23, 42, 0.98) 100%)",
-          border: "1px solid rgba(16, 185, 129, 0.35)",
-          boxShadow: "0 16px 40px rgba(0, 0, 0, 0.45), 0 0 30px rgba(16, 185, 129, 0.12)",
+          borderRadius: 20,
+          background: "linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(6, 182, 212, 0.05) 50%, var(--color-bg-surface) 100%)",
+          border: "1px solid var(--color-border)",
+          boxShadow: "var(--shadow-card)",
           position: "relative",
           overflow: "hidden",
         }}
@@ -335,94 +335,93 @@ export function TabNutricionAI({ onSave }: TabNutricionAIProps) {
           <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
             <div
               style={{
-                width: 60,
-                height: 60,
-                borderRadius: 18,
+                width: 56,
+                height: 56,
+                borderRadius: 16,
                 background: "linear-gradient(135deg, #10b981, #059669)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 color: "#ffffff",
-                boxShadow: "0 8px 24px rgba(16, 185, 129, 0.4)",
+                boxShadow: "0 6px 20px rgba(16, 185, 129, 0.3)",
                 flexShrink: 0,
               }}
             >
-              <Zap size={30} />
+              <Zap size={28} />
             </div>
 
             <div>
-              <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
-                <h2 style={{ fontSize: "1.45rem", fontWeight: 800, letterSpacing: "-0.02em", color: "#ffffff" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+                <h2 style={{ fontSize: "1.4rem", fontWeight: 800, letterSpacing: "-0.02em", color: "var(--color-text-primary)" }}>
                   {plan.perfil.nombre}
                 </h2>
                 <span
                   style={{
-                    fontSize: "0.82rem",
-                    padding: "4px 12px",
+                    fontSize: "0.8rem",
+                    padding: "3px 10px",
                     borderRadius: 99,
-                    background: "rgba(16, 185, 129, 0.22)",
-                    color: "#34d399",
+                    background: "rgba(16, 185, 129, 0.15)",
+                    color: "var(--color-green)",
                     fontWeight: 800,
-                    border: "1px solid rgba(16, 185, 129, 0.45)",
+                    border: "1px solid rgba(16, 185, 129, 0.35)",
                   }}
                 >
                   {plan.perfil.grado}
                 </span>
                 <span
                   style={{
-                    fontSize: "0.82rem",
-                    padding: "4px 12px",
+                    fontSize: "0.8rem",
+                    padding: "3px 10px",
                     borderRadius: 99,
-                    background: "rgba(255, 255, 255, 0.08)",
-                    color: "#ffffff",
+                    background: "var(--color-bg-card)",
+                    color: "var(--color-text-secondary)",
                     fontWeight: 700,
-                    border: "1px solid rgba(255, 255, 255, 0.14)",
+                    border: "1px solid var(--color-border)",
                   }}
                 >
                   {plan.perfil.somatotipo} · {plan.perfil.peso} · {plan.perfil.talla}
                 </span>
               </div>
 
-              <p style={{ fontSize: "0.94rem", color: "#e2e8f0", marginTop: 6, fontWeight: 500 }}>
-                Diagnóstico OMS: <strong style={{ color: "#34d399", fontWeight: 800 }}>{plan.perfil.imc}</strong> · Objetivo: <strong style={{ color: "#ffffff" }}>{plan.perfil.objetivo}</strong>
+              <p style={{ fontSize: "0.9rem", color: "var(--color-text-secondary)", marginTop: 6, fontWeight: 500 }}>
+                Diagnóstico OMS: <strong style={{ color: "var(--color-green)", fontWeight: 800 }}>{plan.perfil.imc}</strong> · Objetivo: <strong style={{ color: "var(--color-text-primary)" }}>{plan.perfil.objetivo}</strong>
               </p>
             </div>
           </div>
 
           {/* Medidores Vivos de Calorías & Configuración */}
-          <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
             <div
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: 14,
-                padding: "12px 20px",
-                borderRadius: 16,
-                background: "rgba(255, 255, 255, 0.06)",
-                border: "1px solid rgba(255, 255, 255, 0.16)",
-                boxShadow: "0 4px 18px rgba(0, 0, 0, 0.3)",
+                gap: 12,
+                padding: "10px 18px",
+                borderRadius: 14,
+                background: "var(--color-bg-surface)",
+                border: "1.5px solid rgba(245, 158, 11, 0.3)",
+                boxShadow: "var(--shadow-sm)",
               }}
             >
               <div
                 style={{
-                  width: 48,
-                  height: 48,
-                  borderRadius: 14,
-                  background: "rgba(245, 158, 11, 0.2)",
+                  width: 44,
+                  height: 44,
+                  borderRadius: 12,
+                  background: "rgba(245, 158, 11, 0.15)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  color: "#fbbf24",
-                  border: "1px solid rgba(245, 158, 11, 0.4)",
+                  color: "#d97706",
                 }}
               >
-                <Flame size={26} />
+                <Flame size={24} />
               </div>
               <div>
-                <div style={{ fontSize: "1.65rem", fontWeight: 800, color: "#ffffff", lineHeight: 1 }}>
+                <div style={{ fontSize: "1.6rem", fontWeight: 900, color: "var(--color-text-primary)", lineHeight: 1 }}>
                   ~{plan.nutricion.calorias.toLocaleString()}
                 </div>
-                <div style={{ fontSize: "0.78rem", color: "#fef3c7", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", marginTop: 3 }}>
+                <div style={{ fontSize: "0.74rem", color: "#d97706", fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.04em", marginTop: 2 }}>
                   kcal diarias recomendadas
                 </div>
               </div>
@@ -432,39 +431,39 @@ export function TabNutricionAI({ onSave }: TabNutricionAIProps) {
               className="btn btn-secondary"
               onClick={() => setShowConfig(!showConfig)}
               style={{
-                padding: "12px 18px",
-                fontSize: "0.9rem",
+                padding: "11px 16px",
+                fontSize: "0.88rem",
                 borderRadius: 12,
-                borderColor: showConfig ? "var(--color-green)" : "rgba(255, 255, 255, 0.2)",
-                color: showConfig ? "#34d399" : "#ffffff",
+                color: "var(--color-text-primary)",
+                border: "1.5px solid var(--color-border)",
                 fontWeight: 700,
               }}
             >
-              <SlidersHorizontal size={16} />
+              <SlidersHorizontal size={16} color="var(--color-green)" />
               <span>{showConfig ? "Ocultar Parámetros" : "Ajustar Parámetros"}</span>
             </button>
           </div>
         </div>
 
         {/* Barra de Distribución Nutricional Clara y Colorida */}
-        <div style={{ marginTop: 22, paddingTop: 18, borderTop: "1px solid rgba(255, 255, 255, 0.1)" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10, flexWrap: "wrap", gap: 10 }}>
-            <span style={{ fontSize: "0.86rem", fontWeight: 800, color: "#ffffff", letterSpacing: "0.04em", textTransform: "uppercase" }}>
+        <div style={{ marginTop: 20, paddingTop: 16, borderTop: "1px solid var(--color-border)" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8, flexWrap: "wrap", gap: 10 }}>
+            <span style={{ fontSize: "0.82rem", fontWeight: 800, color: "var(--color-text-secondary)", letterSpacing: "0.04em", textTransform: "uppercase" }}>
               Distribución de Macronutrientes por Día
             </span>
-            <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
+            <div style={{ display: "flex", gap: 18, flexWrap: "wrap" }}>
               {plan.nutricion.distribucion.map((m) => (
-                <div key={m.macro} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: "0.9rem" }}>
-                  <div style={{ width: 10, height: 10, borderRadius: "50%", background: m.color, boxShadow: `0 0 8px ${m.color}` }} />
-                  <span style={{ color: "#e2e8f0", fontWeight: 600 }}>{m.macro}:</span>
-                  <strong style={{ color: "#ffffff", fontWeight: 800 }}>{m.pct}% ({m.gramos})</strong>
+                <div key={m.macro} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: "0.86rem" }}>
+                  <div style={{ width: 9, height: 9, borderRadius: "50%", background: m.color }} />
+                  <span style={{ color: "var(--color-text-muted)", fontWeight: 600 }}>{m.macro}:</span>
+                  <strong style={{ color: "var(--color-text-primary)", fontWeight: 800 }}>{m.pct}% ({m.gramos})</strong>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Barra segmentada brillante */}
-          <div style={{ height: 10, borderRadius: 99, background: "rgba(255, 255, 255, 0.08)", display: "flex", overflow: "hidden", boxShadow: "inset 0 1px 3px rgba(0,0,0,0.5)" }}>
+          {/* Barra segmentada */}
+          <div style={{ height: 10, borderRadius: 99, background: "var(--color-border)", display: "flex", overflow: "hidden" }}>
             <div style={{ width: "55%", background: "linear-gradient(90deg, #059669, #10b981)" }} title="55% Carbohidratos" />
             <div style={{ width: "20%", background: "linear-gradient(90deg, #0891b2, #06b6d4)" }} title="20% Proteínas" />
             <div style={{ width: "25%", background: "linear-gradient(90deg, #d97706, #f59e0b)" }} title="25% Grasas Saludables" />

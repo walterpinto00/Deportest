@@ -94,7 +94,7 @@ export function TabUsuarios({ onSave }: TabUsuariosProps) {
         ].map((s) => (
           <div key={s.label} className="glass" style={{ padding: "18px 20px" }}>
             <div style={{ fontSize: "0.72rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em", color: "var(--color-text-muted)" }}>{s.label}</div>
-            <div style={{ fontSize: "1.85rem", fontWeight: 800, color: "#ffffff", marginTop: 4, letterSpacing: "-0.02em" }}>{s.value}</div>
+            <div style={{ fontSize: "1.85rem", fontWeight: 800, color: "var(--color-text-primary)", marginTop: 4, letterSpacing: "-0.02em" }}>{s.value}</div>
             <div style={{ fontSize: "0.72rem", color: "var(--color-text-secondary)", marginTop: 2 }}>{s.sub}</div>
           </div>
         ))}

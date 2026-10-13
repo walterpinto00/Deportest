@@ -140,7 +140,7 @@ export function TabGraficas({ role }: TabGraficasProps) {
                   <Icon size={14} />
                 </div>
               </div>
-              <div style={{ fontSize: "1.75rem", fontWeight: 800, color: "#ffffff", marginTop: 8, letterSpacing: "-0.02em" }}>
+              <div style={{ fontSize: "1.75rem", fontWeight: 800, color: "var(--color-text-primary)", marginTop: 8, letterSpacing: "-0.02em" }}>
                 {s.value}
               </div>
               <div style={{ fontSize: "0.72rem", color: "var(--color-text-secondary)", marginTop: 2 }}>
