@@ -48,6 +48,25 @@ Una plataforma web moderna, rápida y clínicamente fundamentada que permite:
 * **Navegación Unificada:** Pestañas sobrias con indicador activo esmeralda.
 * **Tipografía:** Adopción de *Plus Jakarta Sans* para alta legibilidad.
 
+### Fase 5: Rediseño Visual de Alta Legibilidad y Cromatismo Atlético (Colores Vivos & Tipografía Grande)
+* **Diagnóstico:** Los textos resultaban pequeños en pantalla y la interfaz se percibía monótona u oscura, dificultando distinguir los bloques de información al instante.
+* **Mejoras Implementadas:**
+  1. **Cromatismo Vibrante por Momento en Nutrición & Hábitos:**
+     * **Desayuno en Casa:** Ámbar Dorado Solar (`#f59e0b` / `#fbbf24`) — Energía y concentración matutina.
+     * **Refrigerio / Lonchera Escolar:** Verde Esmeralda Natural (`#10b981` / `#34d399`) — Pausa activa y alimentos frescos.
+     * **Almuerzo Balanceado:** Cyan Eléctrico (`#06b6d4` / `#38bdf8`) — Plato del Buen Comer y alto rendimiento.
+     * **Merienda Pre-Actividad:** Violeta Dinámico (`#8b5cf6` / `#c084fc`) — Recarga de glucógeno para el deporte.
+     * **Cena Ligera:** Turquesa / Teal Relajante (`#14b8a6` / `#2dd4bf`) — Digestión ligera y recuperación nocturna.
+  2. **Escala Tipográfica Aumentada (Sin letra pequeña borrosa):**
+     * Títulos de momentos escalados de `0.95rem` a `1.25rem` con peso bold 800 en blanco puro `#ffffff`.
+     * Alimentos e instrucciones aumentados de `0.77rem` a `0.96rem` con alto contraste y cómoda lectura.
+     * Badges de horarios y calorías aumentados a `0.86rem` y `0.92rem` con bordes luminosos.
+     * Botones interactivos aumentados a `0.92rem` con iconos de 16-18px.
+  3. **Identidad Cromática en Todo el Proyecto:**
+     * Barra de navegación superior con color semántico vivo por pestaña (Dashboard, Usuarios, Antropometría, Pruebas, Nutrición, Gráficas).
+     * Tarjetas KPI del Dashboard con identidad visual diferenciada (Azul, Ámbar, Naranja y Verde).
+     * Selector de pruebas físicas con botones temáticos por disciplina.
+
 ---
 
 ## 🏛️ 3. Marco Legal y Estrategia en Colombia

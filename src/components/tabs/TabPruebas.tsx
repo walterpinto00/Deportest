@@ -31,13 +31,14 @@ const PRUEBAS_DISPONIBLES = [
     sub: "Resistencia (12 min)",
     unidad: "metros",
     placeholder: "Ej: 2400",
+    color: "#f59e0b",
     min: 1000,
     max: 3200,
     evaluar: (m: number) => {
-      if (m >= 2500) return { pts: 95, nivel: "Excelente / Sobresaliente", color: "var(--color-green)" };
-      if (m >= 2200) return { pts: 85, nivel: "Bueno / Saludable", color: "var(--color-green)" };
-      if (m >= 1800) return { pts: 70, nivel: "Aceptable / Promedio", color: "var(--color-amber)" };
-      return { pts: 50, nivel: "Bajo / Requiere Acondicionamiento", color: "var(--color-rose)" };
+      if (m >= 2500) return { pts: 95, nivel: "Excelente / Sobresaliente", color: "#10b981" };
+      if (m >= 2200) return { pts: 85, nivel: "Bueno / Saludable", color: "#34d399" };
+      if (m >= 1800) return { pts: 70, nivel: "Aceptable / Promedio", color: "#f59e0b" };
+      return { pts: 50, nivel: "Bajo / Requiere Acondicionamiento", color: "#f43f5e" };
     },
   },
   {
@@ -46,13 +47,14 @@ const PRUEBAS_DISPONIBLES = [
     sub: "Resistencia Escolar (20m)",
     unidad: "períodos (paliers)",
     placeholder: "Ej: 7.5",
+    color: "#10b981",
     min: 2,
     max: 14,
     evaluar: (m: number) => {
-      if (m >= 9) return { pts: 95, nivel: "Excelente / Élite Escolar", color: "var(--color-green)" };
-      if (m >= 7) return { pts: 85, nivel: "Bueno / Zona Saludable", color: "var(--color-green)" };
-      if (m >= 5) return { pts: 70, nivel: "Aceptable", color: "var(--color-amber)" };
-      return { pts: 50, nivel: "Bajo", color: "var(--color-rose)" };
+      if (m >= 9) return { pts: 95, nivel: "Excelente / Élite Escolar", color: "#10b981" };
+      if (m >= 7) return { pts: 85, nivel: "Bueno / Zona Saludable", color: "#34d399" };
+      if (m >= 5) return { pts: 70, nivel: "Aceptable", color: "#f59e0b" };
+      return { pts: 50, nivel: "Bajo", color: "#f43f5e" };
     },
   },
   {
@@ -61,13 +63,14 @@ const PRUEBAS_DISPONIBLES = [
     sub: "Fuerza Tren Superior",
     unidad: "repeticiones en 1 min",
     placeholder: "Ej: 35",
+    color: "#06b6d4",
     min: 0,
     max: 60,
     evaluar: (m: number) => {
-      if (m >= 40) return { pts: 95, nivel: "Excelente", color: "var(--color-green)" };
-      if (m >= 28) return { pts: 85, nivel: "Bueno", color: "var(--color-green)" };
-      if (m >= 18) return { pts: 70, nivel: "Aceptable", color: "var(--color-amber)" };
-      return { pts: 45, nivel: "Bajo", color: "var(--color-rose)" };
+      if (m >= 40) return { pts: 95, nivel: "Excelente", color: "#10b981" };
+      if (m >= 28) return { pts: 85, nivel: "Bueno", color: "#34d399" };
+      if (m >= 18) return { pts: 70, nivel: "Aceptable", color: "#f59e0b" };
+      return { pts: 45, nivel: "Bajo", color: "#f43f5e" };
     },
   },
   {
@@ -76,13 +79,14 @@ const PRUEBAS_DISPONIBLES = [
     sub: "Aceleración",
     unidad: "segundos",
     placeholder: "Ej: 7.5",
+    color: "#f97316",
     min: 6,
     max: 12,
     evaluar: (m: number) => {
-      if (m <= 7.2) return { pts: 95, nivel: "Excelente / Muy Rápido", color: "var(--color-green)" };
-      if (m <= 8.2) return { pts: 85, nivel: "Bueno / Aceptable", color: "var(--color-green)" };
-      if (m <= 9.2) return { pts: 70, nivel: "Promedio", color: "var(--color-amber)" };
-      return { pts: 50, nivel: "Lento", color: "var(--color-rose)" };
+      if (m <= 7.2) return { pts: 95, nivel: "Excelente / Muy Rápido", color: "#10b981" };
+      if (m <= 8.2) return { pts: 85, nivel: "Bueno / Aceptable", color: "#34d399" };
+      if (m <= 9.2) return { pts: 70, nivel: "Promedio", color: "#f59e0b" };
+      return { pts: 50, nivel: "Lento", color: "#f43f5e" };
     },
   },
   {
@@ -91,13 +95,14 @@ const PRUEBAS_DISPONIBLES = [
     sub: "Potencia de Piernas",
     unidad: "centímetros",
     placeholder: "Ej: 210",
+    color: "#8b5cf6",
     min: 100,
     max: 280,
     evaluar: (m: number) => {
-      if (m >= 220) return { pts: 95, nivel: "Excelente", color: "var(--color-green)" };
-      if (m >= 190) return { pts: 85, nivel: "Bueno", color: "var(--color-green)" };
-      if (m >= 160) return { pts: 70, nivel: "Promedio", color: "var(--color-amber)" };
-      return { pts: 45, nivel: "Bajo", color: "var(--color-rose)" };
+      if (m >= 220) return { pts: 95, nivel: "Excelente", color: "#10b981" };
+      if (m >= 190) return { pts: 85, nivel: "Bueno", color: "#34d399" };
+      if (m >= 160) return { pts: 70, nivel: "Promedio", color: "#f59e0b" };
+      return { pts: 45, nivel: "Bajo", color: "#f43f5e" };
     },
   },
   {
@@ -106,13 +111,14 @@ const PRUEBAS_DISPONIBLES = [
     sub: "Elasticidad Isquiotibial",
     unidad: "cm (+ / -)",
     placeholder: "Ej: +4",
+    color: "#14b8a6",
     min: -15,
     max: 20,
     evaluar: (m: number) => {
-      if (m >= 6) return { pts: 95, nivel: "Muy Flexible", color: "var(--color-green)" };
-      if (m >= 1) return { pts: 85, nivel: "Normal / Bueno", color: "var(--color-green)" };
-      if (m >= -4) return { pts: 70, nivel: "Límite Aceptable", color: "var(--color-amber)" };
-      return { pts: 45, nivel: "Baja Flexibilidad", color: "var(--color-rose)" };
+      if (m >= 6) return { pts: 95, nivel: "Muy Flexible", color: "#10b981" };
+      if (m >= 1) return { pts: 85, nivel: "Normal / Bueno", color: "#34d399" };
+      if (m >= -4) return { pts: 70, nivel: "Límite Aceptable", color: "#f59e0b" };
+      return { pts: 45, nivel: "Baja Flexibilidad", color: "#f43f5e" };
     },
   },
 ];
@@ -180,22 +186,23 @@ export function TabPruebas({ role, onSave }: TabPruebasProps) {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "flex-start",
-                padding: "12px 18px",
-                borderRadius: 12,
-                background: isSelected ? "rgba(16, 185, 129, 0.12)" : "rgba(255, 255, 255, 0.03)",
+                padding: "14px 20px",
+                borderRadius: 14,
+                background: isSelected ? `${p.color}25` : "rgba(255, 255, 255, 0.04)",
                 border: "1px solid",
-                borderColor: isSelected ? "var(--color-green)" : "rgba(255, 255, 255, 0.07)",
+                borderColor: isSelected ? p.color : "rgba(255, 255, 255, 0.1)",
+                boxShadow: isSelected ? `0 4px 18px ${p.color}35` : "none",
                 cursor: "pointer",
                 whiteSpace: "nowrap",
                 transition: "all 0.15s ease",
                 fontFamily: "var(--font-sans)",
-                minWidth: 150,
+                minWidth: 160,
               }}
             >
-              <span style={{ fontSize: "0.84rem", fontWeight: 700, color: isSelected ? "#ffffff" : "var(--color-text-secondary)" }}>
+              <span style={{ fontSize: "0.96rem", fontWeight: 800, color: isSelected ? "#ffffff" : "#e2e8f0" }}>
                 {p.nombre}
               </span>
-              <span style={{ fontSize: "0.68rem", color: isSelected ? "var(--color-green)" : "var(--color-text-muted)", marginTop: 2 }}>
+              <span style={{ fontSize: "0.82rem", color: isSelected ? p.color : "#cbd5e1", marginTop: 3, fontWeight: 600 }}>
                 {p.sub}
               </span>
             </button>
@@ -204,34 +211,36 @@ export function TabPruebas({ role, onSave }: TabPruebasProps) {
       </div>
 
       {/* ── 2. PANEL DE EVALUACIÓN DINÁMICO & FEEDBACK EN VIVO (Super fácil) ── */}
-      <div style={{ display: "grid", gridTemplateColumns: "1.2fr 0.8fr", gap: 20 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1.2fr 0.8fr", gap: 24 }}>
         {/* Formulario de Registro Ágil */}
         <div
           className="glass-elevated"
           style={{
-            padding: "24px 28px",
-            borderRadius: 18,
+            padding: "26px 30px",
+            borderRadius: 20,
             display: "flex",
             flexDirection: "column",
-            gap: 18,
+            gap: 20,
           }}
         >
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <div>
-              <span style={{ fontSize: "0.7rem", color: "var(--color-green)", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+              <span style={{ fontSize: "0.82rem", color: pruebaActiva.color, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.05em" }}>
                 Evaluación en Tiempo Real
               </span>
-              <h3 style={{ fontSize: "1.15rem", fontWeight: 800, color: "#ffffff", marginTop: 2 }}>
+              <h3 style={{ fontSize: "1.35rem", fontWeight: 800, color: "#ffffff", marginTop: 2 }}>
                 {pruebaActiva.nombre}
               </h3>
             </div>
             <span
               style={{
-                fontSize: "0.72rem",
-                padding: "4px 10px",
+                fontSize: "0.84rem",
+                padding: "5px 12px",
                 borderRadius: 8,
-                background: "rgba(255, 255, 255, 0.04)",
-                color: "var(--color-text-secondary)",
+                background: `${pruebaActiva.color}20`,
+                border: `1px solid ${pruebaActiva.color}45`,
+                color: "#ffffff",
+                fontWeight: 700,
               }}
             >
               Unidad: {pruebaActiva.unidad}

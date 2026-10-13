@@ -1,6 +1,6 @@
 // ─────────────────────────────────────────────────────────────
 // TabNutricionAI.tsx — Orientación Nutricional & Hábitos Saludables
-// Diseño vivo, interactivo, fácil, atractivo y de alto impacto visual (Estilo Apple Health / Whoop)
+// Diseño de alto impacto visual, tipografía grande y legible, colores vivos por momento
 // ─────────────────────────────────────────────────────────────
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -23,6 +23,10 @@ import {
   Check,
   SlidersHorizontal,
   Zap,
+  Sunrise,
+  Apple,
+  Utensils,
+  Coffee,
 } from "lucide-react";
 import { Select } from "../ui/Select";
 import { Input } from "../ui/Input";
@@ -31,7 +35,91 @@ interface TabNutricionAIProps {
   onSave: () => void;
 }
 
-// Datos completos conservados (sin quitar ninguna función)
+// Configuración de Identidad Visual y Colores Vivos por Momento de Comida
+const THEME_MOMENTOS: Record<
+  string,
+  {
+    color: string;
+    lightColor: string;
+    cardBg: string;
+    border: string;
+    borderDone: string;
+    glow: string;
+    badgeBg: string;
+    badgeBorder: string;
+    badgeText: string;
+    bulletColor: string;
+    tagNombre: string;
+  }
+> = {
+  desayuno: {
+    color: "#f59e0b", // Ámbar dorado energizante
+    lightColor: "#fef3c7",
+    cardBg: "linear-gradient(145deg, rgba(245, 158, 11, 0.12) 0%, rgba(15, 23, 42, 0.95) 100%)",
+    border: "rgba(245, 158, 11, 0.28)",
+    borderDone: "rgba(245, 158, 11, 0.6)",
+    glow: "rgba(245, 158, 11, 0.18)",
+    badgeBg: "rgba(245, 158, 11, 0.2)",
+    badgeBorder: "rgba(245, 158, 11, 0.45)",
+    badgeText: "#fbbf24",
+    bulletColor: "#f59e0b",
+    tagNombre: "ENERGÍA MATUTINA",
+  },
+  lonchera: {
+    color: "#10b981", // Verde esmeralda fresco y natural
+    lightColor: "#d1fae5",
+    cardBg: "linear-gradient(145deg, rgba(16, 185, 129, 0.12) 0%, rgba(15, 23, 42, 0.95) 100%)",
+    border: "rgba(16, 185, 129, 0.28)",
+    borderDone: "rgba(16, 185, 129, 0.6)",
+    glow: "rgba(16, 185, 129, 0.18)",
+    badgeBg: "rgba(16, 185, 129, 0.2)",
+    badgeBorder: "rgba(16, 185, 129, 0.45)",
+    badgeText: "#34d399",
+    bulletColor: "#10b981",
+    tagNombre: "LONCHERA ESCOLAR",
+  },
+  almuerzo: {
+    color: "#06b6d4", // Cyan eléctrico de alto rendimiento
+    lightColor: "#cffafe",
+    cardBg: "linear-gradient(145deg, rgba(6, 182, 212, 0.12) 0%, rgba(15, 23, 42, 0.95) 100%)",
+    border: "rgba(6, 182, 212, 0.28)",
+    borderDone: "rgba(6, 182, 212, 0.6)",
+    glow: "rgba(6, 182, 212, 0.18)",
+    badgeBg: "rgba(6, 182, 212, 0.2)",
+    badgeBorder: "rgba(6, 182, 212, 0.45)",
+    badgeText: "#38bdf8",
+    bulletColor: "#06b6d4",
+    tagNombre: "PLATO PRINCIPAL",
+  },
+  merienda: {
+    color: "#8b5cf6", // Violeta dinámico para pre-actividad
+    lightColor: "#ede9fe",
+    cardBg: "linear-gradient(145deg, rgba(139, 92, 246, 0.12) 0%, rgba(15, 23, 42, 0.95) 100%)",
+    border: "rgba(139, 92, 246, 0.28)",
+    borderDone: "rgba(139, 92, 246, 0.6)",
+    glow: "rgba(139, 92, 246, 0.18)",
+    badgeBg: "rgba(139, 92, 246, 0.2)",
+    badgeBorder: "rgba(139, 92, 246, 0.45)",
+    badgeText: "#c084fc",
+    bulletColor: "#8b5cf6",
+    tagNombre: "PRE-ENTRENO FORMATIVO",
+  },
+  cena: {
+    color: "#14b8a6", // Turquesa / Teal relajante nocturno
+    lightColor: "#ccfbf1",
+    cardBg: "linear-gradient(145deg, rgba(20, 184, 166, 0.12) 0%, rgba(15, 23, 42, 0.95) 100%)",
+    border: "rgba(20, 184, 166, 0.28)",
+    borderDone: "rgba(20, 184, 166, 0.6)",
+    glow: "rgba(20, 184, 166, 0.18)",
+    badgeBg: "rgba(20, 184, 166, 0.2)",
+    badgeBorder: "rgba(20, 184, 166, 0.45)",
+    badgeText: "#2dd4bf",
+    bulletColor: "#14b8a6",
+    tagNombre: "CENA REPARADORA",
+  },
+};
+
+// Datos pedagógicos y clínicos completos conservados
 const PLAN_DATA = {
   perfil: {
     nombre: "Juan Camilo Rodríguez",
@@ -52,9 +140,9 @@ const PLAN_DATA = {
   nutricion: {
     calorias: 2200,
     distribucion: [
-      { macro: "Carbohidratos", pct: 55, gramos: "302 g", color: "#10b981" },
-      { macro: "Proteínas", pct: 20, gramos: "110 g", color: "#06b6d4" },
-      { macro: "Grasas Saludables", pct: 25, gramos: "61 g", color: "#3b82f6" },
+      { macro: "Carbohidratos Complejos", pct: 55, gramos: "302 g", color: "#10b981", desc: "Avena, arroz, papa y frutas frescas" },
+      { macro: "Proteínas de Alto Valor", pct: 20, gramos: "110 g", color: "#06b6d4", desc: "Huevos, pechuga, pescado y lácteos" },
+      { macro: "Grasas Saludables", pct: 25, gramos: "61 g", color: "#f59e0b", desc: "Frutos secos, aguacate y aceite de oliva" },
     ],
     comidas: [
       {
@@ -62,12 +150,12 @@ const PLAN_DATA = {
         momento: "Desayuno en Casa",
         hora: "06:30 am",
         kcal: 500,
-        enfoque: "Energía sostenida y concentración en clase",
+        enfoque: "Energía sostenida y concentración en clases matutinas",
         alimentos: [
           "Porción de avena cocida en leche descremada con canela",
           "1 huevo revuelto o cocido con poco aceite",
           "1 porción de fruta fresca (banano, papaya o manzana)",
-          "Vaso grande de agua natural",
+          "Vaso grande de agua natural fresca",
         ],
       },
       {
@@ -75,7 +163,7 @@ const PLAN_DATA = {
         momento: "Refrigerio / Lonchera Escolar",
         hora: "09:45 am",
         kcal: 250,
-        enfoque: "Pausa activa saludable (sin ultraprocesados)",
+        enfoque: "Pausa activa saludable (100% libre de ultraprocesados y paquetes)",
         alimentos: [
           "1 fruta entera de temporada lavada (manzana o pera)",
           "Puñado de frutos secos naturales (maní sin sal, almendras)",
@@ -87,10 +175,10 @@ const PLAN_DATA = {
         momento: "Almuerzo Balanceado",
         hora: "01:15 pm",
         kcal: 750,
-        enfoque: "Plato del Buen Comer (50% vegetales, 25% proteína, 25% carbohidratos)",
+        enfoque: "Plato del Buen Comer (50% vegetales frescos, 25% proteína, 25% carbohidratos)",
         alimentos: [
           "120 g de pechuga de pollo, pescado o carne magra a la plancha",
-          "1 taza mediana de arroz o papa cocida",
+          "1 taza mediana de arroz o papa cocida al vapor",
           "Ensalada fresca abundante (tomate, zanahoria, pepino y limón)",
           "Porción de legumbres (frijoles o lentejas, 2 a 3 veces por semana)",
         ],
@@ -100,10 +188,10 @@ const PLAN_DATA = {
         momento: "Merienda Pre-Actividad",
         hora: "04:30 pm",
         kcal: 250,
-        enfoque: "Energía antes de entrenar o jugar",
+        enfoque: "Recarga rápida de glucógeno muscular antes de entrenar o jugar",
         alimentos: [
           "1 yogur natural o vaso de leche descremada",
-          "1 tostada o galleta integral con queso bajo en grasa",
+          "1 tostada o galleta integral con queso campesino bajo en grasa",
           "Hidratación continua con agua pura",
         ],
       },
@@ -112,11 +200,11 @@ const PLAN_DATA = {
         momento: "Cena Ligera",
         hora: "07:30 pm",
         kcal: 450,
-        enfoque: "Digestión fácil para un sueño reparador",
+        enfoque: "Digestión fácil para inducir un sueño profundo y reparador",
         alimentos: [
           "Tortilla francesa de 2 huevos con espinacas o champiñones",
-          "Porción generosa de vegetales al vapor o ensalada verde",
-          "Infusión aromática natural tibia (sin azúcar añadida)",
+          "Porción generosa de vegetales al vapor o ensalada verde tibia",
+          "Infusión aromática natural tibia (manzanilla o hierbabuena sin azúcar)",
         ],
       },
     ],
@@ -130,11 +218,12 @@ const PLAN_DATA = {
         nombre: "Movilidad & Coordinación",
         duracion: "45 min",
         intensidad: 65,
+        color: "#10b981",
         actividades: [
-          { ej: "Calentamiento articular dinámico", detalle: "10 min — tobillos, rodillas, cadera y hombros" },
+          { ej: "Calentamiento articular dinámico", detalle: "10 min — movilidad de tobillos, rodillas, cadera y hombros" },
           { ej: "Escalera de agilidad y coordinación", detalle: "3 series × 4 repeticiones a ritmo moderado" },
           { ej: "Juegos deportivos cooperativos (fútbol, baloncesto)", detalle: "20 min continuos" },
-          { ej: "Vuelta a la calma y estiramiento muscular", detalle: "5 min — respiración guiada" },
+          { ej: "Vuelta a la calma y estiramiento muscular", detalle: "5 min — respiración guiada y relajación" },
         ],
       },
       {
@@ -142,10 +231,11 @@ const PLAN_DATA = {
         nombre: "Fuerza con Peso Corporal (Calistenia)",
         duracion: "40 min",
         intensidad: 80,
+        color: "#f97316",
         actividades: [
-          { ej: "Sentadillas libres con técnica guiada", detalle: "3 series × 12 repeticiones" },
+          { ej: "Sentadillas libres con técnica guiada", detalle: "3 series × 12 repeticiones completas" },
           { ej: "Flexiones de pecho (apoyo en rodillas si se requiere)", detalle: "3 series × 8-10 repeticiones" },
-          { ej: "Plancha estática isométrica", detalle: "3 series × 30 segundos de contracción" },
+          { ej: "Plancha estática isométrica", detalle: "3 series × 30 segundos de contracción abdominal" },
           { ej: "Zancadas alternadas en el sitio", detalle: "3 series × 10 por pierna" },
         ],
       },
@@ -154,10 +244,11 @@ const PLAN_DATA = {
         nombre: "Capacidad Aeróbica & Recreación",
         duracion: "50 min",
         intensidad: 75,
+        color: "#06b6d4",
         actividades: [
-          { ej: "Trote suave continuo o marcha deportiva", detalle: "15 min a ritmo conversacional" },
+          { ej: "Trote suave continuo o marcha deportiva", detalle: "15 min a ritmo conversacional cómodo" },
           { ej: "Prueba formativa de velocidad 30 metros", detalle: "3 repeticiones con recuperación amplia" },
-          { ej: "Deporte recreativo al aire libre", detalle: "25 min de juego continuo" },
+          { ej: "Deporte recreativo al aire libre", detalle: "25 min de juego continuo en equipo" },
         ],
       },
     ],
@@ -165,27 +256,31 @@ const PLAN_DATA = {
   pautasSaludables: [
     {
       titulo: "Hidratación Constante con Agua",
-      descripcion: "Consumir al menos 2 litros de agua pura al día. Evitar gaseosas, bebidas energizantes y refrescos azucarados.",
+      descripcion: "Consumir al menos 2 litros de agua pura al día. Evitar gaseosas, bebidas energizantes y refrescos azucarados ultraprocesados.",
       icono: Droplets,
       meta: "2.0 Litros / Día",
+      color: "#06b6d4",
     },
     {
       titulo: "Higiene del Sueño Escolar",
-      descripcion: "Dormir de 8 a 9 horas diarias es fundamental para la memoria, la concentración en clase y el crecimiento físico.",
+      descripcion: "Dormir de 8 a 9 horas diarias es fundamental para la memoria, la concentración en clase y el crecimiento físico durante la adolescencia.",
       icono: Moon,
       meta: "8.5 Horas / Noche",
+      color: "#6366f1",
     },
     {
       titulo: "Control de Tiempo en Pantallas",
       descripcion: "Limitar el uso recreativo de celular, televisión y videojuegos a un máximo de 2 horas al día para evitar el sedentarismo.",
       icono: Activity,
       meta: "Máx. 2 Horas / Día",
+      color: "#f59e0b",
     },
     {
       titulo: "Control Periódico de Salud",
-      descripcion: "Verificar peso, talla y perímetro abdominal al cierre de cada período académico para asegurar una curva positiva.",
+      descripcion: "Verificar peso, talla y perímetro abdominal al cierre de cada período académico para asegurar una curva de crecimiento óptima.",
       icono: Heart,
       meta: "Cada Período",
+      color: "#10b981",
     },
   ],
 };
@@ -221,176 +316,163 @@ export function TabNutricionAI({ onSave }: TabNutricionAIProps) {
   };
 
   return (
-    <div className="animate-fade-in" style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-      {/* ── 1. HERO BANNER VIVO: DASHBOARD DE BIENESTAR & CALORÍAS (Estilo Apple Fitness / Whoop) ── */}
+    <div className="animate-fade-in" style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+      {/* ── 1. HERO BANNER PRINCIPAL: FICHA DEL ESTUDIANTE & CALORÍAS CON ALTO CONTRASTE ── */}
       <div
         className="glass-elevated"
         style={{
-          padding: "24px 28px",
-          borderRadius: 20,
-          background: "linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(6, 182, 212, 0.04) 50%, rgba(13, 18, 31, 0.95) 100%)",
-          border: "1px solid rgba(16, 185, 129, 0.2)",
-          boxShadow: "0 12px 36px rgba(0, 0, 0, 0.35), 0 0 24px rgba(16, 185, 129, 0.08)",
+          padding: "26px 30px",
+          borderRadius: 22,
+          background: "linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(6, 182, 212, 0.08) 50%, rgba(15, 23, 42, 0.98) 100%)",
+          border: "1px solid rgba(16, 185, 129, 0.35)",
+          boxShadow: "0 16px 40px rgba(0, 0, 0, 0.45), 0 0 30px rgba(16, 185, 129, 0.12)",
           position: "relative",
           overflow: "hidden",
         }}
       >
-        {/* Glow de fondo */}
-        <div
-          style={{
-            position: "absolute",
-            top: -60,
-            right: 40,
-            width: 260,
-            height: 260,
-            borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, transparent 70%)",
-            filter: "blur(40px)",
-            pointerEvents: "none",
-          }}
-        />
-
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 20, position: "relative", zIndex: 1 }}>
           {/* Identidad del Atleta / Estudiante */}
           <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
             <div
               style={{
-                width: 56,
-                height: 56,
-                borderRadius: 16,
-                background: "linear-gradient(135deg, var(--color-green), #059669)",
+                width: 60,
+                height: 60,
+                borderRadius: 18,
+                background: "linear-gradient(135deg, #10b981, #059669)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 color: "#ffffff",
-                boxShadow: "0 8px 24px rgba(16, 185, 129, 0.35)",
+                boxShadow: "0 8px 24px rgba(16, 185, 129, 0.4)",
                 flexShrink: 0,
               }}
             >
-              <Zap size={28} />
+              <Zap size={30} />
             </div>
 
             <div>
-              <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
-                <h2 style={{ fontSize: "1.35rem", fontWeight: 800, letterSpacing: "-0.02em" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+                <h2 style={{ fontSize: "1.45rem", fontWeight: 800, letterSpacing: "-0.02em", color: "#ffffff" }}>
                   {plan.perfil.nombre}
                 </h2>
                 <span
                   style={{
-                    fontSize: "0.7rem",
-                    padding: "3px 10px",
+                    fontSize: "0.82rem",
+                    padding: "4px 12px",
                     borderRadius: 99,
-                    background: "rgba(16, 185, 129, 0.15)",
-                    color: "var(--color-green)",
-                    fontWeight: 700,
-                    border: "1px solid rgba(16, 185, 129, 0.3)",
+                    background: "rgba(16, 185, 129, 0.22)",
+                    color: "#34d399",
+                    fontWeight: 800,
+                    border: "1px solid rgba(16, 185, 129, 0.45)",
                   }}
                 >
                   {plan.perfil.grado}
                 </span>
                 <span
                   style={{
-                    fontSize: "0.7rem",
-                    padding: "3px 10px",
+                    fontSize: "0.82rem",
+                    padding: "4px 12px",
                     borderRadius: 99,
-                    background: "rgba(255, 255, 255, 0.05)",
-                    color: "var(--color-text-secondary)",
-                    fontWeight: 600,
+                    background: "rgba(255, 255, 255, 0.08)",
+                    color: "#ffffff",
+                    fontWeight: 700,
+                    border: "1px solid rgba(255, 255, 255, 0.14)",
                   }}
                 >
-                  {plan.perfil.somatotipo} · {plan.perfil.peso}
+                  {plan.perfil.somatotipo} · {plan.perfil.peso} · {plan.perfil.talla}
                 </span>
               </div>
 
-              <p style={{ fontSize: "0.82rem", color: "var(--color-text-secondary)", marginTop: 4 }}>
-                Diagnóstico OMS: <strong style={{ color: "var(--color-green)" }}>{plan.perfil.imc}</strong> · Objetivo: <strong>{plan.perfil.objetivo}</strong>
+              <p style={{ fontSize: "0.94rem", color: "#e2e8f0", marginTop: 6, fontWeight: 500 }}>
+                Diagnóstico OMS: <strong style={{ color: "#34d399", fontWeight: 800 }}>{plan.perfil.imc}</strong> · Objetivo: <strong style={{ color: "#ffffff" }}>{plan.perfil.objetivo}</strong>
               </p>
             </div>
           </div>
 
-          {/* Medidores Vivos (Calorías & Macros en tarjeta visual compacta) */}
-          <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
-            {/* Medidor Circular de Energía */}
+          {/* Medidores Vivos de Calorías & Configuración */}
+          <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
             <div
               style={{
                 display: "flex",
                 alignItems: "center",
                 gap: 14,
-                padding: "10px 18px",
-                borderRadius: 14,
-                background: "rgba(255, 255, 255, 0.03)",
-                border: "1px solid rgba(255, 255, 255, 0.08)",
+                padding: "12px 20px",
+                borderRadius: 16,
+                background: "rgba(255, 255, 255, 0.06)",
+                border: "1px solid rgba(255, 255, 255, 0.16)",
+                boxShadow: "0 4px 18px rgba(0, 0, 0, 0.3)",
               }}
             >
               <div
                 style={{
-                  width: 44,
-                  height: 44,
-                  borderRadius: 12,
-                  background: "rgba(16, 185, 129, 0.15)",
+                  width: 48,
+                  height: 48,
+                  borderRadius: 14,
+                  background: "rgba(245, 158, 11, 0.2)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  color: "var(--color-green)",
+                  color: "#fbbf24",
+                  border: "1px solid rgba(245, 158, 11, 0.4)",
                 }}
               >
-                <Flame size={22} />
+                <Flame size={26} />
               </div>
               <div>
-                <div style={{ fontSize: "1.45rem", fontWeight: 800, color: "#ffffff", lineHeight: 1 }}>
+                <div style={{ fontSize: "1.65rem", fontWeight: 800, color: "#ffffff", lineHeight: 1 }}>
                   ~{plan.nutricion.calorias.toLocaleString()}
                 </div>
-                <div style={{ fontSize: "0.68rem", color: "var(--color-text-muted)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", marginTop: 2 }}>
-                  kcal recomendadas / día
+                <div style={{ fontSize: "0.78rem", color: "#fef3c7", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", marginTop: 3 }}>
+                  kcal diarias recomendadas
                 </div>
               </div>
             </div>
 
-            {/* Botón para abrir configuración de parámetros */}
             <button
               className="btn btn-secondary"
               onClick={() => setShowConfig(!showConfig)}
               style={{
-                padding: "10px 16px",
-                fontSize: "0.8rem",
-                borderRadius: 10,
-                borderColor: showConfig ? "var(--color-green)" : "rgba(255, 255, 255, 0.1)",
-                color: showConfig ? "var(--color-green)" : "var(--color-text-primary)",
+                padding: "12px 18px",
+                fontSize: "0.9rem",
+                borderRadius: 12,
+                borderColor: showConfig ? "var(--color-green)" : "rgba(255, 255, 255, 0.2)",
+                color: showConfig ? "#34d399" : "#ffffff",
+                fontWeight: 700,
               }}
             >
-              <SlidersHorizontal size={14} />
+              <SlidersHorizontal size={16} />
               <span>{showConfig ? "Ocultar Parámetros" : "Ajustar Parámetros"}</span>
             </button>
           </div>
         </div>
 
-        {/* Barra de Distribución Nutricional Viva (Carbs, Proteína, Grasas) */}
-        <div style={{ marginTop: 20, paddingTop: 18, borderTop: "1px solid rgba(255, 255, 255, 0.06)" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-            <span style={{ fontSize: "0.74rem", fontWeight: 700, color: "var(--color-text-secondary)", letterSpacing: "0.04em", textTransform: "uppercase" }}>
-              Balance Óptimo de Macronutrientes
+        {/* Barra de Distribución Nutricional Clara y Colorida */}
+        <div style={{ marginTop: 22, paddingTop: 18, borderTop: "1px solid rgba(255, 255, 255, 0.1)" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10, flexWrap: "wrap", gap: 10 }}>
+            <span style={{ fontSize: "0.86rem", fontWeight: 800, color: "#ffffff", letterSpacing: "0.04em", textTransform: "uppercase" }}>
+              Distribución de Macronutrientes por Día
             </span>
-            <div style={{ display: "flex", gap: 16 }}>
+            <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
               {plan.nutricion.distribucion.map((m) => (
-                <div key={m.macro} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: "0.74rem" }}>
-                  <div style={{ width: 8, height: 8, borderRadius: "50%", background: m.color }} />
-                  <span style={{ color: "var(--color-text-secondary)" }}>{m.macro}:</span>
-                  <strong style={{ color: "#ffffff" }}>{m.pct}% ({m.gramos})</strong>
+                <div key={m.macro} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: "0.9rem" }}>
+                  <div style={{ width: 10, height: 10, borderRadius: "50%", background: m.color, boxShadow: `0 0 8px ${m.color}` }} />
+                  <span style={{ color: "#e2e8f0", fontWeight: 600 }}>{m.macro}:</span>
+                  <strong style={{ color: "#ffffff", fontWeight: 800 }}>{m.pct}% ({m.gramos})</strong>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Barra segmentada brillante */}
-          <div style={{ height: 8, borderRadius: 99, background: "rgba(255, 255, 255, 0.06)", display: "flex", overflow: "hidden" }}>
-            <div style={{ width: "55%", background: "linear-gradient(90deg, #059669, #10b981)", transition: "width 0.4s ease" }} />
-            <div style={{ width: "20%", background: "linear-gradient(90deg, #0891b2, #06b6d4)", transition: "width 0.4s ease" }} />
-            <div style={{ width: "25%", background: "linear-gradient(90deg, #2563eb, #3b82f6)", transition: "width 0.4s ease" }} />
+          <div style={{ height: 10, borderRadius: 99, background: "rgba(255, 255, 255, 0.08)", display: "flex", overflow: "hidden", boxShadow: "inset 0 1px 3px rgba(0,0,0,0.5)" }}>
+            <div style={{ width: "55%", background: "linear-gradient(90deg, #059669, #10b981)" }} title="55% Carbohidratos" />
+            <div style={{ width: "20%", background: "linear-gradient(90deg, #0891b2, #06b6d4)" }} title="20% Proteínas" />
+            <div style={{ width: "25%", background: "linear-gradient(90deg, #d97706, #f59e0b)" }} title="25% Grasas Saludables" />
           </div>
         </div>
       </div>
 
-      {/* ── PANEL DESPLEGABLE DE AJUSTE (Si el usuario quiere editar) ── */}
+      {/* ── PANEL DESPLEGABLE DE AJUSTE (Si el docente desea recalcular) ── */}
       <AnimatePresence>
         {showConfig && (
           <motion.div
@@ -399,12 +481,12 @@ export function TabNutricionAI({ onSave }: TabNutricionAIProps) {
             exit={{ opacity: 0, height: 0 }}
             className="glass"
             style={{
-              padding: "20px 24px",
-              borderRadius: 16,
-              border: "1px solid rgba(16, 185, 129, 0.25)",
+              padding: "24px 28px",
+              borderRadius: 18,
+              border: "1px solid rgba(16, 185, 129, 0.35)",
               display: "grid",
               gridTemplateColumns: "1fr 1fr 1fr auto",
-              gap: 16,
+              gap: 18,
               alignItems: "flex-end",
             }}
           >
@@ -431,12 +513,12 @@ export function TabNutricionAI({ onSave }: TabNutricionAIProps) {
                 className="btn btn-primary"
                 onClick={handleGenerate}
                 disabled={generating}
-                style={{ padding: "10px 18px", fontSize: "0.82rem" }}
+                style={{ padding: "12px 20px", fontSize: "0.92rem" }}
               >
                 {generating ? (
-                  <RefreshCw size={14} style={{ animation: "spin 1s linear infinite" }} />
+                  <RefreshCw size={16} style={{ animation: "spin 1s linear infinite" }} />
                 ) : (
-                  <Sparkles size={14} />
+                  <Sparkles size={16} />
                 )}
                 <span>Recalcular Plan</span>
               </button>
@@ -445,30 +527,30 @@ export function TabNutricionAI({ onSave }: TabNutricionAIProps) {
         )}
       </AnimatePresence>
 
-      {/* ── 2. SELECTOR DE PESTAÑAS TIPO SEGMENTED CONTROL (Sencillo, limpio, fácil) ── */}
+      {/* ── 2. BARRA DE PESTAÑAS INTERNAS & ACCIONES RÁPIDAS (Grande y visible) ── */}
       <div
         style={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
           flexWrap: "wrap",
-          gap: 12,
+          gap: 14,
         }}
       >
         <div
           style={{
             display: "inline-flex",
-            background: "rgba(255, 255, 255, 0.04)",
-            border: "1px solid rgba(255, 255, 255, 0.08)",
-            borderRadius: 12,
-            padding: 4,
-            gap: 4,
+            background: "rgba(255, 255, 255, 0.05)",
+            border: "1px solid rgba(255, 255, 255, 0.12)",
+            borderRadius: 14,
+            padding: 5,
+            gap: 6,
           }}
         >
           {[
-            { id: "nutricion", label: "Horarios & Lonchera Saludable", icon: Heart },
-            { id: "actividad", label: "Plan de Actividad Física Escolar", icon: Dumbbell },
-            { id: "habitos", label: "Pautas de Salud & Bienestar", icon: ShieldCheck },
+            { id: "nutricion", label: "Horarios & Lonchera Saludable", icon: Heart, activeColor: "#06b6d4" },
+            { id: "actividad", label: "Plan de Actividad Física Escolar", icon: Dumbbell, activeColor: "#f97316" },
+            { id: "habitos", label: "Pautas de Salud & Bienestar", icon: ShieldCheck, activeColor: "#8b5cf6" },
           ].map((tab) => {
             const Icon = tab.icon;
             const isSelected = activeTab === tab.id;
@@ -479,163 +561,211 @@ export function TabNutricionAI({ onSave }: TabNutricionAIProps) {
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  gap: 8,
-                  padding: "9px 18px",
-                  borderRadius: 8,
+                  gap: 10,
+                  padding: "11px 22px",
+                  borderRadius: 10,
                   border: "none",
                   cursor: "pointer",
                   fontFamily: "var(--font-sans)",
-                  fontSize: "0.82rem",
-                  fontWeight: isSelected ? 700 : 500,
-                  background: isSelected ? "var(--color-green)" : "transparent",
-                  color: isSelected ? "#070a12" : "var(--color-text-secondary)",
-                  boxShadow: isSelected ? "0 4px 14px rgba(16, 185, 129, 0.3)" : "none",
+                  fontSize: "0.95rem",
+                  fontWeight: isSelected ? 800 : 600,
+                  background: isSelected ? tab.activeColor : "transparent",
+                  color: isSelected ? "#ffffff" : "var(--color-text-secondary)",
+                  boxShadow: isSelected ? `0 4px 16px ${tab.activeColor}55` : "none",
                   transition: "all 0.2s ease",
                 }}
               >
-                <Icon size={14} />
+                <Icon size={17} />
                 <span>{tab.label}</span>
               </button>
             );
           })}
         </div>
 
-        {/* Acciones Rápidas */}
-        <div style={{ display: "flex", gap: 10 }}>
+        {/* Acciones Rápidas (Guardar e Imprimir) */}
+        <div style={{ display: "flex", gap: 12 }}>
           <button
             className="btn btn-ghost"
             onClick={handleSave}
             style={{
-              padding: "8px 14px",
-              fontSize: "0.78rem",
-              borderRadius: 8,
-              color: savedOk ? "var(--color-green)" : "var(--color-text-secondary)",
-              borderColor: savedOk ? "var(--color-green)" : "rgba(255, 255, 255, 0.08)",
+              padding: "10px 18px",
+              fontSize: "0.9rem",
+              borderRadius: 10,
+              color: savedOk ? "#34d399" : "#ffffff",
+              borderColor: savedOk ? "#10b981" : "rgba(255, 255, 255, 0.15)",
+              background: savedOk ? "rgba(16, 185, 129, 0.15)" : "transparent",
+              fontWeight: 700,
             }}
           >
-            {savedOk ? <CheckCircle2 size={13} /> : <Save size={13} />}
-            <span>{savedOk ? "Ficha Guardada" : "Guardar Ficha"}</span>
+            {savedOk ? <CheckCircle2 size={16} /> : <Save size={16} />}
+            <span>{savedOk ? "✓ Ficha Guardada" : "Guardar Ficha"}</span>
           </button>
 
           <button
-            className="btn btn-ghost"
+            className="btn btn-secondary"
             onClick={() => window.print()}
             style={{
-              padding: "8px 14px",
-              fontSize: "0.78rem",
-              borderRadius: 8,
+              padding: "10px 18px",
+              fontSize: "0.9rem",
+              borderRadius: 10,
+              fontWeight: 700,
             }}
-            title="Imprimir informe oficial para padres o acudientes"
+            title="Imprimir boletín oficial para padres de familia"
           >
-            <Printer size={13} />
+            <Printer size={16} />
             <span>Imprimir Boletín</span>
           </button>
         </div>
       </div>
 
-      {/* ── 3. CONTENIDO: SECCIÓN DE ALIMENTACIÓN & LONCHERA (Visual, limpia, interactiva) ── */}
+      {/* ── 3. CONTENIDO: SECCIÓN DE ALIMENTACIÓN & LONCHERA (Colores Vivos por Momento & Letra Grande) ── */}
       {activeTab === "nutricion" && (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: 16 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(360px, 1fr))", gap: 20 }}>
           {plan.nutricion.comidas.map((comida, idx) => {
             const isDone = completedMeals[comida.id];
+            const theme = THEME_MOMENTOS[comida.id] || THEME_MOMENTOS.desayuno;
+
             return (
               <motion.div
                 key={comida.id}
-                whileHover={{ y: -2 }}
+                whileHover={{ y: -3 }}
                 transition={{ duration: 0.15 }}
-                className="glass"
                 style={{
-                  padding: "20px 22px",
-                  borderRadius: 16,
-                  border: isDone ? "1px solid rgba(16, 185, 129, 0.25)" : "1px solid rgba(255, 255, 255, 0.06)",
-                  background: isDone ? "linear-gradient(135deg, rgba(16, 185, 129, 0.03), rgba(13, 18, 31, 0.8))" : "rgba(13, 18, 31, 0.7)",
+                  padding: "24px 26px",
+                  borderRadius: 18,
+                  border: isDone ? `2px solid ${theme.borderDone}` : `1px solid ${theme.border}`,
+                  background: theme.cardBg,
+                  boxShadow: isDone ? `0 12px 32px ${theme.glow}, 0 0 20px ${theme.glow}` : "0 8px 24px rgba(0, 0, 0, 0.4)",
                   display: "flex",
                   flexDirection: "column",
-                  gap: 14,
+                  gap: 16,
                   position: "relative",
+                  overflow: "hidden",
                 }}
               >
-                {/* Cabecera de la Comida */}
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 10 }}>
+                {/* Indicador de acento superior de color */}
+                <div
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: 4,
+                    background: `linear-gradient(90deg, ${theme.color}, ${theme.lightColor})`,
+                  }}
+                />
+
+                {/* Cabecera de la Comida (Con Badge de Color Vivo y Hora Grande) */}
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12 }}>
                   <div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 3 }}>
-                      <span style={{ fontSize: "0.7rem", color: "var(--color-green)", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em" }}>
-                        Momento {idx + 1}
+                    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+                      <span
+                        style={{
+                          fontSize: "0.82rem",
+                          color: theme.badgeText,
+                          background: theme.badgeBg,
+                          border: `1px solid ${theme.badgeBorder}`,
+                          padding: "3px 10px",
+                          borderRadius: 8,
+                          fontWeight: 800,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.05em",
+                        }}
+                      >
+                        Momento {idx + 1} · {theme.tagNombre}
                       </span>
-                      <span style={{ fontSize: "0.7rem", color: "var(--color-text-muted)" }}>•</span>
-                      <span style={{ display: "flex", alignItems: "center", gap: 4, fontSize: "0.7rem", color: "var(--color-text-muted)" }}>
-                        <Clock size={11} /> {comida.hora}
+                      <span
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 5,
+                          fontSize: "0.86rem",
+                          color: "#ffffff",
+                          fontWeight: 700,
+                        }}
+                      >
+                        <Clock size={14} color={theme.color} /> {comida.hora}
                       </span>
                     </div>
 
-                    <h4 style={{ fontSize: "0.95rem", fontWeight: 700, color: "#ffffff" }}>
+                    <h4 style={{ fontSize: "1.25rem", fontWeight: 800, color: "#ffffff", letterSpacing: "-0.01em" }}>
                       {comida.momento}
                     </h4>
-                    <p style={{ fontSize: "0.74rem", color: "var(--color-text-secondary)", marginTop: 2 }}>
+                    <p style={{ fontSize: "0.92rem", color: "#e2e8f0", marginTop: 4, lineHeight: 1.45, fontWeight: 500 }}>
                       {comida.enfoque}
                     </p>
                   </div>
 
+                  {/* Badge de Calorías con Color Vivo */}
                   <div
                     style={{
-                      padding: "4px 10px",
-                      borderRadius: 8,
-                      background: "rgba(16, 185, 129, 0.1)",
-                      border: "1px solid rgba(16, 185, 129, 0.2)",
-                      fontSize: "0.75rem",
-                      fontWeight: 700,
-                      color: "var(--color-green)",
+                      padding: "6px 14px",
+                      borderRadius: 10,
+                      background: theme.badgeBg,
+                      border: `1px solid ${theme.badgeBorder}`,
+                      fontSize: "0.92rem",
+                      fontWeight: 800,
+                      color: "#ffffff",
                       flexShrink: 0,
+                      boxShadow: `0 2px 10px ${theme.glow}`,
                     }}
                   >
                     ~{comida.kcal} kcal
                   </div>
                 </div>
 
-                {/* Lista de Alimentos Claros en Bloques Limpios */}
-                <div style={{ display: "flex", flexDirection: "column", gap: 8, paddingTop: 4 }}>
+                {/* Lista de Alimentos: Claros, Con Fondo Nítido y Letra Grande (0.96rem) */}
+                <div style={{ display: "flex", flexDirection: "column", gap: 9, paddingTop: 4 }}>
                   {comida.alimentos.map((alim, i) => (
                     <div
                       key={i}
                       style={{
                         display: "flex",
                         alignItems: "flex-start",
-                        gap: 10,
-                        padding: "8px 12px",
-                        borderRadius: 8,
-                        background: "rgba(255, 255, 255, 0.02)",
-                        fontSize: "0.77rem",
-                        color: "var(--color-text-secondary)",
+                        gap: 12,
+                        padding: "10px 14px",
+                        borderRadius: 10,
+                        background: "rgba(255, 255, 255, 0.05)",
+                        border: "1px solid rgba(255, 255, 255, 0.08)",
+                        fontSize: "0.96rem",
+                        color: "#ffffff",
+                        fontWeight: 500,
+                        lineHeight: 1.4,
                       }}
                     >
-                      <ChevronRight size={13} color="var(--color-green)" style={{ flexShrink: 0, marginTop: 2 }} />
-                      <span style={{ lineHeight: 1.4 }}>{alim}</span>
+                      <ChevronRight
+                        size={17}
+                        color={theme.color}
+                        style={{ flexShrink: 0, marginTop: 2 }}
+                      />
+                      <span>{alim}</span>
                     </div>
                   ))}
                 </div>
 
-                {/* Botón de cumplimiento interactivo */}
-                <div style={{ marginTop: "auto", paddingTop: 8, display: "flex", justifyContent: "flex-end" }}>
+                {/* Botón de Cumplimiento Interactivo y Claro */}
+                <div style={{ marginTop: "auto", paddingTop: 10, display: "flex", justifyContent: "flex-end" }}>
                   <button
                     onClick={() => toggleMeal(comida.id)}
                     style={{
                       display: "flex",
                       alignItems: "center",
-                      gap: 6,
-                      background: isDone ? "rgba(16, 185, 129, 0.12)" : "rgba(255, 255, 255, 0.03)",
+                      gap: 8,
+                      background: isDone ? theme.badgeBg : "rgba(255, 255, 255, 0.06)",
                       border: "1px solid",
-                      borderColor: isDone ? "rgba(16, 185, 129, 0.3)" : "rgba(255, 255, 255, 0.08)",
-                      color: isDone ? "var(--color-green)" : "var(--color-text-muted)",
-                      padding: "6px 12px",
-                      borderRadius: 6,
-                      fontSize: "0.72rem",
-                      fontWeight: 600,
+                      borderColor: isDone ? theme.borderDone : "rgba(255, 255, 255, 0.16)",
+                      color: isDone ? "#ffffff" : "#cbd5e1",
+                      padding: "8px 16px",
+                      borderRadius: 10,
+                      fontSize: "0.88rem",
+                      fontWeight: 700,
                       cursor: "pointer",
                       transition: "all 0.15s ease",
+                      boxShadow: isDone ? `0 2px 12px ${theme.glow}` : "none",
                     }}
                   >
-                    <Check size={12} />
-                    <span>{isDone ? "Pauta Cumplida" : "Marcar como Guía Activa"}</span>
+                    <Check size={16} color={isDone ? theme.color : "currentColor"} />
+                    <span>{isDone ? "✓ Pauta Cumplida" : "Marcar como Guía Activa"}</span>
                   </button>
                 </div>
               </motion.div>
@@ -644,12 +774,12 @@ export function TabNutricionAI({ onSave }: TabNutricionAIProps) {
         </div>
       )}
 
-      {/* ── 4. CONTENIDO: SECCIÓN DE ACTIVIDAD FÍSICA ESCOLAR (Dinámica & Visual) ── */}
+      {/* ── 4. CONTENIDO: SECCIÓN DE ACTIVIDAD FÍSICA ESCOLAR (Grande, Clara y Dinámica) ── */}
       {activeTab === "actividad" && (
-        <div style={{ display: "grid", gridTemplateColumns: "240px 1fr", gap: 20 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "280px 1fr", gap: 24 }}>
           {/* Selector de Sesiones */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            <span style={{ fontSize: "0.72rem", fontWeight: 700, color: "var(--color-text-muted)", textTransform: "uppercase", letterSpacing: "0.05em", paddingLeft: 4 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            <span style={{ fontSize: "0.82rem", fontWeight: 800, color: "#ffffff", textTransform: "uppercase", letterSpacing: "0.05em", paddingLeft: 4 }}>
               Sesiones de la Semana
             </span>
             {plan.actividadFisica.sesiones.map((ses, i) => {
@@ -662,11 +792,12 @@ export function TabNutricionAI({ onSave }: TabNutricionAIProps) {
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "flex-start",
-                    padding: "14px 16px",
-                    borderRadius: 12,
+                    padding: "16px 18px",
+                    borderRadius: 14,
                     border: "1px solid",
-                    borderColor: isSelected ? "var(--color-green)" : "rgba(255, 255, 255, 0.06)",
-                    background: isSelected ? "rgba(16, 185, 129, 0.08)" : "rgba(255, 255, 255, 0.02)",
+                    borderColor: isSelected ? ses.color : "rgba(255, 255, 255, 0.1)",
+                    background: isSelected ? `${ses.color}22` : "rgba(255, 255, 255, 0.03)",
+                    boxShadow: isSelected ? `0 4px 18px ${ses.color}33` : "none",
                     cursor: "pointer",
                     textAlign: "left",
                     transition: "all 0.15s ease",
@@ -674,14 +805,14 @@ export function TabNutricionAI({ onSave }: TabNutricionAIProps) {
                   }}
                 >
                   <div style={{ display: "flex", justifyContent: "space-between", width: "100%", alignItems: "center" }}>
-                    <span style={{ fontSize: "0.7rem", fontWeight: 700, color: isSelected ? "var(--color-green)" : "var(--color-text-muted)", textTransform: "uppercase" }}>
+                    <span style={{ fontSize: "0.84rem", fontWeight: 800, color: isSelected ? ses.color : "#cbd5e1", textTransform: "uppercase" }}>
                       {ses.dia}
                     </span>
-                    <span style={{ fontSize: "0.68rem", color: "var(--color-text-muted)" }}>
+                    <span style={{ fontSize: "0.82rem", color: "#e2e8f0", fontWeight: 600 }}>
                       {ses.duracion}
                     </span>
                   </div>
-                  <span style={{ fontSize: "0.82rem", fontWeight: 600, color: isSelected ? "#ffffff" : "var(--color-text-secondary)", marginTop: 4 }}>
+                  <span style={{ fontSize: "0.98rem", fontWeight: 700, color: isSelected ? "#ffffff" : "#cbd5e1", marginTop: 4 }}>
                     {ses.nombre}
                   </span>
                 </button>
@@ -690,63 +821,65 @@ export function TabNutricionAI({ onSave }: TabNutricionAIProps) {
 
             <div
               style={{
-                marginTop: 10,
-                padding: "14px 16px",
-                borderRadius: 12,
-                background: "rgba(255, 255, 255, 0.02)",
-                border: "1px solid rgba(255, 255, 255, 0.05)",
-                fontSize: "0.74rem",
-                color: "var(--color-text-secondary)",
+                marginTop: 12,
+                padding: "16px 18px",
+                borderRadius: 14,
+                background: "rgba(255, 255, 255, 0.04)",
+                border: "1px solid rgba(255, 255, 255, 0.08)",
+                fontSize: "0.88rem",
+                color: "#e2e8f0",
                 lineHeight: 1.6,
               }}
             >
-              <strong style={{ color: "var(--color-text-primary)" }}>Frecuencia recomendada:</strong><br />
-              {plan.actividadFisica.frecuencia} de actividad física guiada.
+              <strong style={{ color: "#34d399" }}>Frecuencia recomendada:</strong><br />
+              {plan.actividadFisica.frecuencia} de actividad física guiada y supervisada.
             </div>
           </div>
 
           {/* Detalle de la Sesión Seleccionada */}
           <div
-            className="glass"
+            className="glass-elevated"
             style={{
-              padding: "24px 28px",
-              borderRadius: 16,
+              padding: "26px 30px",
+              borderRadius: 18,
               display: "flex",
               flexDirection: "column",
-              gap: 20,
+              gap: 22,
             }}
           >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid rgba(255, 255, 255, 0.06)", paddingBottom: 16 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid rgba(255, 255, 255, 0.1)", paddingBottom: 18, flexWrap: "wrap", gap: 12 }}>
               <div>
-                <span style={{ fontSize: "0.7rem", color: "var(--color-green)", fontWeight: 700, textTransform: "uppercase" }}>
+                <span style={{ fontSize: "0.84rem", color: plan.actividadFisica.sesiones[activeSesion].color, fontWeight: 800, textTransform: "uppercase" }}>
                   {plan.actividadFisica.sesiones[activeSesion].dia}
                 </span>
-                <h3 style={{ fontSize: "1.1rem", fontWeight: 700, color: "#ffffff", marginTop: 2 }}>
+                <h3 style={{ fontSize: "1.35rem", fontWeight: 800, color: "#ffffff", marginTop: 2 }}>
                   {plan.actividadFisica.sesiones[activeSesion].nombre}
                 </h3>
               </div>
 
-              <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+              <div style={{ display: "flex", gap: 14, alignItems: "center" }}>
                 <span
                   style={{
-                    padding: "4px 10px",
-                    borderRadius: 6,
-                    background: "rgba(255, 255, 255, 0.04)",
-                    fontSize: "0.74rem",
-                    color: "var(--color-text-secondary)",
-                    fontWeight: 600,
+                    padding: "6px 12px",
+                    borderRadius: 8,
+                    background: "rgba(255, 255, 255, 0.06)",
+                    fontSize: "0.88rem",
+                    color: "#ffffff",
+                    fontWeight: 700,
+                    border: "1px solid rgba(255, 255, 255, 0.1)",
                   }}
                 >
                   Duración: {plan.actividadFisica.sesiones[activeSesion].duracion}
                 </span>
                 <span
                   style={{
-                    padding: "4px 10px",
-                    borderRadius: 6,
-                    background: "rgba(16, 185, 129, 0.12)",
-                    color: "var(--color-green)",
-                    fontSize: "0.74rem",
-                    fontWeight: 700,
+                    padding: "6px 14px",
+                    borderRadius: 8,
+                    background: `${plan.actividadFisica.sesiones[activeSesion].color}25`,
+                    color: plan.actividadFisica.sesiones[activeSesion].color,
+                    fontSize: "0.88rem",
+                    fontWeight: 800,
+                    border: `1px solid ${plan.actividadFisica.sesiones[activeSesion].color}55`,
                   }}
                 >
                   Intensidad: {plan.actividadFisica.sesiones[activeSesion].intensidad}%
@@ -754,8 +887,8 @@ export function TabNutricionAI({ onSave }: TabNutricionAIProps) {
               </div>
             </div>
 
-            {/* Lista de Actividades de la Sesión */}
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            {/* Lista de Actividades de la Sesión con Letra Grande */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {plan.actividadFisica.sesiones[activeSesion].actividades.map((act, idx) => (
                 <div
                   key={idx}
@@ -763,40 +896,50 @@ export function TabNutricionAI({ onSave }: TabNutricionAIProps) {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
-                    padding: "12px 16px",
-                    borderRadius: 10,
-                    background: "rgba(255, 255, 255, 0.02)",
-                    border: "1px solid rgba(255, 255, 255, 0.05)",
+                    padding: "14px 18px",
+                    borderRadius: 12,
+                    background: "rgba(255, 255, 255, 0.04)",
+                    border: "1px solid rgba(255, 255, 255, 0.08)",
                   }}
                 >
-                  <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
                     <div
                       style={{
-                        width: 24,
-                        height: 24,
-                        borderRadius: 6,
-                        background: "rgba(16, 185, 129, 0.15)",
-                        color: "var(--color-green)",
+                        width: 30,
+                        height: 30,
+                        borderRadius: 8,
+                        background: `${plan.actividadFisica.sesiones[activeSesion].color}25`,
+                        color: plan.actividadFisica.sesiones[activeSesion].color,
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        fontSize: "0.72rem",
-                        fontWeight: 700,
+                        fontSize: "0.86rem",
+                        fontWeight: 800,
+                        border: `1px solid ${plan.actividadFisica.sesiones[activeSesion].color}44`,
                       }}
                     >
                       {idx + 1}
                     </div>
                     <div>
-                      <div style={{ fontSize: "0.82rem", fontWeight: 600, color: "var(--color-text-primary)" }}>
+                      <div style={{ fontSize: "0.96rem", fontWeight: 700, color: "#ffffff" }}>
                         {act.ej}
                       </div>
-                      <div style={{ fontSize: "0.72rem", color: "var(--color-text-muted)", marginTop: 2 }}>
+                      <div style={{ fontSize: "0.85rem", color: "#cbd5e1", marginTop: 3 }}>
                         {act.detalle}
                       </div>
                     </div>
                   </div>
 
-                  <span style={{ fontSize: "0.68rem", color: "var(--color-green)", fontWeight: 600 }}>
+                  <span
+                    style={{
+                      fontSize: "0.8rem",
+                      color: plan.actividadFisica.sesiones[activeSesion].color,
+                      fontWeight: 800,
+                      background: "rgba(255, 255, 255, 0.05)",
+                      padding: "4px 10px",
+                      borderRadius: 6,
+                    }}
+                  >
                     Guiado
                   </span>
                 </div>
@@ -806,9 +949,9 @@ export function TabNutricionAI({ onSave }: TabNutricionAIProps) {
         </div>
       )}
 
-      {/* ── 5. CONTENIDO: SECCIÓN DE PAUTAS DE SALUD & HÁBITOS ── */}
+      {/* ── 5. CONTENIDO: SECCIÓN DE PAUTAS DE SALUD & HÁBITOS (Tarjetas con Colores Vivos) ── */}
       {activeTab === "habitos" && (
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
           {plan.pautasSaludables.map((pauta) => {
             const Icon = pauta.icono;
             return (
@@ -816,49 +959,53 @@ export function TabNutricionAI({ onSave }: TabNutricionAIProps) {
                 key={pauta.titulo}
                 className="glass"
                 style={{
-                  padding: "22px 24px",
-                  borderRadius: 16,
-                  border: "1px solid rgba(255, 255, 255, 0.06)",
+                  padding: "26px 28px",
+                  borderRadius: 18,
+                  border: `1px solid ${pauta.color}44`,
+                  background: `linear-gradient(145deg, ${pauta.color}15 0%, rgba(15, 23, 42, 0.95) 100%)`,
                   display: "flex",
-                  gap: 16,
+                  gap: 18,
                   alignItems: "flex-start",
+                  boxShadow: `0 8px 24px ${pauta.color}22`,
                 }}
               >
                 <div
                   style={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: 12,
-                    background: "rgba(16, 185, 129, 0.1)",
-                    border: "1px solid rgba(16, 185, 129, 0.25)",
+                    width: 52,
+                    height: 52,
+                    borderRadius: 14,
+                    background: `${pauta.color}25`,
+                    border: `1px solid ${pauta.color}55`,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    color: "var(--color-green)",
+                    color: pauta.color,
                     flexShrink: 0,
+                    boxShadow: `0 4px 16px ${pauta.color}33`,
                   }}
                 >
-                  <Icon size={20} />
+                  <Icon size={24} />
                 </div>
                 <div style={{ flex: 1 }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
-                    <h4 style={{ fontSize: "0.88rem", fontWeight: 700, color: "#ffffff" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8, flexWrap: "wrap", gap: 8 }}>
+                    <h4 style={{ fontSize: "1.1rem", fontWeight: 800, color: "#ffffff" }}>
                       {pauta.titulo}
                     </h4>
                     <span
                       style={{
-                        fontSize: "0.68rem",
-                        padding: "2px 8px",
-                        borderRadius: 6,
-                        background: "rgba(16, 185, 129, 0.12)",
-                        color: "var(--color-green)",
-                        fontWeight: 700,
+                        fontSize: "0.82rem",
+                        padding: "3px 10px",
+                        borderRadius: 8,
+                        background: `${pauta.color}25`,
+                        color: "#ffffff",
+                        fontWeight: 800,
+                        border: `1px solid ${pauta.color}55`,
                       }}
                     >
                       {pauta.meta}
                     </span>
                   </div>
-                  <p style={{ fontSize: "0.78rem", color: "var(--color-text-secondary)", lineHeight: 1.6 }}>
+                  <p style={{ fontSize: "0.92rem", color: "#e2e8f0", lineHeight: 1.6, fontWeight: 500 }}>
                     {pauta.descripcion}
                   </p>
                 </div>
@@ -871,25 +1018,25 @@ export function TabNutricionAI({ onSave }: TabNutricionAIProps) {
             className="glass"
             style={{
               gridColumn: "1 / -1",
-              padding: "20px 24px",
-              borderRadius: 14,
-              background: "rgba(16, 185, 129, 0.04)",
-              border: "1px solid rgba(16, 185, 129, 0.18)",
+              padding: "24px 28px",
+              borderRadius: 16,
+              background: "linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(15, 23, 42, 0.95) 100%)",
+              border: "1px solid rgba(16, 185, 129, 0.35)",
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
               flexWrap: "wrap",
-              gap: 16,
+              gap: 18,
             }}
           >
             <div>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-                <CheckCircle2 size={16} color="var(--color-green)" />
-                <h4 style={{ fontSize: "0.88rem", fontWeight: 700, color: "var(--color-green-light)" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+                <CheckCircle2 size={20} color="#34d399" />
+                <h4 style={{ fontSize: "1.05rem", fontWeight: 800, color: "#34d399" }}>
                   Recomendaciones para el Docente e Informe a Padres
                 </h4>
               </div>
-              <p style={{ fontSize: "0.76rem", color: "var(--color-text-secondary)" }}>
+              <p style={{ fontSize: "0.92rem", color: "#e2e8f0", fontWeight: 500 }}>
                 Estas pautas formativas están preparadas para ser emitidas en el boletín escolar oficial y socializadas en comités de evaluación.
               </p>
             </div>
@@ -897,9 +1044,9 @@ export function TabNutricionAI({ onSave }: TabNutricionAIProps) {
             <button
               className="btn btn-primary"
               onClick={() => window.print()}
-              style={{ fontSize: "0.78rem", padding: "8px 16px" }}
+              style={{ fontSize: "0.92rem", padding: "12px 22px" }}
             >
-              <FileText size={14} />
+              <FileText size={16} />
               <span>Emitir Informe Oficial</span>
             </button>
           </div>

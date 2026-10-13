@@ -40,41 +40,42 @@ export function Header({ role, onRoleChange, onLogout }: HeaderProps) {
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
           <div
             style={{
-              width: 38,
-              height: 38,
-              borderRadius: 10,
+              width: 42,
+              height: 42,
+              borderRadius: 12,
               background: "linear-gradient(135deg, var(--color-green-dark), var(--color-green))",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              boxShadow: "0 4px 16px rgba(16, 185, 129, 0.25)",
+              boxShadow: "0 4px 16px rgba(16, 185, 129, 0.35)",
               color: "#ffffff",
               flexShrink: 0,
             }}
           >
-            <Activity size={20} />
+            <Activity size={22} />
           </div>
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <h1 style={{ fontSize: "1.05rem", fontWeight: 800, letterSpacing: "-0.02em" }}>
+              <h1 style={{ fontSize: "1.15rem", fontWeight: 800, letterSpacing: "-0.02em", color: "#ffffff" }}>
                 DEPORTEST PRO
               </h1>
               <span
                 style={{
-                  fontSize: "0.62rem",
-                  padding: "1px 6px",
+                  fontSize: "0.72rem",
+                  padding: "2px 8px",
                   borderRadius: 99,
-                  background: "rgba(16, 185, 129, 0.12)",
-                  color: "var(--color-green)",
-                  fontWeight: 700,
-                  border: "1px solid rgba(16, 185, 129, 0.25)",
+                  background: "rgba(16, 185, 129, 0.18)",
+                  color: "#34d399",
+                  fontWeight: 800,
+                  border: "1px solid rgba(16, 185, 129, 0.35)",
+                  letterSpacing: "0.05em",
                 }}
               >
                 SENA
               </span>
             </div>
-            <p style={{ fontSize: "0.68rem", color: "var(--color-text-muted)" }}>
-              Sistema Institucional de Rendimiento Atlético
+            <p style={{ fontSize: "0.78rem", color: "var(--color-text-secondary)", fontWeight: 500 }}>
+              Sistema Institucional de Rendimiento Atlético & Salud
             </p>
           </div>
         </div>
@@ -87,14 +88,14 @@ export function Header({ role, onRoleChange, onLogout }: HeaderProps) {
               display: "flex",
               alignItems: "center",
               gap: 8,
-              background: "rgba(255, 255, 255, 0.03)",
+              background: "rgba(255, 255, 255, 0.05)",
               border: "1px solid var(--color-border)",
               borderRadius: 999,
-              padding: "4px 12px",
+              padding: "6px 14px",
             }}
           >
-            <ShieldCheck size={14} color="var(--color-green)" />
-            <span style={{ fontSize: "0.72rem", color: "var(--color-text-muted)", fontWeight: 600 }}>
+            <ShieldCheck size={16} color="var(--color-green-light)" />
+            <span style={{ fontSize: "0.78rem", color: "var(--color-text-secondary)", fontWeight: 700 }}>
               ROL:
             </span>
             <select
@@ -103,18 +104,18 @@ export function Header({ role, onRoleChange, onLogout }: HeaderProps) {
               style={{
                 background: "transparent",
                 border: "none",
-                color: "var(--color-text-primary)",
+                color: "#ffffff",
                 fontFamily: "var(--font-sans)",
-                fontWeight: 600,
-                fontSize: "0.78rem",
+                fontWeight: 700,
+                fontSize: "0.85rem",
                 cursor: "pointer",
                 outline: "none",
               }}
             >
-              <option value="ENTRENADOR" style={{ background: "#0d121f" }}>
+              <option value="ENTRENADOR" style={{ background: "#0f172a", color: "#ffffff" }}>
                 Entrenador / Instructor
               </option>
-              <option value="APRENDIZ" style={{ background: "#0d121f" }}>
+              <option value="APRENDIZ" style={{ background: "#0f172a", color: "#ffffff" }}>
                 Aprendiz / Deportista
               </option>
             </select>
@@ -124,14 +125,14 @@ export function Header({ role, onRoleChange, onLogout }: HeaderProps) {
           <button
             onClick={onLogout}
             style={{
-              background: "rgba(244, 63, 94, 0.08)",
-              border: "1px solid rgba(244, 63, 94, 0.2)",
-              color: "var(--color-rose)",
+              background: "rgba(244, 63, 94, 0.12)",
+              border: "1px solid rgba(244, 63, 94, 0.3)",
+              color: "#fda4af",
               cursor: "pointer",
-              padding: "7px 12px",
-              borderRadius: 8,
-              fontSize: "0.75rem",
-              fontWeight: 600,
+              padding: "8px 14px",
+              borderRadius: 10,
+              fontSize: "0.82rem",
+              fontWeight: 700,
               display: "flex",
               alignItems: "center",
               gap: 6,
@@ -139,7 +140,7 @@ export function Header({ role, onRoleChange, onLogout }: HeaderProps) {
             }}
             title="Cerrar sesión"
           >
-            <LogOut size={13} />
+            <LogOut size={15} />
             <span>Salir</span>
           </button>
         </div>

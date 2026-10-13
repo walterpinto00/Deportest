@@ -25,9 +25,9 @@ export function Navigation({ tabs, activeTab, role, onTabChange }: NavigationPro
   return (
     <nav
       style={{
-        background: "rgba(13, 18, 31, 0.75)",
-        backdropFilter: "blur(12px)",
-        WebkitBackdropFilter: "blur(12px)",
+        background: "rgba(11, 17, 30, 0.88)",
+        backdropFilter: "blur(16px)",
+        WebkitBackdropFilter: "blur(16px)",
         borderBottom: "1px solid var(--color-border)",
         overflowX: "auto",
       }}
@@ -36,14 +36,15 @@ export function Navigation({ tabs, activeTab, role, onTabChange }: NavigationPro
         style={{
           maxWidth: 1320,
           margin: "0 auto",
-          padding: "0 24px",
+          padding: "0 20px",
           display: "flex",
-          gap: 6,
+          gap: 8,
         }}
       >
         {visible.map((tab) => {
           const active = activeTab === tab.id;
           const Icon = tab.icon;
+          const tabColor = tab.color || "#10b981";
           return (
             <button
               key={tab.id}
@@ -51,24 +52,25 @@ export function Navigation({ tabs, activeTab, role, onTabChange }: NavigationPro
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: 8,
-                padding: "12px 16px",
-                fontSize: "0.82rem",
-                fontWeight: active ? 600 : 500,
+                gap: 10,
+                padding: "14px 18px",
+                fontSize: "0.94rem",
+                fontWeight: active ? 700 : 500,
                 fontFamily: "var(--font-sans)",
                 color: active ? "#ffffff" : "var(--color-text-secondary)",
-                background: active ? "rgba(255, 255, 255, 0.06)" : "transparent",
+                background: active ? `linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(${tabColor}, 0.05) 100%)` : "transparent",
                 border: "none",
-                borderBottom: `2px solid ${active ? "var(--color-green)" : "transparent"}`,
+                borderBottom: `3px solid ${active ? tabColor : "transparent"}`,
+                boxShadow: active ? `inset 0 -2px 10px ${tabColor}33` : "none",
                 cursor: "pointer",
-                transition: "all 0.15s ease",
+                transition: "all 0.2s ease",
                 whiteSpace: "nowrap",
-                borderRadius: "6px 6px 0 0",
+                borderRadius: "8px 8px 0 0",
               }}
               onMouseEnter={(e) => {
                 if (!active) {
-                  (e.currentTarget as HTMLButtonElement).style.color = "var(--color-text-primary)";
-                  (e.currentTarget as HTMLButtonElement).style.background = "rgba(255, 255, 255, 0.02)";
+                  (e.currentTarget as HTMLButtonElement).style.color = "#ffffff";
+                  (e.currentTarget as HTMLButtonElement).style.background = "rgba(255, 255, 255, 0.04)";
                 }
               }}
               onMouseLeave={(e) => {
@@ -78,11 +80,19 @@ export function Navigation({ tabs, activeTab, role, onTabChange }: NavigationPro
                 }
               }}
             >
-              <Icon
-                size={15}
-                color={active ? "var(--color-green)" : "currentColor"}
-              />
-              {tab.label}
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: active ? tabColor : "currentColor",
+                  filter: active ? `drop-shadow(0 0 6px ${tabColor}88)` : "none",
+                  transition: "all 0.2s ease",
+                }}
+              >
+                <Icon size={18} />
+              </div>
+              <span>{tab.label}</span>
             </button>
           );
         })}

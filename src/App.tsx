@@ -21,12 +21,12 @@ type Role   = "ENTRENADOR" | "APRENDIZ";
 type TabId  = "dashboard" | "usuarios" | "antropometria" | "pruebas" | "ia" | "graficas";
 
 const ALL_TABS: TabConfig[] = [
-  { id: "dashboard",     icon: LayoutDashboard, label: "Dashboard",             color: "var(--color-green)",  allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
-  { id: "usuarios",      icon: Users,           label: "Usuarios & Roles",      color: "var(--color-green)",  allowedRoles: ["ENTRENADOR"] },
-  { id: "antropometria", icon: FileText,        label: "Ficha Antropométrica",  color: "var(--color-green)",  allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
-  { id: "pruebas",       icon: Activity,        label: "Pruebas Físicas",       color: "var(--color-green)",  allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
-  { id: "ia",            icon: Heart,           label: "Nutrición & Hábitos",   color: "var(--color-green)",  allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
-  { id: "graficas",      icon: BarChart2,       label: "Gráficas & Reportes",   color: "var(--color-green)",  allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
+  { id: "dashboard",     icon: LayoutDashboard, label: "Dashboard",             color: "#10b981", allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
+  { id: "usuarios",      icon: Users,           label: "Usuarios & Roles",      color: "#3b82f6", allowedRoles: ["ENTRENADOR"] },
+  { id: "antropometria", icon: FileText,        label: "Ficha Antropométrica",  color: "#f59e0b", allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
+  { id: "pruebas",       icon: Activity,        label: "Pruebas Físicas",       color: "#f97316", allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
+  { id: "ia",            icon: Heart,           label: "Nutrición & Hábitos",   color: "#06b6d4", allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
+  { id: "graficas",      icon: BarChart2,       label: "Gráficas & Reportes",   color: "#8b5cf6", allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
 ];
 
 export default function App() {
