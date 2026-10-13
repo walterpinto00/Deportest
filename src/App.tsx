@@ -66,8 +66,8 @@ export default function App() {
       <Header role={role} onRoleChange={handleRoleChange} onLogout={() => setIsAuthenticated(false)} />
       <Navigation tabs={ALL_TABS} activeTab={activeTab} role={role} onTabChange={(id) => setActiveTab(id as TabId)} />
 
-      {/* Main */}
-      <main style={{ flex: 1, maxWidth: 1280, margin: "0 auto", width: "100%", padding: "32px 24px" }}>
+      {/* Main Container Espacioso y Cómodo */}
+      <main style={{ flex: 1, maxWidth: 1320, margin: "0 auto", width: "100%", padding: "26px 24px" }}>
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}

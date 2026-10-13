@@ -67,6 +67,20 @@ Una plataforma web moderna, rápida y clínicamente fundamentada que permite:
      * Tarjetas KPI del Dashboard con identidad visual diferenciada (Azul, Ámbar, Naranja y Verde).
      * Selector de pruebas físicas con botones temáticos por disciplina.
 
+### Fase 6: Arquitectura Espaciosa, Desahogo Visual y Eliminación de Elementos Pegados
+* **Diagnóstico del Usuario:** En pantallas de computador estándar (1366x768 / 1080p), los formularios se percibían apelmazados ("pegados uno sobre otro"), con cajas centradas estrechas que dejaban vacíos negros laterales mientras los inputs quedaban asfixiados verticalmente, y tablas cortadas por la barra de tareas.
+* **Soluciones Implementadas:**
+  1. **Ficha Antropométrica Desahogada (`TabAntropometria.tsx`):**
+     * Eliminación de la limitación estrecha (`maxWidth: 940` centrado) pasando a una distribución armónica en todo el ancho (`maxWidth: 1320`).
+     * Subpestañas convertidas en pastillas generosas con iconos propios y acento de color distintivo.
+     * **Semáforo Gráfico Horizontal OMS:** Gráfica de 4 segmentos (Bajo Peso, Normal, Sobrepeso, Obesidad) con indicador visual y concepto clínico inmediato, evitando que el IMC sea una pequeña caja comprimida.
+     * Separación generosa (`gap: 20px - 26px`) entre filas de campos para que cada input respire con total comodidad.
+  2. **Pruebas Físicas Claras y Explicadas (`TabPruebas.tsx`):**
+     * Reorganización en 2 columnas equilibradas: Registro a la izquierda y Baremo en vivo a la derecha.
+     * **Tabla de Baremos de Referencia Incorporada:** Muestra los 4 cortes oficiales de cada prueba (Excelente, Bueno, Aceptable, Bajo) resaltando en vivo la fila del alumno, explicando el motivo de la puntuación obtenida.
+     * Botones de incremento/decremento rápido (`-` y `+`) para ingresar marcas ágilmente sin tecleo forzado.
+     * Historial de clase ajustado en cuadrícula de 2 columnas para que nunca se desborde ni quede cortado por la barra de tareas de Windows.
+
 ---
 
 ## 🏛️ 3. Marco Legal y Estrategia en Colombia

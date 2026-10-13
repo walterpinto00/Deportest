@@ -276,6 +276,15 @@ body::before {
   border-color: var(--color-border-hover);
 }
 
+.section-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #ffffff;
+  margin-bottom: 14px;
+}
+
 /* ─────────────────── Media Print para Reportes ─────────────────── */
 @media print {
   body {
