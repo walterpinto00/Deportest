@@ -166,9 +166,15 @@ const PRUEBAS_DISPONIBLES = [
 
 const REGISTROS_EJEMPLO = [
   { id: 1, alumno: "Juan Camilo Rodríguez", prueba: "Test Cooper", marca: "2.450 m", pts: 88, estado: "Destacado" },
-  { id: 2, alumno: "Valentina Gómez", prueba: "Flexiones", marca: "32 reps", pts: 90, estado: "Excelente" },
-  { id: 3, alumno: "Andrés Felipe Muñoz", prueba: "Course-Navette", marca: "Palier 7.0", pts: 85, estado: "Bueno" },
-  { id: 4, alumno: "Sofía Martínez", prueba: "Velocidad 50m", marca: "7.8 s", pts: 86, estado: "Bueno" },
+  { id: 2, alumno: "Valentina Morales Peña", prueba: "Flexiones de Brazo", marca: "36 reps", pts: 95, estado: "Excelente" },
+  { id: 3, alumno: "Andrés Felipe Gómez", prueba: "Course-Navette", marca: "Palier 7.5", pts: 85, estado: "Bueno" },
+  { id: 4, alumno: "Sofía Daniela Martínez", prueba: "Velocidad 50m", marca: "7.6 s", pts: 90, estado: "Excelente" },
+  { id: 5, alumno: "Cristian Camilo Restrepo", prueba: "Salto Horizontal", marca: "2.25 m", pts: 84, estado: "Bueno" },
+  { id: 6, alumno: "Mariana Lucía Torres", prueba: "Test Flexibilidad Wells", marca: "+5.0 cm", pts: 94, estado: "Excelente" },
+  { id: 7, alumno: "Mateo Alejandro Ospina", prueba: "Test Cooper", marca: "2.620 m", pts: 96, estado: "Excelente" },
+  { id: 8, alumno: "Isabella Caicedo Vera", prueba: "Flexiones de Brazo", marca: "29 reps", pts: 85, estado: "Bueno" },
+  { id: 9, alumno: "Daniel Esteban Parra", prueba: "Salto Horizontal", marca: "2.35 m", pts: 92, estado: "Destacado" },
+  { id: 10, alumno: "Juan Camilo Rodríguez", prueba: "Flexiones de Brazo", marca: "35 reps", pts: 85, estado: "Bueno" },
 ];
 
 export function TabPruebas({ role, onSave }: TabPruebasProps) {
@@ -179,7 +185,16 @@ export function TabPruebas({ role, onSave }: TabPruebasProps) {
     const primer = userService.getUsuarios().find((u) => u.rol === "APRENDIZ");
     return primer ? `${primer.numDoc} — ${primer.nombres} ${primer.apellidos}` : "1001234567 — Juan Camilo Rodríguez";
   });
-  const [registros, setRegistros] = useState(REGISTROS_EJEMPLO);
+  const [registros, setRegistros] = useState(() => {
+    try {
+      const stored = localStorage.getItem("deportest_pruebas_v2");
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch (e) {}
+    return REGISTROS_EJEMPLO;
+  });
   const [savedOk, setSavedOk] = useState(false);
 
   useEffect(() => {
@@ -204,7 +219,9 @@ export function TabPruebas({ role, onSave }: TabPruebasProps) {
       pts: resultado.pts,
       estado: resultado.nivel.split("/")[0].trim(),
     };
-    setRegistros([nuevo, ...registros]);
+    const actualizados = [nuevo, ...registros];
+    setRegistros(actualizados);
+    localStorage.setItem("deportest_pruebas_v2", JSON.stringify(actualizados));
     setSavedOk(true);
     setTimeout(() => setSavedOk(false), 2000);
   };

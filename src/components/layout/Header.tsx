@@ -3,7 +3,7 @@
 // Diseñada para docentes: incluye selector de tema (Claro/Oscuro) y acceso directo a Google Gemini
 // ─────────────────────────────────────────────────────────────
 import React from "react";
-import { Activity, ShieldCheck, LogOut, Sun, Moon, Sparkles } from "lucide-react";
+import { Activity, ShieldCheck, LogOut, Sun, Moon, Sparkles, Search } from "lucide-react";
 
 type Role = "ENTRENADOR" | "APRENDIZ";
 
@@ -14,6 +14,7 @@ interface HeaderProps {
   theme: "light" | "dark";
   onToggleTheme: () => void;
   onOpenGemini: () => void;
+  onOpenSearch?: () => void;
 }
 
 export function Header({
@@ -23,6 +24,7 @@ export function Header({
   theme,
   onToggleTheme,
   onOpenGemini,
+  onOpenSearch,
 }: HeaderProps) {
   return (
     <header
@@ -97,6 +99,47 @@ export function Header({
               Sistema Institucional de Rendimiento Atlético & Salud
             </p>
           </div>
+        </div>
+
+        {/* Buscador Inteligente Global */}
+        <div style={{ flex: "1 1 240px", maxWidth: 360, margin: "0 12px" }}>
+          <button
+            type="button"
+            onClick={onOpenSearch}
+            className="btn btn-secondary"
+            style={{
+              width: "100%",
+              justifyContent: "space-between",
+              padding: "8px 14px",
+              borderRadius: 12,
+              background: "var(--color-bg-card)",
+              border: "1.5px solid var(--color-border)",
+              boxShadow: "none",
+              cursor: "pointer",
+            }}
+            title="Abrir Buscador Inteligente (Ctrl + K)"
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <Search size={15} color="var(--color-green)" />
+              <span style={{ fontSize: "0.82rem", color: "var(--color-text-secondary)", fontWeight: 500 }}>
+                Buscador Inteligente...
+              </span>
+            </div>
+            <kbd
+              style={{
+                fontSize: "0.68rem",
+                padding: "2px 6px",
+                borderRadius: 6,
+                background: "var(--color-bg-surface)",
+                border: "1px solid var(--color-border)",
+                color: "var(--color-text-muted)",
+                fontFamily: "var(--font-mono)",
+                fontWeight: 700,
+              }}
+            >
+              Ctrl K
+            </kbd>
+          </button>
         </div>
 
         {/* Acciones de la Barra Superior */}

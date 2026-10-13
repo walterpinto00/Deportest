@@ -1,6 +1,7 @@
 // ─────────────────────────────────────────────────────────────
 // userService.ts — Gestión Persistente de Usuarios & Aprendices
 // Almacena en localStorage para que todo el sistema funcione conectado
+// Precargado con datos ricos institucionales del SENA
 // ─────────────────────────────────────────────────────────────
 
 export interface Usuario {
@@ -20,10 +21,10 @@ export interface Usuario {
   talla?: string;
 }
 
-const STORAGE_KEY = "deportest_usuarios_v1";
+const STORAGE_KEY = "deportest_usuarios_v2";
 const EVENT_NAME = "deportest_usuarios_updated";
 
-// Usuarios iniciales precargados (SENA y Colegio)
+// Usuarios iniciales precargados (SENA y Colegios Deportivos)
 const USUARIOS_INICIALES: Usuario[] = [
   {
     id: "usr-1",
@@ -37,7 +38,7 @@ const USUARIOS_INICIALES: Usuario[] = [
     fechaNacimiento: "2010-03-12",
     avatarUrl: "https://api.dicebear.com/9.x/notionists/svg?seed=juancamilo&backgroundColor=b6e3f4",
     fechaRegistro: "13/10/2026",
-    grado: "10° B",
+    grado: "10° B (Fútbol Formativo)",
     peso: "64.5",
     talla: "1.74"
   },
@@ -53,7 +54,7 @@ const USUARIOS_INICIALES: Usuario[] = [
     fechaNacimiento: "2009-08-22",
     avatarUrl: "https://api.dicebear.com/9.x/lorelei/svg?seed=valentina&backgroundColor=ffd6e0",
     fechaRegistro: "12/10/2026",
-    grado: "11° A",
+    grado: "11° A (Entrenamiento Deportivo)",
     peso: "55.0",
     talla: "1.65"
   },
@@ -69,12 +70,108 @@ const USUARIOS_INICIALES: Usuario[] = [
     fechaNacimiento: "2011-01-18",
     avatarUrl: "https://api.dicebear.com/9.x/miniavs/svg?seed=andres&backgroundColor=ffdfbf",
     fechaRegistro: "10/10/2026",
-    grado: "9° C",
+    grado: "9° C (Actividad Física)",
     peso: "68.2",
     talla: "1.68"
   },
   {
     id: "usr-4",
+    email: "sofia.martinez@sena.edu.co",
+    rol: "APRENDIZ",
+    tipoDoc: "Tarjeta de Identidad (TI)",
+    numDoc: "1004567890",
+    nombres: "Sofía Daniela",
+    apellidos: "Martínez",
+    genero: "Femenino",
+    fechaNacimiento: "2009-04-14",
+    avatarUrl: "https://api.dicebear.com/9.x/lorelei/svg?seed=sofiamartinez&backgroundColor=d1f4e0",
+    fechaRegistro: "08/10/2026",
+    grado: "11° B (Atletismo & Velocidad)",
+    peso: "58.0",
+    talla: "1.67"
+  },
+  {
+    id: "usr-5",
+    email: "cristian.restrepo@sena.edu.co",
+    rol: "APRENDIZ",
+    tipoDoc: "Tarjeta de Identidad (TI)",
+    numDoc: "1005678901",
+    nombres: "Cristian Camilo",
+    apellidos: "Restrepo",
+    genero: "Masculino",
+    fechaNacimiento: "2010-07-29",
+    avatarUrl: "https://api.dicebear.com/9.x/dylan/svg?seed=cristianrestrepo&backgroundColor=ffeaa7",
+    fechaRegistro: "05/10/2026",
+    grado: "10° A (Acondicionamiento Físico)",
+    peso: "72.0",
+    talla: "1.78"
+  },
+  {
+    id: "usr-6",
+    email: "mariana.torres@sena.edu.co",
+    rol: "APRENDIZ",
+    tipoDoc: "Tarjeta de Identidad (TI)",
+    numDoc: "1006789012",
+    nombres: "Mariana Lucía",
+    apellidos: "Torres",
+    genero: "Femenino",
+    fechaNacimiento: "2009-11-03",
+    avatarUrl: "https://api.dicebear.com/9.x/notionists/svg?seed=marianatorres&backgroundColor=a8edea",
+    fechaRegistro: "03/10/2026",
+    grado: "11° A (Gimnasia & Flexibilidad)",
+    peso: "52.5",
+    talla: "1.60"
+  },
+  {
+    id: "usr-7",
+    email: "mateo.ospina@sena.edu.co",
+    rol: "APRENDIZ",
+    tipoDoc: "Tarjeta de Identidad (TI)",
+    numDoc: "1007890123",
+    nombres: "Mateo Alejandro",
+    apellidos: "Ospina",
+    genero: "Masculino",
+    fechaNacimiento: "2011-06-19",
+    avatarUrl: "https://api.dicebear.com/9.x/pixel-art/svg?seed=mateoospina&backgroundColor=fed7aa",
+    fechaRegistro: "01/10/2026",
+    grado: "9° B (Baloncesto Formativo)",
+    peso: "61.0",
+    talla: "1.72"
+  },
+  {
+    id: "usr-8",
+    email: "isabella.caicedo@sena.edu.co",
+    rol: "APRENDIZ",
+    tipoDoc: "Tarjeta de Identidad (TI)",
+    numDoc: "1008901234",
+    nombres: "Isabella",
+    apellidos: "Caicedo Vera",
+    genero: "Femenino",
+    fechaNacimiento: "2010-09-10",
+    avatarUrl: "https://api.dicebear.com/9.x/avataaars-neutral/svg?seed=isabellacaicedo&backgroundColor=ffd6e0",
+    fechaRegistro: "28/09/2026",
+    grado: "10° C (Voleibol Juvenil)",
+    peso: "59.4",
+    talla: "1.71"
+  },
+  {
+    id: "usr-9",
+    email: "daniel.parra@sena.edu.co",
+    rol: "APRENDIZ",
+    tipoDoc: "Tarjeta de Identidad (TI)",
+    numDoc: "1009012345",
+    nombres: "Daniel Esteban",
+    apellidos: "Parra",
+    genero: "Masculino",
+    fechaNacimiento: "2009-12-05",
+    avatarUrl: "https://api.dicebear.com/9.x/notionists/svg?seed=danielparra&backgroundColor=c0aede",
+    fechaRegistro: "25/09/2026",
+    grado: "11° B (Halterofilia & Potencia)",
+    peso: "76.5",
+    talla: "1.75"
+  },
+  {
+    id: "usr-10",
     email: "walter.pinto@sena.edu.co",
     rol: "ENTRENADOR",
     tipoDoc: "Cédula de Ciudadanía (CC)",
@@ -85,10 +182,10 @@ const USUARIOS_INICIALES: Usuario[] = [
     fechaNacimiento: "1988-06-15",
     avatarUrl: "https://api.dicebear.com/9.x/dylan/svg?seed=walterpinto&backgroundColor=d1f4e0",
     fechaRegistro: "01/02/2026",
-    grado: "Instructor SENA Titular"
+    grado: "Instructor Titular SENA"
   },
   {
-    id: "usr-5",
+    id: "usr-11",
     email: "maria.caicedo@sena.edu.co",
     rol: "BIENESTAR",
     tipoDoc: "Cédula de Ciudadanía (CC)",
@@ -99,7 +196,21 @@ const USUARIOS_INICIALES: Usuario[] = [
     fechaNacimiento: "1992-11-04",
     avatarUrl: "https://api.dicebear.com/9.x/avataaars-neutral/svg?seed=mariacaicedo&backgroundColor=c0aede",
     fechaRegistro: "15/05/2026",
-    grado: "Coordinadora Bienestar"
+    grado: "Coordinadora Bienestar al Aprendiz"
+  },
+  {
+    id: "usr-12",
+    email: "carlos.arboleda@sena.edu.co",
+    rol: "ADMINISTRADOR",
+    tipoDoc: "Cédula de Ciudadanía (CC)",
+    numDoc: "71345678",
+    nombres: "Carlos Mario",
+    apellidos: "Arboleda",
+    genero: "Masculino",
+    fechaNacimiento: "1985-03-21",
+    avatarUrl: "https://api.dicebear.com/9.x/bottts-neutral/svg?seed=carlosarboleda&backgroundColor=b6e3f4",
+    fechaRegistro: "10/01/2026",
+    grado: "Médico Deportólogo Institucional"
   }
 ];
 
@@ -110,14 +221,14 @@ export const userService = {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
         const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length > 0) {
+        if (Array.isArray(parsed) && parsed.length >= 8) {
           return parsed;
         }
       }
     } catch (e) {
       console.error("Error al leer usuarios de localStorage:", e);
     }
-    // Guardar iniciales si no hay nada
+    // Guardar iniciales completos si no hay datos o la lista es muy pequeña
     localStorage.setItem(STORAGE_KEY, JSON.stringify(USUARIOS_INICIALES));
     return USUARIOS_INICIALES;
   },

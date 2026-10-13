@@ -2,7 +2,7 @@
 // TabNutricionAI.tsx — Orientación Nutricional & Hábitos Saludables
 // Diseño de alto impacto visual, tipografía grande y legible, colores vivos por momento
 // ─────────────────────────────────────────────────────────────
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Sparkles,
@@ -27,9 +27,11 @@ import {
   Apple,
   Utensils,
   Coffee,
+  User,
 } from "lucide-react";
 import { Select } from "../ui/Select";
 import { Input } from "../ui/Input";
+import { userService, Usuario } from "../../services/userService";
 
 interface TabNutricionAIProps {
   onSave: () => void;
@@ -286,6 +288,8 @@ const PLAN_DATA = {
 };
 
 export function TabNutricionAI({ onSave }: TabNutricionAIProps) {
+  const [aprendices, setAprendices] = useState(() => userService.getUsuarios().filter((u) => u.rol === "APRENDIZ"));
+  const [estudianteId, setEstudianteId] = useState(() => aprendices[0]?.id || "usr-1");
   const [generating, setGenerating] = useState(false);
   const [activeTab, setActiveTab] = useState<"nutricion" | "actividad" | "habitos">("nutricion");
   const [showConfig, setShowConfig] = useState(false);
@@ -296,7 +300,36 @@ export function TabNutricionAI({ onSave }: TabNutricionAIProps) {
     lonchera: true,
   });
 
-  const plan = PLAN_DATA;
+  useEffect(() => {
+    const unsub = userService.subscribe(() => {
+      const lista = userService.getUsuarios().filter((u) => u.rol === "APRENDIZ");
+      setAprendices(lista);
+    });
+    return () => unsub();
+  }, []);
+
+  const alumnoActivo = aprendices.find((a) => a.id === estudianteId) || aprendices[0];
+  const pesoNum = alumnoActivo ? parseFloat(alumnoActivo.peso || "62.0") : 62.0;
+  const tallaNum = alumnoActivo ? parseFloat(alumnoActivo.talla || "1.72") : 1.72;
+  const imcCalculado = pesoNum > 0 && tallaNum > 0 ? (pesoNum / (tallaNum * tallaNum)).toFixed(1) : "21.0";
+  const caloriasCalculadas = Math.round(pesoNum * 35.5);
+
+  const plan = {
+    ...PLAN_DATA,
+    perfil: {
+      ...PLAN_DATA.perfil,
+      nombre: alumnoActivo ? `${alumnoActivo.nombres} ${alumnoActivo.apellidos}` : PLAN_DATA.perfil.nombre,
+      grado: alumnoActivo ? alumnoActivo.grado || "Programa SENA" : PLAN_DATA.perfil.grado,
+      peso: `${pesoNum} kg`,
+      talla: `${tallaNum} m`,
+      imc: `${imcCalculado} (Rango Saludable OMS)`,
+      calorias: caloriasCalculadas,
+    },
+    nutricion: {
+      ...PLAN_DATA.nutricion,
+      calorias: caloriasCalculadas,
+    }
+  };
 
   const toggleMeal = (id: string) => {
     setCompletedMeals((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -306,7 +339,7 @@ export function TabNutricionAI({ onSave }: TabNutricionAIProps) {
     setGenerating(true);
     setTimeout(() => {
       setGenerating(false);
-    }, 1000);
+    }, 800);
   };
 
   const handleSave = () => {
@@ -317,6 +350,41 @@ export function TabNutricionAI({ onSave }: TabNutricionAIProps) {
 
   return (
     <div className="animate-fade-in" style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+      {/* ── SELECTOR DE ALUMNO EN TIEMPO REAL ── */}
+      <div
+        className="glass"
+        style={{
+          padding: "14px 22px",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: 12,
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <User size={18} color="var(--color-green)" />
+          <span style={{ fontSize: "0.88rem", fontWeight: 700, color: "var(--color-text-primary)" }}>
+            Atleta o Aprendiz a Orientar:
+          </span>
+          <select
+            className="dp-select"
+            value={estudianteId}
+            onChange={(e) => setEstudianteId(e.target.value)}
+            style={{ width: "auto", minWidth: 260, padding: "8px 36px 8px 14px", fontSize: "0.88rem", fontWeight: 700 }}
+          >
+            {aprendices.map((ap) => (
+              <option key={ap.id} value={ap.id}>
+                {ap.nombres} {ap.apellidos} — {ap.grado || "10°"} ({ap.peso} kg, {ap.talla} m)
+              </option>
+            ))}
+          </select>
+        </div>
+        <span style={{ fontSize: "0.78rem", color: "var(--color-text-muted)", fontWeight: 500 }}>
+          💡 El plan adapta calorías y nutrientes según las medidas antropométricas reales.
+        </span>
+      </div>
+
       {/* ── 1. HERO BANNER PRINCIPAL: FICHA DEL ESTUDIANTE & CALORÍAS (Limpio y Alto Contraste) ── */}
       <div
         className="glass-elevated"

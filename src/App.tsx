@@ -18,9 +18,10 @@ import { TabGraficas }      from "./components/tabs/TabGraficas";
 import { TabDashboard }     from "./components/tabs/TabDashboard";
 import { Login }            from "./components/auth/Login";
 import { AsistenteGeminiDocente } from "./components/ai/AsistenteGeminiDocente";
+import { BuscadorInteligente } from "./components/search/BuscadorInteligente";
 
 type Role   = "ENTRENADOR" | "APRENDIZ";
-type TabId  = "dashboard" | "usuarios" | "antropometria" | "pruebas" | "ia" | "graficas";
+type TabId  = "dashboard" | "usuarios" | "antropometria" | "pruebas" | "graficas" | "ia";
 type Theme  = "light" | "dark";
 
 const ALL_TABS: TabConfig[] = [
@@ -28,8 +29,8 @@ const ALL_TABS: TabConfig[] = [
   { id: "usuarios",      icon: Users,           label: "Usuarios & Roles",      color: "#3b82f6", allowedRoles: ["ENTRENADOR"] },
   { id: "antropometria", icon: FileText,        label: "Ficha Antropométrica",  color: "#10b981", allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
   { id: "pruebas",       icon: Activity,        label: "Pruebas Físicas",       color: "#f97316", allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
-  { id: "ia",            icon: Heart,           label: "Nutrición & Hábitos",   color: "#06b6d4", allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
   { id: "graficas",      icon: BarChart2,       label: "Gráficas & Reportes",   color: "#8b5cf6", allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
+  { id: "ia",            icon: Heart,           label: "Nutrición & Hábitos",   color: "#06b6d4", allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
 ];
 
 export default function App() {
@@ -38,6 +39,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<TabId>("dashboard");
   const [toast, setToast]       = useState<string | null>(null);
   const [isGeminiOpen, setIsGeminiOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   // Modo Claro Institucional por defecto (limpio, claro y amigable para profesores)
   const [theme, setTheme] = useState<Theme>(() => {
@@ -49,6 +51,18 @@ export default function App() {
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("deportest_theme", theme);
   }, [theme]);
+
+  // Atajo de teclado global Ctrl + K para abrir buscador inteligente
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setIsSearchOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   const toggleTheme = () => {
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
@@ -89,6 +103,7 @@ export default function App() {
         theme={theme}
         onToggleTheme={toggleTheme}
         onOpenGemini={() => setIsGeminiOpen(true)}
+        onOpenSearch={() => setIsSearchOpen(true)}
       />
       <Navigation tabs={ALL_TABS} activeTab={activeTab} role={role} onTabChange={(id) => setActiveTab(id as TabId)} />
 
@@ -142,6 +157,14 @@ export default function App() {
         <Sparkles size={18} />
         <span>Ayuda Google Gemini</span>
       </button>
+
+      {/* Buscador Inteligente Global Spotlight */}
+      <BuscadorInteligente
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+        onNavigate={(tab) => setActiveTab(tab as TabId)}
+        onOpenGemini={() => setIsGeminiOpen(true)}
+      />
 
       {/* Asistente Pedagógico IA Google AI Studio */}
       <AsistenteGeminiDocente
