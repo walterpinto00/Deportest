@@ -76,7 +76,7 @@ export default function App() {
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
           >
-            {activeTab === "dashboard"     && <TabDashboard />}
+            {activeTab === "dashboard"     && <TabDashboard onNavigate={(t) => setActiveTab(t as any)} />}
             {activeTab === "usuarios"      && <TabUsuarios      onSave={() => notify("✓ Usuario registrado correctamente.")} />}
             {activeTab === "antropometria" && <TabAntropometria role={role} onSave={() => notify("✓ Ficha antropométrica guardada.")} />}
             {activeTab === "pruebas"       && <TabPruebas       role={role} onSave={() => notify("✓ Resultado de prueba registrado.")} />}

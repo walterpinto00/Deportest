@@ -1,32 +1,38 @@
 // ─────────────────────────────────────────────────────────────
-// TabDashboard.tsx — Panel de Control y Métricas de Alto Rendimiento
+// TabDashboard.tsx — Centro de Mando Atlético & Acciones Rápidas
 // ─────────────────────────────────────────────────────────────
 import React from "react";
 import {
   Users,
   Activity,
-  TrendingUp,
   FileText,
   ShieldCheck,
-  BarChart2,
-  CheckCircle2,
-  ArrowUpRight,
-  ChevronRight,
+  TrendingUp,
+  ArrowRight,
+  PlusCircle,
+  Heart,
+  Clock,
+  Sparkles,
+  Award,
 } from "lucide-react";
 import { motion, Variants } from "framer-motion";
 
-export function TabDashboard() {
+interface TabDashboardProps {
+  onNavigate?: (tab: string) => void;
+}
+
+export function TabDashboard({ onNavigate }: TabDashboardProps) {
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
-      transition: { staggerChildren: 0.08 },
+      transition: { staggerChildren: 0.06 },
     },
   };
 
   const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 12 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.35, ease: "easeOut" } },
+    hidden: { opacity: 0, y: 10 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.3, ease: "easeOut" } },
   };
 
   return (
@@ -37,68 +43,123 @@ export function TabDashboard() {
       animate="show"
       style={{ display: "flex", flexDirection: "column", gap: 20 }}
     >
-      {/* ── Resumen de Indicadores Clave (KPIs) ── */}
+      {/* ── BANNER HERO DE ACCIONES RÁPIDAS (Lo que un profesor necesita hacer en 1 clic) ── */}
+      <div
+        className="glass-elevated"
+        style={{
+          padding: "24px 28px",
+          borderRadius: 20,
+          background: "linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(13, 18, 31, 0.95) 100%)",
+          border: "1px solid rgba(16, 185, 129, 0.2)",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: 16,
+        }}
+      >
+        <div>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+            <span style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--color-green)", boxShadow: "0 0 10px var(--color-green)" }} />
+            <span style={{ fontSize: "0.72rem", color: "var(--color-green)", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+              Panel Activo · Período 2026
+            </span>
+          </div>
+          <h2 style={{ fontSize: "1.35rem", fontWeight: 800, color: "#ffffff", letterSpacing: "-0.02em" }}>
+            Bienvenido, Entrenador / Instructor
+          </h2>
+          <p style={{ fontSize: "0.8rem", color: "var(--color-text-secondary)", marginTop: 2 }}>
+            Monitorea el estado físico de los aprendices y registra valoraciones en tiempo real.
+          </p>
+        </div>
+
+        {/* Botones de acción rápida con 1 clic */}
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+          <button
+            className="btn btn-primary"
+            onClick={() => onNavigate && onNavigate("pruebas")}
+            style={{ fontSize: "0.82rem", padding: "10px 16px" }}
+          >
+            <Activity size={15} />
+            <span>Calificar Prueba Física</span>
+          </button>
+
+          <button
+            className="btn btn-secondary"
+            onClick={() => onNavigate && onNavigate("antropometria")}
+            style={{ fontSize: "0.82rem", padding: "10px 16px" }}
+          >
+            <FileText size={15} color="var(--color-green)" />
+            <span>Nueva Ficha Antropométrica</span>
+          </button>
+
+          <button
+            className="btn btn-ghost"
+            onClick={() => onNavigate && onNavigate("ia")}
+            style={{ fontSize: "0.82rem", padding: "10px 16px" }}
+          >
+            <Heart size={15} color="var(--color-green)" />
+            <span>Nutrición & Hábitos</span>
+          </button>
+        </div>
+      </div>
+
+      {/* ── 4 TARJETAS KPI DE RESUMEN ── */}
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
           gap: 16,
         }}
       >
         {[
           {
             label: "Aprendices Registrados",
-            value: "248",
-            meta: "+18 nuevas fichas",
+            valor: "248",
+            nota: "+18 nuevas fichas este ciclo",
             icon: Users,
-            badge: "Activos",
+            color: "var(--color-green)",
           },
           {
-            label: "Evaluaciones Clínicas",
-            value: "186",
-            meta: "Completadas este ciclo",
+            label: "Evaluaciones Antropométricas",
+            valor: "186",
+            nota: "Completadas con protocolo OMS",
             icon: FileText,
-            badge: "92% al día",
+            color: "var(--color-green)",
           },
           {
-            label: "Pruebas Físicas Validadas",
-            value: "412",
-            meta: "Baremos calculados",
+            label: "Pruebas Físicas Calificadas",
+            valor: "412",
+            nota: "Baremos oficiales asignados",
             icon: Activity,
-            badge: "Oficiales",
+            color: "var(--color-green)",
           },
           {
-            label: "Condición Saludable (OMS)",
-            value: "76.4%",
-            meta: "En percentil normal",
+            label: "En Zona Saludable (OMS)",
+            valor: "76.4%",
+            nota: "Percentil óptimo juvenil",
             icon: ShieldCheck,
-            badge: "+4.2% mejora",
+            color: "var(--color-green)",
           },
-        ].map((stat, i) => {
-          const Icon = stat.icon;
+        ].map((kpi, i) => {
+          const Icon = kpi.icon;
           return (
             <motion.div
               key={i}
               variants={itemVariants}
               className="glass"
-              style={{
-                padding: "20px 22px",
-                display: "flex",
-                flexDirection: "column",
-                gap: 12,
-              }}
+              style={{ padding: "20px 22px", display: "flex", flexDirection: "column", gap: 10 }}
             >
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span style={{ fontSize: "0.74rem", fontWeight: 600, color: "var(--color-text-secondary)", letterSpacing: "0.02em" }}>
-                  {stat.label}
+                <span style={{ fontSize: "0.72rem", fontWeight: 600, color: "var(--color-text-secondary)", textTransform: "uppercase", letterSpacing: "0.04em" }}>
+                  {kpi.label}
                 </span>
                 <div
                   style={{
                     width: 32,
                     height: 32,
                     borderRadius: 8,
-                    background: "rgba(255, 255, 255, 0.04)",
-                    border: "1px solid rgba(255, 255, 255, 0.07)",
+                    background: "rgba(16, 185, 129, 0.1)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -110,25 +171,11 @@ export function TabDashboard() {
               </div>
 
               <div>
-                <div style={{ fontSize: "2rem", fontWeight: 800, letterSpacing: "-0.03em", color: "#ffffff" }}>
-                  {stat.value}
+                <div style={{ fontSize: "2rem", fontWeight: 800, color: "#ffffff", letterSpacing: "-0.03em", lineHeight: 1.1 }}>
+                  {kpi.valor}
                 </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 4 }}>
-                  <span
-                    style={{
-                      fontSize: "0.68rem",
-                      padding: "2px 6px",
-                      borderRadius: 4,
-                      background: "rgba(16, 185, 129, 0.12)",
-                      color: "var(--color-green)",
-                      fontWeight: 700,
-                    }}
-                  >
-                    {stat.badge}
-                  </span>
-                  <span style={{ fontSize: "0.73rem", color: "var(--color-text-muted)" }}>
-                    {stat.meta}
-                  </span>
+                <div style={{ fontSize: "0.72rem", color: "var(--color-text-muted)", marginTop: 6 }}>
+                  {kpi.nota}
                 </div>
               </div>
             </motion.div>
@@ -136,124 +183,93 @@ export function TabDashboard() {
         })}
       </div>
 
-      {/* ── Gráficas y Métricas Detalladas ── */}
-      <div style={{ display: "grid", gridTemplateColumns: "1.7fr 1.3fr", gap: 20 }}>
-        {/* Rendimiento por Disciplina Deportiva */}
-        <motion.div variants={itemVariants} className="glass-elevated" style={{ padding: "24px 28px" }}>
+      {/* ── RENDIMIENTO POR DISCIPLINA & SEMÁFORO OMS ── */}
+      <div style={{ display: "grid", gridTemplateColumns: "1.5fr 1.5fr", gap: 20 }}>
+        {/* Rendimiento por Deporte */}
+        <motion.div variants={itemVariants} className="glass" style={{ padding: "24px 28px", borderRadius: 18 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
             <div>
-              <h3 style={{ fontSize: "0.95rem", fontWeight: 700, letterSpacing: "-0.01em" }}>
-                Aptitud Física por Disciplina
+              <h3 style={{ fontSize: "0.95rem", fontWeight: 700, color: "#ffffff" }}>
+                Cumplimiento por Disciplina Deportiva
               </h3>
-              <p style={{ fontSize: "0.72rem", color: "var(--color-text-muted)", marginTop: 2 }}>
-                Promedio general de cumplimiento de marcas de rendimiento
+              <p style={{ fontSize: "0.72rem", color: "var(--color-text-muted)" }}>
+                Porcentaje de aprendices en marcas óptimas
               </p>
             </div>
-            <span
-              style={{
-                fontSize: "0.7rem",
-                padding: "3px 8px",
-                borderRadius: 6,
-                background: "rgba(255, 255, 255, 0.04)",
-                color: "var(--color-text-secondary)",
-                fontWeight: 600,
-              }}
-            >
-              Período Activo
+            <span style={{ fontSize: "0.7rem", padding: "3px 8px", borderRadius: 6, background: "rgba(255, 255, 255, 0.04)", color: "var(--color-text-secondary)" }}>
+              Período Actual
             </span>
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
             {[
-              { disciplina: "Fútbol Formativo", pct: 91, atletas: "64 evaluados" },
-              { disciplina: "Atletismo & Velocidad", pct: 88, atletas: "42 evaluados" },
-              { disciplina: "Baloncesto Juvenil", pct: 82, atletas: "50 evaluados" },
-              { disciplina: "Voleibol Escolar", pct: 79, atletas: "48 evaluados" },
-              { disciplina: "Acondicionamiento General", pct: 85, atletas: "44 evaluados" },
-            ].map((dep, i) => (
+              { dep: "Fútbol Formativo", pct: 91, count: "64 alumnos" },
+              { dep: "Atletismo & Velocidad", pct: 88, count: "42 alumnos" },
+              { dep: "Baloncesto Juvenil", pct: 82, count: "50 alumnos" },
+              { dep: "Voleibol Escolar", pct: 79, count: "48 alumnos" },
+              { dep: "Acondicionamiento General", pct: 85, count: "44 alumnos" },
+            ].map((d, i) => (
               <div key={i}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                    <span style={{ fontSize: "0.82rem", fontWeight: 600, color: "var(--color-text-primary)" }}>
-                      {dep.disciplina}
-                    </span>
-                    <span style={{ fontSize: "0.7rem", color: "var(--color-text-muted)" }}>
-                      ({dep.atletas})
-                    </span>
-                  </div>
-                  <span style={{ fontSize: "0.82rem", fontWeight: 700, color: "var(--color-green)" }}>
-                    {dep.pct}%
+                <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.8rem", marginBottom: 6 }}>
+                  <span style={{ fontWeight: 600, color: "var(--color-text-primary)" }}>
+                    {d.dep} <span style={{ color: "var(--color-text-muted)", fontSize: "0.7rem" }}>({d.count})</span>
+                  </span>
+                  <span style={{ fontWeight: 700, color: "var(--color-green)" }}>
+                    {d.pct}%
                   </span>
                 </div>
-                {/* Barra de progreso unificada y elegante */}
-                <div
-                  style={{
-                    height: 6,
-                    background: "rgba(255, 255, 255, 0.05)",
-                    borderRadius: 99,
-                    overflow: "hidden",
-                  }}
-                >
-                  <motion.div
-                    initial={{ width: 0 }}
-                    animate={{ width: `${dep.pct}%` }}
-                    transition={{ duration: 0.8, delay: 0.15 + i * 0.05, ease: [0.16, 1, 0.3, 1] }}
-                    style={{
-                      height: "100%",
-                      background: "linear-gradient(90deg, var(--color-green-dark), var(--color-green))",
-                      borderRadius: 99,
-                    }}
-                  />
+                <div style={{ height: 6, borderRadius: 99, background: "rgba(255, 255, 255, 0.05)", overflow: "hidden" }}>
+                  <div style={{ width: `${d.pct}%`, height: "100%", background: "var(--color-green)", borderRadius: 99 }} />
                 </div>
               </div>
             ))}
           </div>
         </motion.div>
 
-        {/* Clasificación Nutricional y Semáforo OMS */}
-        <motion.div variants={itemVariants} className="glass-elevated" style={{ padding: "24px 28px", display: "flex", flexDirection: "column" }}>
+        {/* Clasificación Nutricional (Semáforo Escolar OMS) */}
+        <motion.div variants={itemVariants} className="glass" style={{ padding: "24px 28px", borderRadius: 18 }}>
           <div style={{ marginBottom: 20 }}>
-            <h3 style={{ fontSize: "0.95rem", fontWeight: 700, letterSpacing: "-0.01em" }}>
-              Clasificación Nutricional (OMS)
+            <h3 style={{ fontSize: "0.95rem", fontWeight: 700, color: "#ffffff" }}>
+              Estado Nutricional del Grupo (OMS)
             </h3>
-            <p style={{ fontSize: "0.72rem", color: "var(--color-text-muted)", marginTop: 2 }}>
-              Distribución corporal de la población evaluada
+            <p style={{ fontSize: "0.72rem", color: "var(--color-text-muted)" }}>
+              Detección preventiva según percentiles de IMC
             </p>
           </div>
 
-          <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-around", gap: 12 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             {[
               {
-                estado: "Peso Adecuado / Saludable",
-                porcentaje: "76.4%",
+                rango: "Peso Saludable / Adecuado",
+                pct: "76.4%",
                 alumnos: "189 aprendices",
-                indicador: "var(--color-green)",
+                color: "var(--color-green)",
               },
               {
-                estado: "Sobrepeso Leve (Monitoreo)",
-                porcentaje: "14.2%",
+                rango: "Sobrepeso Leve (Monitoreo)",
+                pct: "14.2%",
                 alumnos: "35 aprendices",
-                indicador: "var(--color-amber)",
+                color: "var(--color-amber)",
               },
               {
-                estado: "Bajo Peso (Orientación)",
-                porcentaje: "6.8%",
+                rango: "Bajo Peso (Orientación)",
+                pct: "6.8%",
                 alumnos: "17 aprendices",
-                indicador: "var(--color-blue)",
+                color: "var(--color-blue)",
               },
               {
-                estado: "Riesgo de Obesidad",
-                porcentaje: "2.6%",
+                rango: "Riesgo de Obesidad",
+                pct: "2.6%",
                 alumnos: "7 aprendices",
-                indicador: "var(--color-rose)",
+                color: "var(--color-rose)",
               },
-            ].map((row, i) => (
+            ].map((st, i) => (
               <div
                 key={i}
                 style={{
                   display: "flex",
-                  alignItems: "center",
                   justifyContent: "space-between",
+                  alignItems: "center",
                   padding: "12px 14px",
                   borderRadius: 10,
                   background: "rgba(255, 255, 255, 0.02)",
@@ -261,27 +277,19 @@ export function TabDashboard() {
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <div
-                    style={{
-                      width: 8,
-                      height: 8,
-                      borderRadius: "50%",
-                      background: row.indicador,
-                      boxShadow: `0 0 8px ${row.indicador}66`,
-                    }}
-                  />
+                  <div style={{ width: 8, height: 8, borderRadius: "50%", background: st.color, boxShadow: `0 0 8px ${st.color}66` }} />
                   <div>
                     <div style={{ fontSize: "0.8rem", fontWeight: 600, color: "var(--color-text-primary)" }}>
-                      {row.estado}
+                      {st.rango}
                     </div>
                     <div style={{ fontSize: "0.68rem", color: "var(--color-text-muted)" }}>
-                      {row.alumnos}
+                      {st.alumnos}
                     </div>
                   </div>
                 </div>
 
-                <div style={{ fontSize: "0.85rem", fontWeight: 700, color: "#ffffff" }}>
-                  {row.porcentaje}
+                <div style={{ fontSize: "0.88rem", fontWeight: 800, color: "#ffffff" }}>
+                  {st.pct}
                 </div>
               </div>
             ))}
