@@ -47,6 +47,7 @@ El ecosistema de **Deportest** está construido utilizando tecnologías modernas
 ```text
 📦 Deportest
  ┣ 📂 backend            # Servidor Node.js, controladores, middlewares y rutas
+ ┣ 📂 docs               # Bitácora de evolución, memoria gráfica y capturas
  ┣ 📂 public             # Recursos estáticos (imágenes de login, iconos)
  ┣ 📂 src
  ┃ ┣ 📂 components       # Componentes de React (Layouts, UI, Tabs)
@@ -58,6 +59,13 @@ El ecosistema de **Deportest** está construido utilizando tecnologías modernas
  ┣ 📜 package.json       # Dependencias del frontend
  ┗ 📜 README.md          # Documentación del proyecto
 ```
+
+---
+
+## 📚 Documentación y Registro del Proyecto
+
+* 📋 **[Bitácora de Desarrollo y Negocio](docs/BITACORA_PROCESO.md):** Fases del proyecto, roles del equipo (Walter, Camilo, Instructor Carlos), marco legal (Ley 1581) y estrategia para colegios.
+* 📸 **[Memoria Gráfica de la Sesión](docs/HISTORIAL_SESION_CHAT.md):** Historial visual completo con capturas de pantalla de la evolución del proyecto.
 
 ---
 
@@ -81,10 +89,10 @@ Para levantar el entorno de desarrollo localmente:
    ```bash
    npm run dev
    ```
-5. Abre [http://localhost:5173](http://localhost:5173) en tu navegador para ver la aplicación.
+5. Abre [http://localhost:3000](http://localhost:3000) en tu navegador para ver la aplicación.
 
 ---
 
 <div align="center">
-  <i>Desarrollado para la excelencia deportiva en el SENA.</i> 🟢
+  <i>Desarrollado para la excelencia deportiva en el SENA y colegios.</i> 🟢
 </div>
