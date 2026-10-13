@@ -1,8 +1,19 @@
-// ─────────────────────────────────────────────
-// Tab: Ficha Antropométrica
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
+// TabAntropometria.tsx — Ficha Antropométrica y Evaluación Clínica
+// ─────────────────────────────────────────────────────────────
 import React, { useState } from "react";
-import { FileText, Save, Search, User, Ruler, Weight, HeartPulse, Activity, Download } from "lucide-react";
+import {
+  FileText,
+  Save,
+  Search,
+  User,
+  Ruler,
+  Weight,
+  HeartPulse,
+  Activity,
+  Printer,
+  ShieldCheck,
+} from "lucide-react";
 import { Input } from "../ui/Input";
 import { Select } from "../ui/Select";
 
@@ -13,19 +24,19 @@ interface TabAntropometriaProps {
 
 type SubTab = "datos" | "perimetros" | "pliegues" | "clinico";
 
-const SUB_TABS: { id: SubTab; label: string; color: string }[] = [
-  { id: "datos",      label: "Datos Básicos",     color: "var(--color-teal)" },
-  { id: "perimetros", label: "Perímetros",         color: "var(--color-blue)" },
-  { id: "pliegues",   label: "Pliegues",           color: "var(--color-amber)" },
-  { id: "clinico",    label: "Análisis Clínico",   color: "var(--color-rose)" },
+const SUB_TABS: { id: SubTab; label: string }[] = [
+  { id: "datos",      label: "Composición & IMC" },
+  { id: "perimetros", label: "Perímetros Corporales" },
+  { id: "pliegues",   label: "Pliegues Cutáneos" },
+  { id: "clinico",    label: "Evaluación Médica" },
 ];
 
 export function TabAntropometria({ role, onSave }: TabAntropometriaProps) {
   const [subTab, setSubTab] = useState<SubTab>("datos");
 
   // Estado para cálculo de IMC
-  const [peso, setPeso] = useState("");
-  const [talla, setTalla] = useState("");
+  const [peso, setPeso] = useState("64.5");
+  const [talla, setTalla] = useState("1.74");
 
   const pesoNum = parseFloat(peso);
   const tallaNum = parseFloat(talla);
@@ -37,74 +48,144 @@ export function TabAntropometria({ role, onSave }: TabAntropometriaProps) {
   let imcClass = "Sin datos";
   let imcColor = "var(--color-text-muted)";
   let imcBg = "rgba(255,255,255,0.05)";
-  
+
   if (imc > 0) {
     if (imc < 18.5) {
-      imcClass = "Bajo Peso"; imcColor = "#38bdf8"; imcBg = "rgba(56, 189, 248, 0.2)";
+      imcClass = "Bajo Peso";
+      imcColor = "var(--color-blue)";
+      imcBg = "rgba(59, 130, 246, 0.15)";
     } else if (imc < 25) {
-      imcClass = "Peso Normal"; imcColor = "var(--color-green)"; imcBg = "rgba(34, 197, 94, 0.2)";
+      imcClass = "Rango Saludable (Normal)";
+      imcColor = "var(--color-green)";
+      imcBg = "rgba(16, 185, 129, 0.15)";
     } else if (imc < 30) {
-      imcClass = "Sobrepeso"; imcColor = "var(--color-amber)"; imcBg = "rgba(245, 158, 11, 0.2)";
+      imcClass = "Sobrepeso";
+      imcColor = "var(--color-amber)";
+      imcBg = "rgba(245, 158, 11, 0.15)";
     } else {
-      imcClass = "Obesidad"; imcColor = "var(--color-rose)"; imcBg = "rgba(244, 63, 94, 0.2)";
+      imcClass = "Obesidad";
+      imcColor = "var(--color-rose)";
+      imcBg = "rgba(244, 63, 94, 0.15)";
     }
   }
 
-  // Decorator Card Component
-  const MetricCard = ({ label, icon: Icon, color, children }: any) => (
-    <div style={{
-      background: "rgba(255,255,255,0.02)",
-      border: "1px solid rgba(255,255,255,0.05)",
-      borderRadius: 16,
-      padding: 20,
-      display: "flex",
-      flexDirection: "column",
-      gap: 16
-    }}>
+  // Tarjeta de sección interna
+  const MetricCard = ({ label, icon: Icon, children }: any) => (
+    <div
+      style={{
+        background: "rgba(255,255,255,0.02)",
+        border: "1px solid rgba(255,255,255,0.06)",
+        borderRadius: 14,
+        padding: "20px 22px",
+        display: "flex",
+        flexDirection: "column",
+        gap: 16,
+      }}
+    >
       <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-        <div style={{ width: 32, height: 32, borderRadius: 8, background: `color-mix(in srgb, ${color} 15%, transparent)`, display: "flex", alignItems: "center", justifyContent: "center", color }}>
-          <Icon size={16} />
+        <div
+          style={{
+            width: 30,
+            height: 30,
+            borderRadius: 8,
+            background: "rgba(255, 255, 255, 0.04)",
+            border: "1px solid rgba(255, 255, 255, 0.08)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "var(--color-green)",
+          }}
+        >
+          <Icon size={15} />
         </div>
-        <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--color-text-primary)" }}>{label}</span>
+        <span style={{ fontSize: "0.84rem", fontWeight: 700, color: "var(--color-text-primary)" }}>
+          {label}
+        </span>
       </div>
       {children}
     </div>
   );
 
   return (
-    <div className="animate-fade-in glass-elevated" style={{ overflow: "hidden", borderRadius: 24 }}>
-      {/* Header Premium */}
-      <div style={{ padding: "32px 40px", borderBottom: "1px solid rgba(255,255,255,0.06)", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16, background: "rgba(0,0,0,0.2)" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <div style={{ width: 48, height: 48, borderRadius: 14, background: "linear-gradient(135deg, rgba(20,184,166,0.2), rgba(20,184,166,0.05))", border: "1px solid rgba(20,184,166,0.4)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 8px 24px rgba(20,184,166,0.2)" }}>
-            <FileText size={24} color="var(--color-teal)" />
+    <div className="animate-fade-in glass-elevated" style={{ overflow: "hidden", borderRadius: 16 }}>
+      {/* Cabecera de la ficha */}
+      <div
+        style={{
+          padding: "24px 32px",
+          borderBottom: "1px solid var(--color-border)",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: 16,
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+          <div
+            style={{
+              width: 40,
+              height: 40,
+              borderRadius: 10,
+              background: "rgba(16, 185, 129, 0.1)",
+              border: "1px solid rgba(16, 185, 129, 0.25)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "var(--color-green)",
+            }}
+          >
+            <FileText size={20} />
           </div>
           <div>
-            <h2 style={{ fontSize: "1.25rem", fontWeight: 800, letterSpacing: "-0.02em" }}>Ficha Antropométrica</h2>
-            <p style={{ fontSize: "0.8rem", color: "var(--color-text-secondary)", marginTop: 2 }}>Dashboard clínico de mediciones corporales</p>
+            <h2 style={{ fontSize: "1.1rem", fontWeight: 700, letterSpacing: "-0.01em" }}>
+              Ficha Antropométrica Oficial
+            </h2>
+            <p style={{ fontSize: "0.74rem", color: "var(--color-text-secondary)" }}>
+              Protocolo de medición física y clasificación según estándares OMS
+            </p>
           </div>
         </div>
+
         {role === "ENTRENADOR" && (
-          <div className="no-print" style={{ display: "flex", alignItems: "flex-end", gap: 12, flexWrap: "wrap", background: "rgba(255,255,255,0.03)", padding: "12px 20px", borderRadius: 16, border: "1px solid rgba(255,255,255,0.05)" }}>
-            <Input label="Documento del Aprendiz" placeholder="Buscar ID..." style={{ width: 180, background: "rgba(0,0,0,0.2)" }} />
-            <button className="btn btn-secondary" style={{ marginBottom: 0, padding: "10px 16px" }}>
-              <Search size={14} /> Buscar
+          <div
+            className="no-print"
+            style={{
+              display: "flex",
+              alignItems: "flex-end",
+              gap: 10,
+              flexWrap: "wrap",
+            }}
+          >
+            <div style={{ width: 170 }}>
+              <Input label="ID Aprendiz" placeholder="Buscar ID..." defaultValue="1001234567" />
+            </div>
+            <button className="btn btn-secondary" style={{ padding: "9px 14px", fontSize: "0.78rem" }}>
+              <Search size={13} /> Buscar
             </button>
-            <div style={{ width: 1, height: 40, background: "rgba(255,255,255,0.1)", margin: "0 8px" }} />
-            <Input label="Paciente" placeholder="—" readOnly style={{ width: 200, opacity: 0.7 }} />
-            <button 
-              className="btn" 
+            <button
+              className="btn btn-ghost"
               onClick={() => window.print()}
-              style={{ marginBottom: 0, padding: "10px 16px", background: "rgba(34, 197, 94, 0.2)", color: "var(--color-green)", border: "1px solid rgba(34, 197, 94, 0.4)" }}
+              style={{ padding: "9px 14px", fontSize: "0.78rem" }}
+              title="Imprimir informe clínico oficial"
             >
-              <Download size={14} /> Exportar PDF
+              <Printer size={13} /> Imprimir / PDF
             </button>
           </div>
         )}
       </div>
 
-      {/* Navegación de Pestañas con estilo Píldora */}
-      <div className="no-print" style={{ display: "flex", padding: "20px 40px", gap: 8, overflowX: "auto", background: "rgba(0,0,0,0.1)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+      {/* Navegación por Sub-pestañas */}
+      <div
+        className="no-print"
+        style={{
+          display: "flex",
+          padding: "12px 32px",
+          gap: 6,
+          background: "rgba(0, 0, 0, 0.15)",
+          borderBottom: "1px solid var(--color-border)",
+          overflowX: "auto",
+        }}
+      >
         {SUB_TABS.map((t) => {
           const active = subTab === t.id;
           return (
@@ -113,16 +194,16 @@ export function TabAntropometria({ role, onSave }: TabAntropometriaProps) {
               onClick={() => setSubTab(t.id)}
               style={{
                 padding: "8px 16px",
-                fontSize: "0.8rem",
-                fontWeight: active ? 700 : 500,
-                color: active ? "#fff" : "var(--color-text-muted)",
-                background: active ? t.color : "transparent",
-                border: "none",
-                borderRadius: 20,
+                fontSize: "0.78rem",
+                fontWeight: active ? 600 : 500,
+                color: active ? "#ffffff" : "var(--color-text-secondary)",
+                background: active ? "rgba(255, 255, 255, 0.08)" : "transparent",
+                border: "1px solid",
+                borderColor: active ? "rgba(255, 255, 255, 0.12)" : "transparent",
+                borderRadius: 8,
                 cursor: "pointer",
-                transition: "all 0.2s",
+                transition: "all 0.15s ease",
                 whiteSpace: "nowrap",
-                boxShadow: active ? `0 4px 12px color-mix(in srgb, ${t.color} 40%, transparent)` : "none",
               }}
             >
               {t.label}
@@ -131,28 +212,76 @@ export function TabAntropometria({ role, onSave }: TabAntropometriaProps) {
         })}
       </div>
 
-      {/* Content Area */}
-      <div style={{ padding: 40, minHeight: 400 }}>
+      {/* Área de Contenido */}
+      <div style={{ padding: "32px", minHeight: 380 }}>
         {subTab === "datos" && (
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 32, maxWidth: 900, margin: "0 auto" }}>
-            <MetricCard label="Información General" icon={User} color="var(--color-teal)">
-              <Input label="Evaluador a Cargo" placeholder="Nombre del entrenador" />
-              <Input label="Fecha de Evaluación" type="date" />
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, maxWidth: 940, margin: "0 auto" }}>
+            <MetricCard label="Datos Generales de la Valoración" icon={User}>
+              <Input label="Docente / Evaluador a Cargo" defaultValue="Prof. Walter Pinto" />
+              <Input label="Fecha de Registro" type="date" defaultValue="2026-10-12" />
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+                <Input label="Edad Registrada" type="number" min="0" defaultValue="16" />
+                <Select label="Sexo Biológico">
+                  <option>Masculino</option>
+                  <option>Femenino</option>
+                </Select>
+              </div>
             </MetricCard>
 
-            <MetricCard label="Composición Básica" icon={Weight} color="var(--color-green)">
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-                <Input label="Edad (años)" type="number" min="0" placeholder="—" />
-                <Input label="Talla (m)" type="number" min="0" step="0.01" placeholder="Ej: 1.70" value={talla} onChange={(e) => setTalla(e.target.value)} />
+            <MetricCard label="Medición y Análisis de IMC" icon={Weight}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+                <Input
+                  label="Estatura / Talla (m)"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  placeholder="Ej: 1.74"
+                  value={talla}
+                  onChange={(e) => setTalla(e.target.value)}
+                />
+                <Input
+                  label="Peso Corporal (kg)"
+                  type="number"
+                  min="0"
+                  step="0.1"
+                  placeholder="Ej: 64.5"
+                  value={peso}
+                  onChange={(e) => setPeso(e.target.value)}
+                />
               </div>
-              <Input label="Peso Total (kg)" type="number" min="0" step="0.1" placeholder="Ej: 68.5" value={peso} onChange={(e) => setPeso(e.target.value)} />
-              
-              <div style={{ marginTop: 8, padding: 16, borderRadius: 12, background: "linear-gradient(135deg, rgba(20,184,166,0.1), rgba(20,184,166,0.02))", border: "1px solid rgba(20,184,166,0.2)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+
+              {/* Indicador Clínico de IMC */}
+              <div
+                style={{
+                  marginTop: 6,
+                  padding: "16px 20px",
+                  borderRadius: 12,
+                  background: "rgba(255, 255, 255, 0.02)",
+                  border: "1px solid rgba(255, 255, 255, 0.06)",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
                 <div>
-                  <p style={{ fontSize: "0.7rem", color: "var(--color-teal)", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em" }}>Índice de Masa Corporal</p>
-                  <p style={{ fontSize: "2rem", fontWeight: 900, color: "#fff", lineHeight: 1 }}>{imc > 0 ? imc : "--"}</p>
+                  <p style={{ fontSize: "0.68rem", color: "var(--color-text-muted)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                    Índice de Masa Corporal (IMC)
+                  </p>
+                  <p style={{ fontSize: "2.1rem", fontWeight: 800, color: "#ffffff", lineHeight: 1.1, marginTop: 4 }}>
+                    {imc > 0 ? imc : "--"}
+                  </p>
                 </div>
-                <div style={{ padding: "6px 12px", background: imcBg, color: imcColor, borderRadius: 8, fontSize: "0.75rem", fontWeight: 700, transition: "all 0.3s" }}>
+                <div
+                  style={{
+                    padding: "6px 14px",
+                    background: imcBg,
+                    color: imcColor,
+                    borderRadius: 8,
+                    fontSize: "0.78rem",
+                    fontWeight: 700,
+                    border: `1px solid ${imcColor}33`,
+                  }}
+                >
                   {imcClass}
                 </div>
               </div>
@@ -161,17 +290,23 @@ export function TabAntropometria({ role, onSave }: TabAntropometriaProps) {
         )}
 
         {subTab === "perimetros" && (
-          <div style={{ maxWidth: 900, margin: "0 auto" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
-              <p style={{ fontSize: "0.9rem", color: "var(--color-text-secondary)", display: "flex", alignItems: "center", gap: 8 }}><Ruler size={16} /> Medidas en centímetros (cm)</p>
-              <Input label="Fecha Medición" type="date" style={{ width: 160 }} />
+          <div style={{ maxWidth: 940, margin: "0 auto" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+              <p style={{ fontSize: "0.82rem", color: "var(--color-text-secondary)", display: "flex", alignItems: "center", gap: 8 }}>
+                <Ruler size={15} color="var(--color-green)" /> Medidas registradas en centímetros (cm)
+              </p>
+              <div style={{ width: 160 }}>
+                <Input label="Fecha de Toma" type="date" defaultValue="2026-10-12" />
+              </div>
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "20px 24px" }}>
-              {["Hombro", "Tórax", "Cintura", "Cadera", "Brazo Derecho", "Brazo Izquierdo", "Muslo Superior", "Muslo Medio", "Muslo Inferior", "Pierna"].map(
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(210px, 1fr))", gap: "16px 20px" }}>
+              {["Hombros", "Tórax / Pecho", "Cintura", "Cadera", "Brazo Relajado", "Brazo Flexionado", "Muslo Superior", "Muslo Medio", "Pantorrilla"].map(
                 (m) => (
                   <div key={m} style={{ position: "relative" }}>
-                    <Input label={m} type="number" min="0" step="0.1" placeholder="0.0" />
-                    <div style={{ position: "absolute", right: 12, top: 38, fontSize: "0.7rem", color: "var(--color-text-muted)", fontWeight: 600 }}>cm</div>
+                    <Input label={m} type="number" min="0" step="0.1" placeholder="0.0" defaultValue="75.0" />
+                    <div style={{ position: "absolute", right: 12, top: 34, fontSize: "0.7rem", color: "var(--color-text-muted)", fontWeight: 600 }}>
+                      cm
+                    </div>
                   </div>
                 )
               )}
@@ -180,17 +315,23 @@ export function TabAntropometria({ role, onSave }: TabAntropometriaProps) {
         )}
 
         {subTab === "pliegues" && (
-          <div style={{ maxWidth: 900, margin: "0 auto" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
-              <p style={{ fontSize: "0.9rem", color: "var(--color-text-secondary)", display: "flex", alignItems: "center", gap: 8 }}><Activity size={16} /> Adiposidad en milímetros (mm)</p>
-              <Input label="Fecha Medición" type="date" style={{ width: 160 }} />
+          <div style={{ maxWidth: 940, margin: "0 auto" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+              <p style={{ fontSize: "0.82rem", color: "var(--color-text-secondary)", display: "flex", alignItems: "center", gap: 8 }}>
+                <Activity size={15} color="var(--color-green)" /> Grosor de tejido adiposo en milímetros (mm)
+              </p>
+              <div style={{ width: 160 }}>
+                <Input label="Fecha de Toma" type="date" defaultValue="2026-10-12" />
+              </div>
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "20px 24px" }}>
-              {["Bicipital", "Tricipital", "Subescapular", "Suprailiaco", "Abdominal", "Muslo", "Pantorrilla"].map(
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(210px, 1fr))", gap: "16px 20px" }}>
+              {["Bicipital", "Tricipital", "Subescapular", "Suprailiaco", "Abdominal", "Muslo Anterior", "Pantorrilla Medial"].map(
                 (m) => (
                   <div key={m} style={{ position: "relative" }}>
-                    <Input label={m} type="number" min="0" step="0.1" placeholder="0.0" />
-                    <div style={{ position: "absolute", right: 12, top: 38, fontSize: "0.7rem", color: "var(--color-text-muted)", fontWeight: 600 }}>mm</div>
+                    <Input label={m} type="number" min="0" step="0.1" placeholder="0.0" defaultValue="12.0" />
+                    <div style={{ position: "absolute", right: 12, top: 34, fontSize: "0.7rem", color: "var(--color-text-muted)", fontWeight: 600 }}>
+                      mm
+                    </div>
                   </div>
                 )
               )}
@@ -199,48 +340,53 @@ export function TabAntropometria({ role, onSave }: TabAntropometriaProps) {
         )}
 
         {subTab === "clinico" && (
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 32, maxWidth: 900, margin: "0 auto" }}>
-            <MetricCard label="Signos Vitales e Índices" icon={HeartPulse} color="var(--color-rose)">
-              <Input label="Tensión Arterial (mmHg)" placeholder="Ej: 120/80" />
-              <Input label="Frecuencia Cardíaca (bpm)" type="number" min="0" placeholder="Ej: 72" />
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-                <Input label="Peso Ideal (kg)" type="number" min="0" />
-                <Input label="Índ. Obesidad" type="number" min="0" step="0.1" />
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, maxWidth: 940, margin: "0 auto" }}>
+            <MetricCard label="Signos Vitales y Capacidad" icon={HeartPulse}>
+              <Input label="Presión Arterial (mmHg)" placeholder="Ej: 118/78" defaultValue="115/75" />
+              <Input label="Frecuencia Cardíaca en Reposo (bpm)" type="number" min="0" placeholder="Ej: 68" defaultValue="68" />
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+                <Input label="Capacidad Vital (L)" type="number" min="0" step="0.1" defaultValue="4.2" />
+                <Input label="Saturación O2 (%)" type="number" min="0" max="100" defaultValue="98" />
               </div>
             </MetricCard>
 
-            <MetricCard label="Evaluación Postural" icon={Activity} color="var(--color-purple)">
-              <Select label="Escoliosis">
-                <option>Normal</option><option>Leve</option><option>Moderada</option><option>Severa</option>
-              </Select>
-              <Select label="Cifosis">
-                <option>Normal</option><option>Leve</option><option>Moderada</option><option>Severa</option>
-              </Select>
-              <Select label="Lordosis">
-                <option>Normal</option><option>Leve</option><option>Moderada</option><option>Severa</option>
-              </Select>
-              <Input label="Observaciones Médicas" placeholder="Notas adicionales..." />
+            <MetricCard label="Observaciones y Postura" icon={ShieldCheck}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+                <Select label="Evaluación Escoliosis">
+                  <option>Normal / Sin Desviación</option>
+                  <option>Leve</option>
+                  <option>Moderada</option>
+                </Select>
+                <Select label="Apoyo Plantar (Pie)">
+                  <option>Normal (Neutro)</option>
+                  <option>Pie Plano</option>
+                  <option>Pie Cavo</option>
+                </Select>
+              </div>
+              <Input label="Recomendaciones Médicas / Formativas" defaultValue="Apto para actividad deportiva competitiva sin restricciones." />
             </MetricCard>
           </div>
         )}
       </div>
 
-      {/* Footer Action */}
-      <div className="no-print" style={{ padding: "24px 40px", borderTop: "1px solid rgba(255,255,255,0.05)", display: "flex", justifyContent: "flex-end", background: "rgba(0,0,0,0.2)" }}>
-        <button 
-          className="btn btn-primary" 
+      {/* Pie de guardado */}
+      <div
+        className="no-print"
+        style={{
+          padding: "20px 32px",
+          borderTop: "1px solid var(--color-border)",
+          display: "flex",
+          justifyContent: "flex-end",
+          background: "rgba(0, 0, 0, 0.15)",
+        }}
+      >
+        <button
+          className="btn btn-primary"
           onClick={onSave}
-          style={{ 
-            padding: "14px 28px", 
-            fontSize: "0.95rem",
-            background: "linear-gradient(135deg, #0d9488, #0f766e)", 
-            boxShadow: "0 8px 24px rgba(13,148,136,0.3)",
-            border: "none",
-            borderRadius: 12
-          }}
+          style={{ padding: "11px 24px" }}
         >
-          <Save size={18} />
-          Guardar Registro Médico
+          <Save size={15} />
+          Guardar Ficha Oficial
         </button>
       </div>
     </div>

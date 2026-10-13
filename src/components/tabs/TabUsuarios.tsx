@@ -86,29 +86,29 @@ export function TabUsuarios({ onSave }: TabUsuariosProps) {
     <div className="animate-fade-in" style={{ display: "flex", flexDirection: "column", gap: 24 }}>
 
       {/* Stats row */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 16 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16 }}>
         {[
-          { label: "Usuarios Totales", value: "48", sub: "Activos este mes",   color: "var(--color-green)"  },
-          { label: "Entrenadores",     value: "6",  sub: "Roles asignados",    color: "var(--color-teal)"   },
-          { label: "Aprendices",       value: "42", sub: "Programas SENA",     color: "var(--color-purple)" },
+          { label: "Usuarios Totales", value: "248", sub: "Comunidad activa SENA" },
+          { label: "Entrenadores / Docentes", value: "14", sub: "Instructores autorizados" },
+          { label: "Aprendices Deportistas", value: "234", sub: "Fichas técnicas y escolares" },
         ].map((s) => (
-          <div key={s.label} className="glass" style={{ padding: 20 }}>
-            <div style={{ fontSize: "0.7rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.07em", color: "var(--color-text-muted)" }}>{s.label}</div>
-            <div style={{ fontSize: "2rem", fontWeight: 900, color: s.color, marginTop: 4 }}>{s.value}</div>
+          <div key={s.label} className="glass" style={{ padding: "18px 20px" }}>
+            <div style={{ fontSize: "0.72rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em", color: "var(--color-text-muted)" }}>{s.label}</div>
+            <div style={{ fontSize: "1.85rem", fontWeight: 800, color: "#ffffff", marginTop: 4, letterSpacing: "-0.02em" }}>{s.value}</div>
             <div style={{ fontSize: "0.72rem", color: "var(--color-text-secondary)", marginTop: 2 }}>{s.sub}</div>
           </div>
         ))}
       </div>
 
       {/* Form */}
-      <div className="glass-elevated" style={{ padding: 32 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 28 }}>
-          <div style={{ width: 36, height: 36, borderRadius: 10, background: "rgba(34,197,94,0.15)", border: "1px solid rgba(34,197,94,0.3)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <Users size={18} color="var(--color-green)" />
+      <div className="glass-elevated" style={{ padding: "28px 32px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
+          <div style={{ width: 38, height: 38, borderRadius: 10, background: "rgba(16,185,129,0.1)", border: "1px solid rgba(16,185,129,0.25)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--color-green)" }}>
+            <Users size={18} />
           </div>
           <div>
-            <h2 style={{ fontSize: "1rem", fontWeight: 700 }}>Registro de Usuario</h2>
-            <p style={{ fontSize: "0.75rem", color: "var(--color-text-secondary)", marginTop: 2 }}>Crea un nuevo usuario y personaliza su perfil.</p>
+            <h2 style={{ fontSize: "1.05rem", fontWeight: 700, letterSpacing: "-0.01em" }}>Registro de Usuario Institucional</h2>
+            <p style={{ fontSize: "0.74rem", color: "var(--color-text-secondary)", marginTop: 2 }}>Crea un nuevo usuario, asigna roles de acceso y personaliza su identidad visual.</p>
           </div>
         </div>
 

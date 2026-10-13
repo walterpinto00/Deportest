@@ -1,6 +1,6 @@
-// ─────────────────────────────────────────────
-// Layout: Navigation Component
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
+// Navigation.tsx — Barra de navegación por pestañas unificada
+// ─────────────────────────────────────────────────────────────
 import React from "react";
 import { LucideIcon } from "lucide-react";
 
@@ -25,7 +25,7 @@ export function Navigation({ tabs, activeTab, role, onTabChange }: NavigationPro
   return (
     <nav
       style={{
-        background: "rgba(17, 24, 39, 0.6)",
+        background: "rgba(13, 18, 31, 0.75)",
         backdropFilter: "blur(12px)",
         WebkitBackdropFilter: "blur(12px)",
         borderBottom: "1px solid var(--color-border)",
@@ -34,11 +34,11 @@ export function Navigation({ tabs, activeTab, role, onTabChange }: NavigationPro
     >
       <div
         style={{
-          maxWidth: 1280,
+          maxWidth: 1320,
           margin: "0 auto",
           padding: "0 24px",
           display: "flex",
-          gap: 2,
+          gap: 6,
         }}
       >
         {visible.map((tab) => {
@@ -52,33 +52,36 @@ export function Navigation({ tabs, activeTab, role, onTabChange }: NavigationPro
                 display: "flex",
                 alignItems: "center",
                 gap: 8,
-                padding: "14px 18px",
+                padding: "12px 16px",
                 fontSize: "0.82rem",
-                fontWeight: active ? 700 : 500,
+                fontWeight: active ? 600 : 500,
                 fontFamily: "var(--font-sans)",
-                color: active ? tab.color : "var(--color-text-muted)",
-                background: active ? `${tab.color}12` : "transparent",
+                color: active ? "#ffffff" : "var(--color-text-secondary)",
+                background: active ? "rgba(255, 255, 255, 0.06)" : "transparent",
                 border: "none",
-                borderBottom: `2px solid ${active ? tab.color : "transparent"}`,
+                borderBottom: `2px solid ${active ? "var(--color-green)" : "transparent"}`,
                 cursor: "pointer",
-                transition: "all 0.2s",
+                transition: "all 0.15s ease",
                 whiteSpace: "nowrap",
-                letterSpacing: active ? "-0.01em" : "normal",
+                borderRadius: "6px 6px 0 0",
               }}
               onMouseEnter={(e) => {
                 if (!active) {
-                  (e.currentTarget as HTMLButtonElement).style.color = "var(--color-text-secondary)";
-                  (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.03)";
+                  (e.currentTarget as HTMLButtonElement).style.color = "var(--color-text-primary)";
+                  (e.currentTarget as HTMLButtonElement).style.background = "rgba(255, 255, 255, 0.02)";
                 }
               }}
               onMouseLeave={(e) => {
                 if (!active) {
-                  (e.currentTarget as HTMLButtonElement).style.color = "var(--color-text-muted)";
+                  (e.currentTarget as HTMLButtonElement).style.color = "var(--color-text-secondary)";
                   (e.currentTarget as HTMLButtonElement).style.background = "transparent";
                 }
               }}
             >
-              <Icon size={15} />
+              <Icon
+                size={15}
+                color={active ? "var(--color-green)" : "currentColor"}
+              />
               {tab.label}
             </button>
           );

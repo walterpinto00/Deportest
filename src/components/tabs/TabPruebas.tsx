@@ -1,8 +1,8 @@
-// ─────────────────────────────────────────────
-// Tab: Pruebas Físicas
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
+// TabPruebas.tsx — Registro de Pruebas Físicas y Baremos Oficiales
+// ─────────────────────────────────────────────────────────────
 import React, { useState } from "react";
-import { Activity, Dumbbell, Save, Info } from "lucide-react";
+import { Activity, Dumbbell, Save, Award, ChevronRight, CheckCircle2 } from "lucide-react";
 import { Input } from "../ui/Input";
 
 interface TabPruebasProps {
@@ -10,139 +10,294 @@ interface TabPruebasProps {
   onSave: () => void;
 }
 
-const TESTS: Record<string, { title: string; desc: string; icon: any; color: string; unit: string; details: string[] }> = {
-  cooper:      { title: "Test de Cooper (12 min)", icon: Activity, color: "var(--color-rose)", unit: "metros recorridos", desc: "Prueba de resistencia aeróbica. Recorre la mayor distancia posible en 12 minutos a velocidad constante.", details: ["Mide el VO2 máximo (consumo de oxígeno).", "Realizar en pista plana de 400m.", "Anotar la distancia en metros recorridos."] },
-  ruffier:     { title: "Test de Ruffier-Dickson", icon: Activity, color: "var(--color-amber)", unit: "índice calculado", desc: "Mide la adaptación y recuperación cardiovascular tras esfuerzo corto e intenso.", details: ["Pulsaciones en reposo 1 min (P1).", "30 sentadillas en 45 s y tomar pulso (P2).", "Descansar 1 min y tomar pulso (P3).", "Fórmula: (P1+P2+P3-200)/10."] },
-  velocidad:   { title: "Velocidad 50 metros", icon: Activity, color: "var(--color-blue)", unit: "segundos", desc: "Mide la velocidad de desplazamiento en 50 m partiendo desde posición de pie.", details: ["Superficie plana y antideslizante.", "Cronómetro que inicia al '¡Ya!'", "Anotar tiempo exacto en segundos."] },
-  flexiones:   { title: "Fuerza – Flexiones", icon: Dumbbell, color: "var(--color-green)", unit: "repeticiones", desc: "Evalúa la fuerza resistencia de brazos, pectorales y zona media.", details: ["Máximas flexiones en 1 minuto.", "Cuerpo recto, codos a 90° en el descenso.", "Mujeres pueden apoyar rodillas."] },
-  salto_largo: { title: "Salto Largo sin Impulso", icon: Activity, color: "var(--color-purple)", unit: "centímetros", desc: "Mide la fuerza explosiva de los miembros inferiores.", details: ["Pies a la anchura de hombros.", "Flexionar rodillas y balancear brazos.", "Medir desde la línea al talón más atrasado."] },
-  abdominales: { title: "Abdominales (1 min)", icon: Activity, color: "var(--color-teal)", unit: "repeticiones", desc: "Mide la fuerza de resistencia de la musculatura abdominal.", details: ["Boca arriba, rodillas flexionadas.", "Subir tronco hasta tocar rodillas con codos.", "Máximas repeticiones correctas en 1 min."] },
-  flexibilidad:{ title: "Sit and Reach", icon: Activity, color: "var(--color-amber)", unit: "centímetros", desc: "Evalúa la flexibilidad del tronco y elasticidad de isquiotibiales.", details: ["Sentado, piernas extendidas y juntas.", "Alcanzar lo más lejos posible.", "Mantener posición 2 segundos."] },
-  agilidad:    { title: "Test de Illinois", icon: Activity, color: "var(--color-rose)", unit: "segundos", desc: "Evalúa la agilidad y velocidad de cambios de dirección.", details: ["Circuito 10×5m con conos.", "Iniciar acostado boca abajo.", "Registrar tiempo total del recorrido."] },
+const TESTS: Record<
+  string,
+  { title: string; categoria: string; unit: string; desc: string; baremoEstimado: string; details: string[] }
+> = {
+  cooper: {
+    title: "Test de Cooper (12 min)",
+    categoria: "Resistencia Cardiovascular",
+    unit: "metros recorridos",
+    desc: "Prueba estandarizada de capacidad aeróbica máxima. El aprendiz recorre la mayor distancia continua posible durante 12 minutos.",
+    baremoEstimado: "> 2.400 m (Nivel Bueno - Aceptable para 16-18 años)",
+    details: [
+      "Permite estimar el VO2 Máximo según protocolo oficial.",
+      "Ejecutar sobre pista atlética o superficie plana de 400 m.",
+      "Registro de marca final en metros continuos.",
+    ],
+  },
+  course_navette: {
+    title: "Course-Navette (Léger)",
+    categoria: "Potencia Aeróbica Escolar",
+    unit: "períodos completados",
+    desc: "Test progresivo de ida y vuelta en 20 metros con señal sonora regulada (el pitido escolar).",
+    baremoEstimado: "Palier 7.5 (Promedio óptimo juvenil)",
+    details: [
+      "Prueba de referencia para evaluación escolar y colegios.",
+      "Pista de 20 metros delimitada con conos.",
+      "Finaliza cuando el alumno no alcanza la línea antes del pitido.",
+    ],
+  },
+  velocidad: {
+    title: "Velocidad 50 Metros",
+    categoria: "Velocidad de Desplazamiento",
+    unit: "segundos",
+    desc: "Mide la velocidad de aceleración pura en distancia corta con salida de pie.",
+    baremoEstimado: "7.2 s (Nivel Competitivo Juvenil)",
+    details: [
+      "Superficie plana no resbaladiza.",
+      "Cronómetro digital manual o células fotoeléctricas.",
+      "Registro del mejor tiempo entre dos intentos.",
+    ],
+  },
+  flexiones: {
+    title: "Fuerza Resistencia — Flexiones",
+    categoria: "Fuerza del Tren Superior",
+    unit: "repeticiones en 1 min",
+    desc: "Evalúa la resistencia muscular en pectorales, deltoides y tríceps con alineación corporal estricta.",
+    baremoEstimado: "30 a 35 repeticiones (Nivel Bueno)",
+    details: [
+      "Espalda y cadera en línea recta durante todo el rango.",
+      "Descenso hasta ángulo de 90° en los codos.",
+      "Mujeres pueden optar por apoyo de rodillas según baremo formativo.",
+    ],
+  },
+  salto_largo: {
+    title: "Salto Largo sin Impulso",
+    categoria: "Potencia del Tren Inferior",
+    unit: "centímetros",
+    desc: "Mide la fuerza explosiva de los miembros inferiores desde posición estática.",
+    baremoEstimado: "210 cm (Nivel Bueno)",
+    details: [
+      "Pies a la anchura de hombros detrás de la línea de despegue.",
+      "Flexión de rodillas y oscilación coordinada de brazos.",
+      "Se mide hasta la huella del talón más cercano a la línea.",
+    ],
+  },
+  abdominales: {
+    title: "Abdominales en 1 Minuto",
+    categoria: "Resistencia de la Zona Media (Core)",
+    unit: "repeticiones",
+    desc: "Evalúa la fuerza y estabilidad de la musculatura abdominal y flexora de cadera.",
+    baremoEstimado: "38 repeticiones (Nivel Muy Bueno)",
+    details: [
+      "Boca arriba con rodillas a 90° y pies sujetos.",
+      "Elevación de tronco tocando rodillas con los codos.",
+      "Conteo continuo de repeticiones válidas en 60 segundos.",
+    ],
+  },
+  flexibilidad: {
+    title: "Test de Flexibilidad (Wells)",
+    categoria: "Elasticidad Muscular & Movilidad",
+    unit: "centímetros (+/-)",
+    desc: "Evalúa la elongación de los músculos isquiotibiales y flexibilidad lumbosacra.",
+    baremoEstimado: "+4 cm sobre el punto cero (Nivel Satisfactorio)",
+    details: [
+      "Uso del cajón estándar de flexión de tronco.",
+      "Piernas completamente extendidas sin flexionar rodillas.",
+      "Mantener la posición máxima durante 2 segundos.",
+    ],
+  },
 };
 
 export function TabPruebas({ role, onSave }: TabPruebasProps) {
   const [selectedTest, setSelectedTest] = useState("cooper");
   const test = TESTS[selectedTest];
-  const Icon = test.icon;
 
   return (
-    <div className="animate-fade-in glass-elevated" style={{ overflow: "hidden" }}>
-      {/* Header */}
-      <div style={{ padding: "24px 32px", borderBottom: "1px solid var(--color-border)", display: "flex", alignItems: "center", gap: 12 }}>
-        <div style={{ width: 38, height: 38, borderRadius: 10, background: "rgba(244,63,94,0.15)", border: "1px solid rgba(244,63,94,0.3)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <Activity size={18} color="var(--color-rose)" />
+    <div className="animate-fade-in glass-elevated" style={{ overflow: "hidden", borderRadius: 16 }}>
+      {/* Cabecera */}
+      <div
+        style={{
+          padding: "24px 32px",
+          borderBottom: "1px solid var(--color-border)",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: 16,
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+          <div
+            style={{
+              width: 40,
+              height: 40,
+              borderRadius: 10,
+              background: "rgba(16, 185, 129, 0.1)",
+              border: "1px solid rgba(16, 185, 129, 0.25)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "var(--color-green)",
+            }}
+          >
+            <Activity size={20} />
+          </div>
+          <div>
+            <h2 style={{ fontSize: "1.1rem", fontWeight: 700, letterSpacing: "-0.01em" }}>
+              Baremos y Pruebas Físicas Oficiales
+            </h2>
+            <p style={{ fontSize: "0.74rem", color: "var(--color-text-secondary)" }}>
+              Registro de marcas atléticas y baremación estandarizada por edad y género
+            </p>
+          </div>
         </div>
-        <div>
-          <h2 style={{ fontSize: "1rem", fontWeight: 700 }}>Registro de Pruebas Físicas</h2>
-          <p style={{ fontSize: "0.72rem", color: "var(--color-text-secondary)", marginTop: 2 }}>Evalúa la condición atlética, mide el progreso y ajusta la intensidad del entrenamiento.</p>
-        </div>
+
+        <span
+          style={{
+            fontSize: "0.72rem",
+            padding: "4px 10px",
+            borderRadius: 6,
+            background: "rgba(255, 255, 255, 0.04)",
+            border: "1px solid rgba(255, 255, 255, 0.08)",
+            color: "var(--color-text-secondary)",
+          }}
+        >
+          {Object.keys(TESTS).length} Pruebas Estandarizadas
+        </span>
       </div>
 
-      <div style={{ display: "flex", flexDirection: "row", gap: 0 }}>
-        {/* Selector izquierdo */}
-        <div style={{ width: 200, flexShrink: 0, borderRight: "1px solid var(--color-border)", padding: "16px 0" }}>
-          {Object.entries(TESTS).map(([id, t]) => (
-            <button
-              key={id}
-              onClick={() => setSelectedTest(id)}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 10,
-                width: "100%",
-                padding: "10px 20px",
-                background: selectedTest === id ? `${t.color}14` : "transparent",
-                border: "none",
-                borderLeft: `3px solid ${selectedTest === id ? t.color : "transparent"}`,
-                color: selectedTest === id ? t.color : "var(--color-text-muted)",
-                fontSize: "0.8rem",
-                fontWeight: selectedTest === id ? 700 : 500,
-                fontFamily: "var(--font-sans)",
-                cursor: "pointer",
-                textAlign: "left",
-                transition: "all 0.15s",
-              }}
-            >
-              <t.icon size={14} />
-              {t.title.split("–")[0].split("(")[0].trim()}
-            </button>
-          ))}
+      <div style={{ display: "grid", gridTemplateColumns: "240px 1fr", minHeight: 460 }}>
+        {/* Selector de Pruebas Lateral */}
+        <div
+          style={{
+            borderRight: "1px solid var(--color-border)",
+            padding: "16px 0",
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+            background: "rgba(0, 0, 0, 0.1)",
+          }}
+        >
+          {Object.entries(TESTS).map(([id, t]) => {
+            const active = selectedTest === id;
+            return (
+              <button
+                key={id}
+                onClick={() => setSelectedTest(id)}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "flex-start",
+                  width: "100%",
+                  padding: "12px 20px",
+                  background: active ? "rgba(255, 255, 255, 0.06)" : "transparent",
+                  border: "none",
+                  borderLeft: `3px solid ${active ? "var(--color-green)" : "transparent"}`,
+                  color: active ? "#ffffff" : "var(--color-text-secondary)",
+                  cursor: "pointer",
+                  textAlign: "left",
+                  transition: "all 0.15s ease",
+                  fontFamily: "var(--font-sans)",
+                }}
+              >
+                <span style={{ fontSize: "0.8rem", fontWeight: active ? 700 : 500 }}>
+                  {t.title}
+                </span>
+                <span style={{ fontSize: "0.68rem", color: "var(--color-text-muted)", marginTop: 2 }}>
+                  {t.categoria}
+                </span>
+              </button>
+            );
+          })}
         </div>
 
-        {/* Contenido */}
-        <div style={{ flex: 1, padding: 32, display: "flex", gap: 32, flexWrap: "wrap" }}>
-          {/* Form */}
-          <div style={{ padding: 24, display: "flex", flexDirection: "column", gap: 16 }}>
-            {role === "ENTRENADOR" && <Input label="ID Usuario Evaluado" placeholder="Identificación..." />}
-            <div style={{ flexDirection: "column", gap: 16 }}>
-              <Input label={`Marca Obtenida (${test.unit})`} type="number" step="0.01" placeholder="0.00" />
-              <Input label="Fecha de Ejecución" type="date" />
-            </div>
-
-            {/* Baremo info */}
-            <div style={{ padding: 16, borderRadius: 12, background: `${test.color}10`, border: `1px solid ${test.color}30` }}>
-              <h4 style={{ fontSize: "0.78rem", fontWeight: 700, color: test.color, marginBottom: 6 }}>Puntuación Automática (Baremo)</h4>
-              <p style={{ fontSize: "0.75rem", color: "var(--color-text-secondary)", lineHeight: 1.6 }}>
-                El sistema calculará los puntos cruzando la marca ingresada con la tabla <strong>test_baremo</strong> según género y edad del usuario.
+        {/* Panel de Registro y Detalles de la Prueba */}
+        <div style={{ padding: "32px", display: "grid", gridTemplateColumns: "1.1fr 0.9fr", gap: 32 }}>
+          {/* Formulario de Registro */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+            <div>
+              <span
+                style={{
+                  fontSize: "0.7rem",
+                  color: "var(--color-green)",
+                  fontWeight: 700,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.06em",
+                }}
+              >
+                {test.categoria}
+              </span>
+              <h3 style={{ fontSize: "1.2rem", fontWeight: 800, marginTop: 4, letterSpacing: "-0.02em" }}>
+                {test.title}
+              </h3>
+              <p style={{ fontSize: "0.8rem", color: "var(--color-text-secondary)", lineHeight: 1.6, marginTop: 6 }}>
+                {test.desc}
               </p>
             </div>
 
-            <div style={{ marginTop: "auto" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+              {role === "ENTRENADOR" && (
+                <Input label="Identificación del Aprendiz" defaultValue="1001234567" />
+              )}
+              <Input
+                label={`Marca Alcanzada (${test.unit})`}
+                type="number"
+                step="0.01"
+                placeholder="Ingresa la marca obtenida..."
+                defaultValue="2450"
+              />
+              <Input label="Fecha de Ejecución" type="date" defaultValue="2026-10-12" />
+            </div>
+
+            <div style={{ marginTop: 12 }}>
               <button
                 className="btn btn-primary"
-                style={{ background: `linear-gradient(135deg, ${test.color}cc, ${test.color})`, boxShadow: `0 4px 12px ${test.color}40` }}
                 onClick={onSave}
+                style={{ padding: "12px 24px" }}
               >
                 <Save size={15} />
-                Registrar Prueba
+                Guardar y Calcular Baremo
               </button>
             </div>
           </div>
 
-          {/* Instrucciones */}
-          <div
-            style={{
-              width: 300,
-              flexShrink: 0,
-              background: "rgba(255,255,255,0.02)",
-              border: "1px solid var(--color-border)",
-              borderRadius: 14,
-              padding: 24,
-              display: "flex",
-              flexDirection: "column",
-              gap: 16,
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <Info size={16} color={test.color} />
-              <span style={{ fontSize: "0.8rem", fontWeight: 700, color: "var(--color-text-primary)" }}>¿Cómo realizar la prueba?</span>
-            </div>
+          {/* Tarjeta de Baremo Oficial y Protocolo */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+            {/* Baremo Oficial */}
             <div
               style={{
-                height: 100,
-                borderRadius: 10,
-                background: `${test.color}10`,
-                border: `1px solid ${test.color}25`,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
+                padding: "20px",
+                borderRadius: 12,
+                background: "rgba(16, 185, 129, 0.05)",
+                border: "1px solid rgba(16, 185, 129, 0.2)",
               }}
             >
-              <Icon size={40} color={test.color} style={{ opacity: 0.7 }} />
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+                <Award size={16} color="var(--color-green)" />
+                <span style={{ fontSize: "0.78rem", fontWeight: 700, color: "var(--color-green)" }}>
+                  Baremo de Referencia (Tabla Oficial)
+                </span>
+              </div>
+              <p style={{ fontSize: "0.85rem", fontWeight: 700, color: "#ffffff", marginBottom: 6 }}>
+                {test.baremoEstimado}
+              </p>
+              <p style={{ fontSize: "0.74rem", color: "var(--color-text-secondary)", lineHeight: 1.5 }}>
+                El puntaje numérico (1 a 100 pts) se calcula automáticamente de acuerdo con las tablas estandarizadas del manual de educación física y rendimiento atlético.
+              </p>
             </div>
-            <h4 style={{ fontSize: "0.95rem", fontWeight: 800, color: "var(--color-text-primary)" }}>{test.title}</h4>
-            <p style={{ fontSize: "0.78rem", color: "var(--color-text-secondary)", lineHeight: 1.7 }}>{test.desc}</p>
-            <div>
-              <p className="section-title" style={{ marginBottom: 10 }}>Pasos:</p>
-              <ul style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+
+            {/* Protocolo de Aplicación */}
+            <div
+              style={{
+                padding: "18px 20px",
+                borderRadius: 12,
+                background: "rgba(255, 255, 255, 0.02)",
+                border: "1px solid rgba(255, 255, 255, 0.05)",
+              }}
+            >
+              <h4 style={{ fontSize: "0.8rem", fontWeight: 700, marginBottom: 12, color: "var(--color-text-primary)" }}>
+                Protocolo Técnico de Aplicación
+              </h4>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                 {test.details.map((d, i) => (
-                  <li key={i} style={{ display: "flex", gap: 10, fontSize: "0.78rem", color: "var(--color-text-secondary)", lineHeight: 1.6 }}>
-                    <span style={{ width: 18, height: 18, borderRadius: "50%", background: `${test.color}20`, border: `1px solid ${test.color}40`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.65rem", fontWeight: 700, color: test.color, flexShrink: 0, marginTop: 2 }}>{i+1}</span>
-                    {d}
-                  </li>
+                  <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, fontSize: "0.75rem", color: "var(--color-text-secondary)" }}>
+                    <ChevronRight size={13} color="var(--color-green)" style={{ flexShrink: 0, marginTop: 2 }} />
+                    <span>{d}</span>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </div>
           </div>
         </div>

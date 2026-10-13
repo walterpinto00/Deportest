@@ -3,7 +3,7 @@
 // ─────────────────────────────────────────────
 import React, { useState } from "react";
 import {
-  Users, Activity, FileText, BarChart2, BrainCircuit, Check, LayoutDashboard
+  Users, Activity, FileText, BarChart2, Heart, Check, LayoutDashboard
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -21,12 +21,12 @@ type Role   = "ENTRENADOR" | "APRENDIZ";
 type TabId  = "dashboard" | "usuarios" | "antropometria" | "pruebas" | "ia" | "graficas";
 
 const ALL_TABS: TabConfig[] = [
-  { id: "dashboard",     icon: LayoutDashboard, label: "Dashboard General",      color: "var(--color-blue)",   allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
-  { id: "usuarios",      icon: Users,       label: "Usuarios & Roles",        color: "var(--color-green)",  allowedRoles: ["ENTRENADOR"] },
-  { id: "antropometria", icon: FileText,     label: "Ficha Antropométrica",    color: "var(--color-teal)",   allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
-  { id: "pruebas",       icon: Activity,    label: "Pruebas Físicas",          color: "var(--color-rose)",   allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
-  { id: "ia",            icon: BrainCircuit,label: "IA · Nutrición",           color: "var(--color-purple)", allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
-  { id: "graficas",      icon: BarChart2,   label: "Gráficas de Salud",        color: "var(--color-amber)",  allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
+  { id: "dashboard",     icon: LayoutDashboard, label: "Dashboard",             color: "var(--color-green)",  allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
+  { id: "usuarios",      icon: Users,           label: "Usuarios & Roles",      color: "var(--color-green)",  allowedRoles: ["ENTRENADOR"] },
+  { id: "antropometria", icon: FileText,        label: "Ficha Antropométrica",  color: "var(--color-green)",  allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
+  { id: "pruebas",       icon: Activity,        label: "Pruebas Físicas",       color: "var(--color-green)",  allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
+  { id: "ia",            icon: Heart,           label: "Nutrición & Hábitos",   color: "var(--color-green)",  allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
+  { id: "graficas",      icon: BarChart2,       label: "Gráficas & Reportes",   color: "var(--color-green)",  allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
 ];
 
 export default function App() {
