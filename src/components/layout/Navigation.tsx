@@ -1,5 +1,6 @@
 // ─────────────────────────────────────────────────────────────
 // Navigation.tsx — Barra de navegación por pestañas unificada
+// Adaptable automáticamente a Modo Claro y Modo Oscuro
 // ─────────────────────────────────────────────────────────────
 import React from "react";
 import { LucideIcon } from "lucide-react";
@@ -25,11 +26,10 @@ export function Navigation({ tabs, activeTab, role, onTabChange }: NavigationPro
   return (
     <nav
       style={{
-        background: "rgba(11, 17, 30, 0.88)",
-        backdropFilter: "blur(16px)",
-        WebkitBackdropFilter: "blur(16px)",
+        background: "var(--color-bg-surface)",
         borderBottom: "1px solid var(--color-border)",
         overflowX: "auto",
+        boxShadow: "0 1px 3px rgba(0, 0, 0, 0.03)",
       }}
     >
       <div
@@ -38,7 +38,7 @@ export function Navigation({ tabs, activeTab, role, onTabChange }: NavigationPro
           margin: "0 auto",
           padding: "0 20px",
           display: "flex",
-          gap: 8,
+          gap: 6,
         }}
       >
         {visible.map((tab) => {
@@ -54,14 +54,13 @@ export function Navigation({ tabs, activeTab, role, onTabChange }: NavigationPro
                 alignItems: "center",
                 gap: 10,
                 padding: "14px 18px",
-                fontSize: "0.94rem",
-                fontWeight: active ? 700 : 500,
+                fontSize: "0.92rem",
+                fontWeight: active ? 800 : 600,
                 fontFamily: "var(--font-sans)",
-                color: active ? "#ffffff" : "var(--color-text-secondary)",
-                background: active ? `linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(${tabColor}, 0.05) 100%)` : "transparent",
+                color: active ? tabColor : "var(--color-text-secondary)",
+                background: active ? `${tabColor}12` : "transparent",
                 border: "none",
                 borderBottom: `3px solid ${active ? tabColor : "transparent"}`,
-                boxShadow: active ? `inset 0 -2px 10px ${tabColor}33` : "none",
                 cursor: "pointer",
                 transition: "all 0.2s ease",
                 whiteSpace: "nowrap",
@@ -69,14 +68,14 @@ export function Navigation({ tabs, activeTab, role, onTabChange }: NavigationPro
               }}
               onMouseEnter={(e) => {
                 if (!active) {
-                  (e.currentTarget as HTMLButtonElement).style.color = "#ffffff";
-                  (e.currentTarget as HTMLButtonElement).style.background = "rgba(255, 255, 255, 0.04)";
+                  (e.currentTarget as HTMLButtonElement).style.background = "var(--color-bg-card)";
+                  (e.currentTarget as HTMLButtonElement).style.color = "var(--color-text-primary)";
                 }
               }}
               onMouseLeave={(e) => {
                 if (!active) {
-                  (e.currentTarget as HTMLButtonElement).style.color = "var(--color-text-secondary)";
                   (e.currentTarget as HTMLButtonElement).style.background = "transparent";
+                  (e.currentTarget as HTMLButtonElement).style.color = "var(--color-text-secondary)";
                 }
               }}
             >
@@ -86,11 +85,9 @@ export function Navigation({ tabs, activeTab, role, onTabChange }: NavigationPro
                   alignItems: "center",
                   justifyContent: "center",
                   color: active ? tabColor : "currentColor",
-                  filter: active ? `drop-shadow(0 0 6px ${tabColor}88)` : "none",
-                  transition: "all 0.2s ease",
                 }}
               >
-                <Icon size={18} />
+                <Icon size={19} />
               </div>
               <span>{tab.label}</span>
             </button>

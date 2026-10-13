@@ -1,9 +1,10 @@
 // ─────────────────────────────────────────────
-// App.tsx — Orquestador principal (limpio y modular)
+// App.tsx — Orquestador principal institucional
+// Diseñado para docentes: incluye gestión de tema Claro/Oscuro y Asistente Google Gemini
 // ─────────────────────────────────────────────
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
-  Users, Activity, FileText, BarChart2, Heart, Check, LayoutDashboard
+  Users, Activity, FileText, BarChart2, Heart, Check, LayoutDashboard, Sparkles
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -16,14 +17,16 @@ import { TabNutricionAI }   from "./components/tabs/TabNutricionAI";
 import { TabGraficas }      from "./components/tabs/TabGraficas";
 import { TabDashboard }     from "./components/tabs/TabDashboard";
 import { Login }            from "./components/auth/Login";
+import { AsistenteGeminiDocente } from "./components/ai/AsistenteGeminiDocente";
 
 type Role   = "ENTRENADOR" | "APRENDIZ";
 type TabId  = "dashboard" | "usuarios" | "antropometria" | "pruebas" | "ia" | "graficas";
+type Theme  = "light" | "dark";
 
 const ALL_TABS: TabConfig[] = [
   { id: "dashboard",     icon: LayoutDashboard, label: "Dashboard",             color: "#10b981", allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
   { id: "usuarios",      icon: Users,           label: "Usuarios & Roles",      color: "#3b82f6", allowedRoles: ["ENTRENADOR"] },
-  { id: "antropometria", icon: FileText,        label: "Ficha Antropométrica",  color: "#f59e0b", allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
+  { id: "antropometria", icon: FileText,        label: "Ficha Antropométrica",  color: "#10b981", allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
   { id: "pruebas",       icon: Activity,        label: "Pruebas Físicas",       color: "#f97316", allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
   { id: "ia",            icon: Heart,           label: "Nutrición & Hábitos",   color: "#06b6d4", allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
   { id: "graficas",      icon: BarChart2,       label: "Gráficas & Reportes",   color: "#8b5cf6", allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
@@ -34,6 +37,22 @@ export default function App() {
   const [role, setRole]         = useState<Role>("ENTRENADOR");
   const [activeTab, setActiveTab] = useState<TabId>("dashboard");
   const [toast, setToast]       = useState<string | null>(null);
+  const [isGeminiOpen, setIsGeminiOpen] = useState(false);
+
+  // Modo Claro Institucional por defecto (limpio, claro y amigable para profesores)
+  const [theme, setTheme] = useState<Theme>(() => {
+    const guardado = localStorage.getItem("deportest_theme") as Theme;
+    return guardado === "dark" ? "dark" : "light";
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("deportest_theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+  };
 
   const notify = (msg: string) => {
     setToast(msg);
@@ -62,8 +81,15 @@ export default function App() {
 
   return (
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
-      {/* Layout */}
-      <Header role={role} onRoleChange={handleRoleChange} onLogout={() => setIsAuthenticated(false)} />
+      {/* Layout Header & Navigation */}
+      <Header
+        role={role}
+        onRoleChange={handleRoleChange}
+        onLogout={() => setIsAuthenticated(false)}
+        theme={theme}
+        onToggleTheme={toggleTheme}
+        onOpenGemini={() => setIsGeminiOpen(true)}
+      />
       <Navigation tabs={ALL_TABS} activeTab={activeTab} role={role} onTabChange={(id) => setActiveTab(id as TabId)} />
 
       {/* Main Container Espacioso y Cómodo */}
@@ -71,20 +97,57 @@ export default function App() {
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
-            initial={{ opacity: 0, y: 14 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
           >
             {activeTab === "dashboard"     && <TabDashboard onNavigate={(t) => setActiveTab(t as any)} />}
             {activeTab === "usuarios"      && <TabUsuarios      onSave={() => notify("✓ Usuario registrado correctamente.")} />}
-            {activeTab === "antropometria" && <TabAntropometria role={role} onSave={() => notify("✓ Ficha antropométrica guardada.")} />}
+            {activeTab === "antropometria" && (
+              <TabAntropometria
+                role={role}
+                onSave={() => notify("✓ Ficha antropométrica guardada con éxito.")}
+                onOpenGemini={() => setIsGeminiOpen(true)}
+              />
+            )}
             {activeTab === "pruebas"       && <TabPruebas       role={role} onSave={() => notify("✓ Resultado de prueba registrado.")} />}
             {activeTab === "ia"            && <TabNutricionAI   onSave={() => notify("✓ Plan de nutrición guardado en base de datos.")} />}
             {activeTab === "graficas"      && <TabGraficas      role={role} />}
           </motion.div>
         </AnimatePresence>
       </main>
+
+      {/* Botón Flotante Permanente de Asistente IA Google Gemini */}
+      <button
+        onClick={() => setIsGeminiOpen(true)}
+        className="btn"
+        style={{
+          position: "fixed",
+          bottom: 26,
+          right: 26,
+          background: "linear-gradient(135deg, #4285F4 0%, #9B51E0 50%, #34A853 100%)",
+          color: "#ffffff",
+          padding: "12px 20px",
+          borderRadius: 99,
+          boxShadow: "0 8px 30px rgba(66, 133, 244, 0.4)",
+          fontSize: "0.88rem",
+          fontWeight: 800,
+          zIndex: 90,
+          gap: 8,
+          cursor: "pointer",
+        }}
+        title="Pregúntale cualquier duda al Asistente Google Gemini"
+      >
+        <Sparkles size={18} />
+        <span>Ayuda Google Gemini</span>
+      </button>
+
+      {/* Asistente Pedagógico IA Google AI Studio */}
+      <AsistenteGeminiDocente
+        isOpen={isGeminiOpen}
+        onClose={() => setIsGeminiOpen(false)}
+      />
 
       {/* Toast Notification */}
       <AnimatePresence>
@@ -97,26 +160,24 @@ export default function App() {
             style={{
               position: "fixed",
               bottom: 28,
-              right: 28,
-              background: "rgba(17, 24, 39, 0.95)",
-              backdropFilter: "blur(20px)",
-              border: "1px solid rgba(34,197,94,0.3)",
+              left: 28,
+              background: "var(--color-bg-surface)",
+              border: "1.5px solid var(--color-green)",
               borderRadius: 14,
               padding: "14px 22px",
               display: "flex",
               alignItems: "center",
               gap: 12,
-              boxShadow: "0 8px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(34,197,94,0.1)",
+              boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
               zIndex: 9999,
             }}
           >
             <div
               style={{
-                width: 32,
-                height: 32,
+                width: 30,
+                height: 30,
                 borderRadius: "50%",
-                background: "rgba(34,197,94,0.15)",
-                border: "1px solid rgba(34,197,94,0.4)",
+                background: "rgba(16, 185, 129, 0.15)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -125,7 +186,7 @@ export default function App() {
             >
               <Check size={16} color="var(--color-green)" />
             </div>
-            <span style={{ fontSize: "0.85rem", fontWeight: 600, color: "var(--color-text-primary)" }}>{toast}</span>
+            <span style={{ fontSize: "0.88rem", fontWeight: 700, color: "var(--color-text-primary)" }}>{toast}</span>
           </motion.div>
         )}
       </AnimatePresence>
