@@ -3,7 +3,7 @@
 // Diseñada para Docentes e Instructores: Clara, Guiada, Sin Enredos Técnicos
 // Soporta Modo Claro/Oscuro y Asistencia Inteligente con Google Gemini
 // ─────────────────────────────────────────────────────────────
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FileText,
   Save,
@@ -29,6 +29,7 @@ import {
 import { Input } from "../ui/Input";
 import { Select } from "../ui/Select";
 import { consultarGoogleGemini } from "../../services/geminiService";
+import { userService } from "../../services/userService";
 
 interface TabAntropometriaProps {
   role: string;
@@ -39,15 +40,44 @@ interface TabAntropometriaProps {
 type ModoVista = "basica" | "perimetros" | "pliegues" | "clinica";
 
 const ESTUDIANTES_EJEMPLO = [
-  { id: "1", nombre: "Juan Camilo Rodríguez", doc: "1001234567", grado: "10° B", edad: 16, sexo: "Masculino", tallaIni: "1.74", pesoIni: "64.5" },
-  { id: "2", nombre: "Valentina Morales Peña", doc: "1002345678", grado: "11° A", edad: 17, sexo: "Femenino", tallaIni: "1.65", pesoIni: "55.0" },
-  { id: "3", nombre: "Andrés Felipe Gómez",    doc: "1003456789", grado: "9° C",  edad: 15, sexo: "Masculino", tallaIni: "1.68", pesoIni: "68.2" },
+  { id: "usr-1", nombre: "Juan Camilo Rodríguez", doc: "1001234567", grado: "10° B", edad: 16, sexo: "Masculino", tallaIni: "1.74", pesoIni: "64.5" },
+  { id: "usr-2", nombre: "Valentina Morales Peña", doc: "1002345678", grado: "11° A", edad: 17, sexo: "Femenino", tallaIni: "1.65", pesoIni: "55.0" },
+  { id: "usr-3", nombre: "Andrés Felipe Gómez",    doc: "1003456789", grado: "9° C",  edad: 15, sexo: "Masculino", tallaIni: "1.68", pesoIni: "68.2" },
 ];
 
+const obtenerEstudiantes = () => {
+  const users = userService.getUsuarios().filter((u) => u.rol === "APRENDIZ");
+  if (users.length > 0) {
+    return users.map((u) => ({
+      id: u.id,
+      nombre: `${u.nombres} ${u.apellidos}`,
+      doc: u.numDoc,
+      grado: u.grado || "10° B",
+      edad: userService.calcularEdad(u.fechaNacimiento) || 16,
+      sexo: u.genero,
+      tallaIni: u.talla || "1.70",
+      pesoIni: u.peso || "60.0",
+      avatarUrl: u.avatarUrl,
+    }));
+  }
+  return ESTUDIANTES_EJEMPLO;
+};
+
 export function TabAntropometria({ role, onSave, onOpenGemini }: TabAntropometriaProps) {
-  const [estudianteSel, setEstudianteSel] = useState(ESTUDIANTES_EJEMPLO[0]);
+  const [estudiantes, setEstudiantes] = useState(obtenerEstudiantes);
+  const [estudianteSel, setEstudianteSel] = useState(() => estudiantes[0] || ESTUDIANTES_EJEMPLO[0]);
   const [modoVista, setModoVista] = useState<ModoVista>("basica");
   const [savedOk, setSavedOk] = useState(false);
+
+  // Escuchar si se registran nuevos usuarios en TabUsuarios
+  useEffect(() => {
+    const unsub = userService.subscribe(() => {
+      const actualizados = obtenerEstudiantes();
+      setEstudiantes(actualizados);
+      setEstudianteSel((prev) => actualizados.find((e) => e.id === prev.id) || actualizados[0]);
+    });
+    return () => unsub();
+  }, []);
 
   // Estado para cálculo dinámico de IMC
   const [peso, setPeso] = useState(estudianteSel.pesoIni);
@@ -59,7 +89,7 @@ export function TabAntropometria({ role, onSave, onOpenGemini }: TabAntropometri
 
   // Al cambiar de estudiante
   const cambiarEstudiante = (id: string) => {
-    const est = ESTUDIANTES_EJEMPLO.find((e) => e.id === id) || ESTUDIANTES_EJEMPLO[0];
+    const est = estudiantes.find((e) => e.id === id) || estudiantes[0];
     setEstudianteSel(est);
     setTalla(est.tallaIni);
     setPeso(est.pesoIni);
@@ -137,6 +167,7 @@ export function TabAntropometria({ role, onSave, onOpenGemini }: TabAntropometri
 
   const handleSave = () => {
     onSave();
+    userService.actualizarMedidas(estudianteSel.id, peso, talla);
     setSavedOk(true);
     setTimeout(() => setSavedOk(false), 2500);
   };
@@ -213,7 +244,7 @@ export function TabAntropometria({ role, onSave, onOpenGemini }: TabAntropometri
                   cursor: "pointer",
                 }}
               >
-                {ESTUDIANTES_EJEMPLO.map((est) => (
+                {estudiantes.map((est) => (
                   <option key={est.id} value={est.id}>
                     {est.nombre} — {est.grado} ({est.edad} años)
                   </option>
@@ -498,8 +529,20 @@ export function TabAntropometria({ role, onSave, onOpenGemini }: TabAntropometri
                   <input className="dp-input" defaultValue="Prof. Walter Pinto" style={{ fontSize: "0.85rem" }} />
                 </div>
                 <div>
-                  <label className="dp-label">Fecha de Medición</label>
-                  <input className="dp-input" type="date" defaultValue="2026-10-13" style={{ fontSize: "0.85rem" }} />
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+                    <label className="dp-label" style={{ display: "flex", alignItems: "center", gap: 6, margin: 0 }}>
+                      <Calendar size={13} color="var(--color-green)" /> Fecha de Medición
+                    </label>
+                    <span style={{ fontSize: "0.72rem", color: "var(--color-green)", fontWeight: 700 }}>
+                      📅 Calendario Oficial
+                    </span>
+                  </div>
+                  <input
+                    className="dp-input"
+                    type="date"
+                    defaultValue="2026-10-13"
+                    style={{ fontSize: "0.88rem", fontWeight: 700 }}
+                  />
                 </div>
               </div>
             </div>

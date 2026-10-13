@@ -2,7 +2,7 @@
 // TabPruebas.tsx — Pruebas Físicas & Calificación Instantánea de Baremos
 // Diseño amigable para docentes: claro, con botones visibles y escala explicativa
 // ─────────────────────────────────────────────────────────────
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   Activity,
@@ -12,8 +12,10 @@ import {
   TrendingUp,
   Minus,
   Plus,
+  Calendar,
 } from "lucide-react";
 import { Input } from "../ui/Input";
+import { userService } from "../../services/userService";
 
 interface TabPruebasProps {
   role: string;
@@ -170,11 +172,23 @@ const REGISTROS_EJEMPLO = [
 ];
 
 export function TabPruebas({ role, onSave }: TabPruebasProps) {
+  const [aprendices, setAprendices] = useState(() => userService.getUsuarios().filter((u) => u.rol === "APRENDIZ"));
   const [pruebaId, setPruebaId] = useState("flexiones");
   const [marcaStr, setMarcaStr] = useState("35");
-  const [alumno, setAlumno] = useState("1001234567 — Juan Camilo Rodríguez");
+  const [alumno, setAlumno] = useState(() => {
+    const primer = userService.getUsuarios().find((u) => u.rol === "APRENDIZ");
+    return primer ? `${primer.numDoc} — ${primer.nombres} ${primer.apellidos}` : "1001234567 — Juan Camilo Rodríguez";
+  });
   const [registros, setRegistros] = useState(REGISTROS_EJEMPLO);
   const [savedOk, setSavedOk] = useState(false);
+
+  useEffect(() => {
+    const unsub = userService.subscribe(() => {
+      const lista = userService.getUsuarios().filter((u) => u.rol === "APRENDIZ");
+      setAprendices(lista);
+    });
+    return () => unsub();
+  }, []);
 
   const pruebaActiva = PRUEBAS_DISPONIBLES.find((p) => p.id === pruebaId) || PRUEBAS_DISPONIBLES[2];
   const marcaNum = parseFloat(marcaStr) || 0;
@@ -303,11 +317,18 @@ export function TabPruebas({ role, onSave }: TabPruebasProps) {
 
           <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
             <div>
-              <Input
-                label="Estudiante a Calificar"
+              <label className="dp-label">Estudiante a Calificar</label>
+              <select
+                className="dp-select"
                 value={alumno}
                 onChange={(e) => setAlumno(e.target.value)}
-              />
+              >
+                {aprendices.map((ap) => (
+                  <option key={ap.id} value={`${ap.numDoc} — ${ap.nombres} ${ap.apellidos}`}>
+                    {ap.numDoc} — {ap.nombres} {ap.apellidos} ({ap.grado || "10°"})
+                  </option>
+                ))}
+              </select>
             </div>
 
             {/* Input de Marca Grande con Botones Rápidos (Colores nítidos) */}
@@ -347,7 +368,20 @@ export function TabPruebas({ role, onSave }: TabPruebasProps) {
             </div>
 
             <div>
-              <Input label="Fecha de Toma" type="date" defaultValue="2026-10-13" />
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+                <label className="dp-label" style={{ display: "flex", alignItems: "center", gap: 6, margin: 0 }}>
+                  <Calendar size={13} color="var(--color-green)" /> Fecha de la Prueba
+                </label>
+                <span style={{ fontSize: "0.72rem", color: "var(--color-green)", fontWeight: 700 }}>
+                  📅 Calendario Oficial
+                </span>
+              </div>
+              <input
+                className="dp-input"
+                type="date"
+                defaultValue="2026-10-13"
+                style={{ fontSize: "0.88rem", fontWeight: 700 }}
+              />
             </div>
           </div>
 

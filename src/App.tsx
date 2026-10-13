@@ -103,7 +103,7 @@ export default function App() {
             transition={{ duration: 0.2, ease: "easeOut" }}
           >
             {activeTab === "dashboard"     && <TabDashboard onNavigate={(t) => setActiveTab(t as any)} />}
-            {activeTab === "usuarios"      && <TabUsuarios      onSave={() => notify("✓ Usuario registrado correctamente.")} />}
+            {activeTab === "usuarios"      && <TabUsuarios      onSave={(msg) => notify(msg || "✓ Usuario registrado correctamente.")} />}
             {activeTab === "antropometria" && (
               <TabAntropometria
                 role={role}
