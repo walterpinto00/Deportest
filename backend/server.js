@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 const authRoutes = require('./routes/authRoutes');
 const redisClient = require('./config/redis');
 
@@ -8,6 +9,10 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 
 // Middlewares globales
+app.use(cors({
+  origin: true, // Permitir solicitudes desde el frontend (localhost:3000 o cualquier origen local)
+  credentials: true
+}));
 app.use(express.json());
 app.use(cookieParser());
 

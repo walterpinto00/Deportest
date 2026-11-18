@@ -24,11 +24,17 @@ import {
   ExternalLink,
   Filter,
   CheckCircle2,
-  AlertCircle
+  AlertCircle,
+  ShieldCheck,
+  FileText,
+  AlertTriangle,
+  ChevronDown,
+  ChevronUp
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Input } from "../ui/Input";
 import { Select } from "../ui/Select";
+import { ModalPoliticaPrivacidad } from "../ui/ModalPoliticaPrivacidad";
 import { userService, Usuario } from "../../services/userService";
 
 interface TabUsuariosProps {
@@ -81,8 +87,12 @@ export function TabUsuarios({ onSave }: TabUsuariosProps) {
     apellidos: "",
     genero: "Masculino",
     fechaNacimiento: "2009-05-15",
+    programaFormacion: "Entrenamiento Deportivo / Fútbol Formativo",
+    aceptaHabeasData: false,
   });
 
+  const [mostrarPolitica, setMostrarPolitica] = useState(false);
+  const [isModalPoliticaOpen, setIsModalPoliticaOpen] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [exitoMsg, setExitoMsg] = useState<string | null>(null);
 
@@ -148,6 +158,14 @@ export function TabUsuarios({ onSave }: TabUsuariosProps) {
       newErrors.fechaNacimiento = "Selecciona la fecha de nacimiento";
     }
 
+    if (!formData.programaFormacion.trim()) {
+      newErrors.programaFormacion = "El programa o disciplina deportiva es obligatorio";
+    }
+
+    if (!formData.aceptaHabeasData) {
+      newErrors.aceptaHabeasData = "Es obligatorio aceptar la política de tratamiento de datos personales (Ley 1581 de 2012) para registrar al usuario.";
+    }
+
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       // Desplazar hacia arriba suavemente si hay errores
@@ -166,13 +184,15 @@ export function TabUsuarios({ onSave }: TabUsuariosProps) {
       genero: formData.genero,
       fechaNacimiento: formData.fechaNacimiento,
       avatarUrl: avatarUrl,
+      programaFormacion: formData.programaFormacion.trim(),
+      aceptaHabeasData: formData.aceptaHabeasData,
     });
 
     // Actualizar lista local inmediatamente
     setUsuarios(userService.getUsuarios());
 
     // Mensaje de éxito visible para el docente
-    const mensaje = `¡Usuario "${nuevoUsuario.nombres} ${nuevoUsuario.apellidos}" (${nuevoUsuario.rol}) registrado y guardado exitosamente!`;
+    const mensaje = `¡Usuario "${nuevoUsuario.nombres} ${nuevoUsuario.apellidos}" (${nuevoUsuario.rol}) registrado y guardado exitosamente con consentimiento de datos Ley 1581!`;
     setExitoMsg(mensaje);
     if (onSave) onSave(mensaje);
 
@@ -187,6 +207,8 @@ export function TabUsuarios({ onSave }: TabUsuariosProps) {
       apellidos: "",
       genero: "Masculino",
       fechaNacimiento: "2009-05-15",
+      programaFormacion: "Entrenamiento Deportivo / Fútbol Formativo",
+      aceptaHabeasData: false,
     });
     setSeed(Math.random().toString(36).slice(2, 8));
 
@@ -404,6 +426,14 @@ export function TabUsuarios({ onSave }: TabUsuariosProps) {
                 <option>Femenino</option>
                 <option>Otro</option>
               </Select>
+
+              <Input
+                label="Programa / Disciplina Deportiva *"
+                placeholder="Ej: Entrenamiento Deportivo / Fútbol Formativo"
+                value={formData.programaFormacion}
+                onChange={(e) => handleChange("programaFormacion", e.target.value)}
+                error={errors.programaFormacion}
+              />
 
               {/* Selector de Fecha de Nacimiento Mejorado con Cálculo de Edad */}
               <div>
@@ -787,6 +817,138 @@ export function TabUsuarios({ onSave }: TabUsuariosProps) {
             </div>
           </div>
 
+          {/* Bloque 4: Protección de Datos Personales & Habeas Data (Ley 1581 de 2012) */}
+          <div
+            style={{
+              padding: "20px 24px",
+              borderRadius: 16,
+              background: "var(--color-bg-card)",
+              border: errors.aceptaHabeasData ? "1.5px solid var(--color-rose)" : "1.5px solid var(--color-border)",
+              display: "flex",
+              flexDirection: "column",
+              gap: 14,
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 10 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <ShieldCheck size={20} color="var(--color-green)" />
+                <span style={{ fontSize: "0.95rem", fontWeight: 800, color: "var(--color-text-primary)" }}>
+                  4. Consentimiento y Protección de Datos Personales (Ley 1581 de 2012)
+                </span>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <button
+                  type="button"
+                  onClick={() => setMostrarPolitica(!mostrarPolitica)}
+                  className="btn btn-ghost"
+                  style={{ fontSize: "0.78rem", padding: "4px 8px", color: "var(--color-text-secondary)", fontWeight: 600 }}
+                >
+                  {mostrarPolitica ? "Ocultar resumen" : "Ver resumen"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsModalPoliticaOpen(true)}
+                  className="btn btn-secondary"
+                  style={{ fontSize: "0.78rem", padding: "4px 10px", color: "var(--color-blue)", fontWeight: 700 }}
+                >
+                  Documento Oficial Completo
+                </button>
+              </div>
+            </div>
+
+            {/* Aviso especial para menores de edad */}
+            {edadCalculada !== null && edadCalculada < 18 && (
+              <div
+                style={{
+                  padding: "10px 14px",
+                  borderRadius: 10,
+                  background: "rgba(217, 119, 6, 0.12)",
+                  border: "1px solid rgba(217, 119, 6, 0.3)",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 10,
+                  fontSize: "0.82rem",
+                  color: "#d97706",
+                  fontWeight: 600,
+                }}
+              >
+                <AlertCircle size={16} style={{ flexShrink: 0 }} />
+                <span>
+                  <strong>Aviso para Menores de Edad ({edadCalculada} años):</strong> En concordancia con el Art. 7 de la Ley 1581 de 2012 y el Decreto 1377 de 2013, el tratamiento de datos sensibles (salud, medidas antropométricas y rendimiento físico) debe contar con la autorización previa y expresa del padre, madre o acudiente legal.
+                </span>
+              </div>
+            )}
+
+            {/* Detalle desplegable de la política */}
+            {mostrarPolitica && (
+              <div
+                style={{
+                  padding: "14px 18px",
+                  borderRadius: 12,
+                  background: "var(--color-bg-surface)",
+                  border: "1px solid var(--color-border)",
+                  fontSize: "0.8rem",
+                  color: "var(--color-text-secondary)",
+                  lineHeight: 1.6,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 8,
+                }}
+              >
+                <p>
+                  <strong>Finalidad:</strong> Los datos personales, biométricos y de salud recopilados en DEPORTEST serán tratados exclusivamente con fines pedagógicos, de seguimiento formativo, prescripción de hábitos saludables y evaluación de rendimiento físico.
+                </p>
+                <p>
+                  <strong>Datos Sensibles:</strong> Las medidas corporales (talla, peso, perímetros, pliegues) y signos vitales son considerados datos sensibles. Su suministro tiene carácter facultativo y se garantiza confidencialidad y custodia segura.
+                </p>
+                <p>
+                  <strong>Derechos del Titular:</strong> Como titular (o acudiente del menor), tiene derecho a conocer, actualizar, rectificar y solicitar la supresión de sus datos personales conforme a la ley colombiana.
+                </p>
+              </div>
+            )}
+
+            {/* Checkbox de Aceptación */}
+            <label
+              style={{
+                display: "flex",
+                alignItems: "flex-start",
+                gap: 12,
+                cursor: "pointer",
+                userSelect: "none",
+                fontSize: "0.85rem",
+                color: "var(--color-text-primary)",
+                fontWeight: 600,
+              }}
+            >
+              <input
+                type="checkbox"
+                checked={formData.aceptaHabeasData}
+                onChange={(e) => {
+                  setFormData((prev) => ({ ...prev, aceptaHabeasData: e.target.checked }));
+                  if (errors.aceptaHabeasData) {
+                    setErrors((prev) => ({ ...prev, aceptaHabeasData: "" }));
+                  }
+                }}
+                style={{
+                  width: 18,
+                  height: 18,
+                  accentColor: "var(--color-green)",
+                  cursor: "pointer",
+                  marginTop: 2,
+                }}
+              />
+              <span>
+                Autorizo de manera previa, expresa e informada el tratamiento de datos personales y sensibles (antropometría y rendimiento físico) conforme a la <strong>Ley Estatutaria 1581 de 2012</strong> y las políticas de privacidad institucionales. *
+              </span>
+            </label>
+
+            {errors.aceptaHabeasData && (
+              <span style={{ color: "var(--color-rose)", fontSize: "0.78rem", fontWeight: 700, display: "flex", alignItems: "center", gap: 6 }}>
+                <AlertCircle size={14} /> {errors.aceptaHabeasData}
+              </span>
+            )}
+          </div>
+
           {/* Botón de Guardado y Registro Final */}
           <div
             style={{
@@ -984,8 +1146,8 @@ export function TabUsuarios({ onSave }: TabUsuariosProps) {
                         <div style={{ fontWeight: 700, color: "var(--color-text-primary)" }}>
                           {u.nombres} {u.apellidos}
                         </div>
-                        <div style={{ fontSize: "0.74rem", color: "var(--color-text-muted)" }}>
-                          {u.genero} {u.grado ? `• ${u.grado}` : ""}
+                        <div style={{ fontSize: "0.74rem", color: "var(--color-text-muted)", marginTop: 2 }}>
+                          {u.programaFormacion ? u.programaFormacion : (u.grado ? u.grado : u.genero)}
                         </div>
                       </td>
 
@@ -1058,6 +1220,11 @@ export function TabUsuarios({ onSave }: TabUsuariosProps) {
         )}
       </div>
 
+      {/* Modal Oficial de Política de Privacidad y Consentimiento de Menores */}
+      <ModalPoliticaPrivacidad
+        isOpen={isModalPoliticaOpen}
+        onClose={() => setIsModalPoliticaOpen(false)}
+      />
     </div>
   );
 }

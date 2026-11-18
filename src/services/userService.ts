@@ -17,6 +17,8 @@ export interface Usuario {
   avatarUrl: string;
   fechaRegistro: string; // "DD/MM/YYYY"
   grado?: string;
+  programaFormacion?: string;
+  aceptaHabeasData?: boolean;
   peso?: string;
   talla?: string;
 }
@@ -250,7 +252,9 @@ export const userService = {
       fechaRegistro,
       peso: nuevo.peso || "60.0",
       talla: nuevo.talla || "1.70",
-      grado: nuevo.grado || (nuevo.rol === "APRENDIZ" ? "10° A" : undefined)
+      grado: nuevo.grado || (nuevo.rol === "APRENDIZ" ? "10° A" : undefined),
+      programaFormacion: nuevo.programaFormacion || (nuevo.rol === "APRENDIZ" ? "Entrenamiento Deportivo / Fútbol Formativo" : undefined),
+      aceptaHabeasData: nuevo.aceptaHabeasData ?? true,
     };
 
     const nuevaLista = [usuarioCreado, ...usuarios];

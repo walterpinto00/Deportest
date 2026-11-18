@@ -13,6 +13,7 @@ import {
   Activity,
   CheckCircle2,
 } from "lucide-react";
+import { ModalPoliticaPrivacidad } from "../ui/ModalPoliticaPrivacidad";
 
 interface LoginProps {
   onLogin: (role: "ENTRENADOR" | "APRENDIZ") => void;
@@ -23,6 +24,7 @@ export function Login({ onLogin }: LoginProps) {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [mostrarPolitica, setMostrarPolitica] = useState(false);
 
   const handleSubmit = (e?: React.FormEvent, forceRole?: "ENTRENADOR" | "APRENDIZ") => {
     if (e) e.preventDefault();
@@ -261,11 +263,33 @@ export function Login({ onLogin }: LoginProps) {
           </div>
         </div>
 
-        {/* Pie de seguridad institucional */}
-        <div style={{ textAlign: "center", marginTop: 20, fontSize: "0.7rem", color: "var(--color-text-muted)" }}>
-          Sistema seguro con protección de datos institucionales
+        {/* Pie de seguridad institucional con enlace a Política de Privacidad */}
+        <div style={{ textAlign: "center", marginTop: 22, fontSize: "0.72rem", color: "var(--color-text-muted)", display: "flex", flexDirection: "column", gap: 6, alignItems: "center" }}>
+          <span>Sistema institucional protegido con cifrado y confidencialidad</span>
+          <button
+            type="button"
+            onClick={() => setMostrarPolitica(true)}
+            style={{
+              background: "none",
+              border: "none",
+              color: "var(--color-green)",
+              cursor: "pointer",
+              fontSize: "0.74rem",
+              fontWeight: 700,
+              textDecoration: "underline",
+              padding: 0,
+            }}
+          >
+            Aviso de Privacidad & Tratamiento de Datos (Ley 1581)
+          </button>
         </div>
       </motion.div>
+
+      {/* Modal Oficial de Política de Privacidad y Menores */}
+      <ModalPoliticaPrivacidad
+        isOpen={mostrarPolitica}
+        onClose={() => setMostrarPolitica(false)}
+      />
     </div>
   );
 }
