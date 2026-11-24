@@ -120,7 +120,7 @@ const ACCIONES_SISTEMA = [
   {
     id: "act-print",
     titulo: "Imprimir / Exportar Reporte en PDF",
-    sub: "Generar documento oficial para presentación escolar o SENA",
+    sub: "Generar documento oficial de valoración física para presentación técnica o institucional",
     action: "print",
     icon: Printer,
     color: "#64748b",
@@ -458,7 +458,7 @@ export function BuscadorInteligente({
                                   </span>
                                 </div>
                                 <div style={{ fontSize: "0.76rem", color: "var(--color-text-secondary)", marginTop: 2 }}>
-                                  Doc: <strong>{user.numDoc}</strong> • {user.grado || "Programa SENA"} {edad ? `• ${edad} años` : ""}
+                                  Doc: <strong>{user.numDoc}</strong> • {user.grado || "Atleta / Categoría Libre"} {edad ? `• ${edad} años` : ""}
                                 </div>
                               </div>
                             </div>

@@ -16,17 +16,20 @@ import {
 import { ModalPoliticaPrivacidad } from "../ui/ModalPoliticaPrivacidad";
 
 interface LoginProps {
-  onLogin: (role: "ENTRENADOR" | "APRENDIZ") => void;
+  onLogin: (role: "ADMIN" | "ENTRENADOR" | "APRENDIZ") => void;
+  brandMode?: "mercado" | "institucional";
+  onToggleBrandMode?: () => void;
 }
 
-export function Login({ onLogin }: LoginProps) {
+export function Login({ onLogin, brandMode = "mercado", onToggleBrandMode }: LoginProps) {
+  const isMercado = brandMode === "mercado";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [mostrarPolitica, setMostrarPolitica] = useState(false);
 
-  const handleSubmit = (e?: React.FormEvent, forceRole?: "ENTRENADOR" | "APRENDIZ") => {
+  const handleSubmit = async (e?: React.FormEvent, forceRole?: "ADMIN" | "ENTRENADOR" | "APRENDIZ") => {
     if (e) e.preventDefault();
     setError("");
 
@@ -48,21 +51,66 @@ export function Login({ onLogin }: LoginProps) {
 
     setLoading(true);
 
+    // Intentar autenticación contra backend con bcrypt + JWT
+    try {
+      const res = await fetch("http://localhost:4000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data.accessToken) {
+          localStorage.setItem("deportest_token", data.accessToken);
+          localStorage.setItem("deportest_user", JSON.stringify(data.user));
+        }
+        setLoading(false);
+        const mappedRole: "ADMIN" | "ENTRENADOR" | "APRENDIZ" =
+          data.user?.role === "administrador"
+            ? "ADMIN"
+            : data.user?.role === "entrenador"
+            ? "ENTRENADOR"
+            : "APRENDIZ";
+        onLogin(forceRole || mappedRole);
+        return;
+      } else {
+        const errJson = await res.json().catch(() => null);
+        if (errJson?.error && !forceRole) {
+          setLoading(false);
+          setError(errJson.error);
+          return;
+        }
+      }
+    } catch (netErr) {
+      // Si el servidor backend está apagado o en entorno offline, fallback local
+    }
+
     setTimeout(() => {
       setLoading(false);
       if (forceRole) {
         onLogin(forceRole);
-      } else if (email.includes("entrenador") || email.includes("admin")) {
+      } else if (email.includes("admin")) {
+        onLogin("ADMIN");
+      } else if (email.includes("entrenador")) {
         onLogin("ENTRENADOR");
       } else {
         onLogin("APRENDIZ");
       }
-    }, 500);
+    }, 350);
   };
 
-  const handleQuickLogin = (role: "ENTRENADOR" | "APRENDIZ") => {
-    setEmail(role === "ENTRENADOR" ? "entrenador@deportest.com" : "aprendiz@deportest.com");
-    setPassword("123456");
+  const handleQuickLogin = (role: "ADMIN" | "ENTRENADOR" | "APRENDIZ") => {
+    if (role === "ADMIN") {
+      setEmail("admin@deportest.sena.edu.co");
+      setPassword("Admin123");
+    } else if (role === "ENTRENADOR") {
+      setEmail("entrenador@deportest.com");
+      setPassword("123456");
+    } else {
+      setEmail("aprendiz@deportest.com");
+      setPassword("123456");
+    }
     handleSubmit(undefined, role);
   };
 
@@ -136,18 +184,20 @@ export function Login({ onLogin }: LoginProps) {
                 fontSize: "0.68rem",
                 padding: "2px 8px",
                 borderRadius: 99,
-                background: "rgba(16, 185, 129, 0.15)",
-                color: "var(--color-green)",
+                background: isMercado ? "rgba(6, 182, 212, 0.15)" : "rgba(16, 185, 129, 0.15)",
+                color: isMercado ? "#0891b2" : "var(--color-green)",
                 fontWeight: 700,
-                border: "1px solid rgba(16, 185, 129, 0.3)",
+                border: isMercado ? "1px solid rgba(6, 182, 212, 0.3)" : "1px solid rgba(16, 185, 129, 0.3)",
               }}
             >
-              SENA
+              {isMercado ? "ATHLETIC" : "SENA"}
             </span>
           </div>
 
           <p style={{ fontSize: "0.82rem", color: "var(--color-text-secondary)" }}>
-            Plataforma de Valoración Atlética & Salud Escolar
+            {isMercado
+              ? "Plataforma Profesional de Rendimiento Deportivo & Fitness"
+              : "Plataforma de Valoración Atlética & Salud Escolar"}
           </p>
         </div>
 
@@ -172,7 +222,9 @@ export function Login({ onLogin }: LoginProps) {
         {/* Formulario de Login */}
         <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
           <div>
-            <label className="dp-label" style={{ marginBottom: 6 }}>Correo Institucional</label>
+            <label className="dp-label" style={{ marginBottom: 6 }}>
+              {isMercado ? "Correo Electrónico" : "Correo Institucional"}
+            </label>
             <div style={{ position: "relative" }}>
               <div style={{ position: "absolute", left: 14, top: 12, color: "var(--color-text-muted)" }}>
                 <Mail size={16} />
@@ -243,22 +295,36 @@ export function Login({ onLogin }: LoginProps) {
             </span>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
             <button
-              onClick={() => handleQuickLogin("ENTRENADOR")}
+              type="button"
+              onClick={() => handleQuickLogin("ADMIN")}
               className="btn btn-secondary"
-              style={{ justifyContent: "center", fontSize: "0.8rem", padding: "10px" }}
+              style={{ justifyContent: "center", fontSize: "0.75rem", padding: "8px 6px" }}
               disabled={loading}
+              title="Iniciar como Administrador"
             >
-              <User size={14} color="var(--color-green)" /> Rol Entrenador
+              <ShieldCheck size={13} color="#f59e0b" /> Admin
             </button>
             <button
+              type="button"
+              onClick={() => handleQuickLogin("ENTRENADOR")}
+              className="btn btn-secondary"
+              style={{ justifyContent: "center", fontSize: "0.75rem", padding: "8px 6px" }}
+              disabled={loading}
+              title={isMercado ? "Iniciar como Coach / Entrenador" : "Iniciar como Docente / Entrenador"}
+            >
+              <User size={13} color="var(--color-green)" /> {isMercado ? "Coach" : "Docente"}
+            </button>
+            <button
+              type="button"
               onClick={() => handleQuickLogin("APRENDIZ")}
               className="btn btn-secondary"
-              style={{ justifyContent: "center", fontSize: "0.8rem", padding: "10px" }}
+              style={{ justifyContent: "center", fontSize: "0.75rem", padding: "8px 6px" }}
               disabled={loading}
+              title={isMercado ? "Iniciar como Atleta / Cliente" : "Iniciar como Aprendiz"}
             >
-              <User size={14} color="var(--color-text-secondary)" /> Rol Aprendiz
+              <User size={13} color="var(--color-text-secondary)" /> {isMercado ? "Atleta" : "Aprendiz"}
             </button>
           </div>
         </div>

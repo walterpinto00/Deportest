@@ -25,14 +25,18 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Error interno del servidor' });
 });
 
-// Iniciar servidor
-app.listen(PORT, () => {
-  console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
-  console.log(`📌 Entorno: ${process.env.NODE_ENV || 'development'}`);
-});
+// Iniciar servidor solo si es ejecutado directamente
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
+    console.log(`📌 Entorno: ${process.env.NODE_ENV || 'development'}`);
+  });
+}
 
 // Cierre graceful
 process.on('SIGINT', async () => {
   await redisClient.quit();
   process.exit(0);
 });
+
+module.exports = app;

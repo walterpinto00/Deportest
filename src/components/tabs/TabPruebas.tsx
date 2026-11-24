@@ -13,6 +13,10 @@ import {
   Minus,
   Plus,
   Calendar,
+  Video,
+  Info,
+  ShieldCheck,
+  AlertTriangle
 } from "lucide-react";
 import { Input } from "../ui/Input";
 import { userService } from "../../services/userService";
@@ -34,6 +38,11 @@ const PRUEBAS_DISPONIBLES = [
     step: 50,
     min: 1000,
     max: 3200,
+    tecnica: {
+      posicion: "Salida de pie tras la línea de inicio con calzado deportivo adecuado.",
+      ejecucion: "Correr y dosificar el ritmo continuo durante 12 minutos buscando acumular la mayor distancia posible.",
+      falta: "Detenerse por completo o invadir carriles no asignados para acortar distancia."
+    },
     escalas: [
       { nivel: "Excelente / Sobresaliente", rango: "≥ 2.500 m", pts: 95, color: "#10b981" },
       { nivel: "Bueno / Saludable", rango: "2.200 - 2.499 m", pts: 85, color: "#059669" },
@@ -57,6 +66,11 @@ const PRUEBAS_DISPONIBLES = [
     step: 0.5,
     min: 2,
     max: 14,
+    tecnica: {
+      posicion: "De pie sobre una de las líneas limítrofes separadas por exactamente 20 metros.",
+      ejecucion: "Correr al ritmo del pitido de audio (bip), pisando la línea opuesta justo antes de la siguiente señal progresiva.",
+      falta: "No pisar la línea antes del pitido en 2 ocasiones consecutivas."
+    },
     escalas: [
       { nivel: "Excelente / Élite Escolar", rango: "≥ Palier 9.0", pts: 95, color: "#10b981" },
       { nivel: "Bueno / Zona Saludable", rango: "Palier 7.0 - 8.5", pts: 85, color: "#059669" },
@@ -80,6 +94,12 @@ const PRUEBAS_DISPONIBLES = [
     step: 1,
     min: 0,
     max: 60,
+    videoUrl: "/videos/flexiones.mp4",
+    tecnica: {
+      posicion: "Cuerpo recto alineado de cabeza a talones, palmas apoyadas a la anchura de hombros y codos extendidos.",
+      ejecucion: "Descender flexionando codos a 90° con pecho cerca del suelo y subir hasta extensión completa de brazos.",
+      falta: "No arquear la zona lumbar, no dejar caer la cadera y no rebotar contra el piso."
+    },
     escalas: [
       { nivel: "Excelente", rango: "≥ 40 repeticiones", pts: 95, color: "#10b981" },
       { nivel: "Bueno / Aceptable", rango: "28 - 39 repeticiones", pts: 85, color: "#059669" },
@@ -103,6 +123,11 @@ const PRUEBAS_DISPONIBLES = [
     step: 0.1,
     min: 5.5,
     max: 12.0,
+    tecnica: {
+      posicion: "Posición alta de salida o semiflexión sin pisar la línea de partida.",
+      ejecucion: "Acelerar con potencia máxima hasta rebasar completamente la línea de meta a los 50m.",
+      falta: "Salida en falso antes del silbato o desacelerar antes de cruzar la meta."
+    },
     escalas: [
       { nivel: "Muy Rápido / Élite", rango: "≤ 7.2 s", pts: 95, color: "#10b981" },
       { nivel: "Bueno / Promedio Alto", rango: "7.3 - 8.2 s", pts: 85, color: "#059669" },
@@ -126,6 +151,11 @@ const PRUEBAS_DISPONIBLES = [
     step: 5,
     min: 100,
     max: 280,
+    tecnica: {
+      posicion: "Pies paralelos separados al ancho de hombros justo detrás de la línea de batida.",
+      ejecucion: "Flexión coordinada de rodillas con balanceo de brazos y despegue explosivo simultáneo con ambos pies.",
+      falta: "Pisar la línea al batir o dar pasos previos de impulso antes de saltar."
+    },
     escalas: [
       { nivel: "Excelente", rango: "≥ 220 cm", pts: 95, color: "#10b981" },
       { nivel: "Bueno", rango: "190 - 219 cm", pts: 85, color: "#059669" },
@@ -149,6 +179,12 @@ const PRUEBAS_DISPONIBLES = [
     step: 1,
     min: -15,
     max: 20,
+    videoUrl: "/videos/wells.mp4",
+    tecnica: {
+      posicion: "Sentado en el suelo con piernas totalmente extendidas y plantas apoyadas firmes contra el cajón de medición.",
+      ejecucion: "Flexión continua hacia adelante deslizando ambas manos sobre la regla sin flexionar rodillas, sosteniendo la marca final 2 segundos.",
+      falta: "No doblar rodillas y no realizar rebotes bruscos o movimientos de impulso balístico."
+    },
     escalas: [
       { nivel: "Muy Flexible", rango: "≥ +6 cm", pts: 95, color: "#10b981" },
       { nivel: "Normal / Bueno", rango: "+1 a +5 cm", pts: 85, color: "#059669" },
@@ -334,11 +370,20 @@ export function TabPruebas({ role, onSave }: TabPruebasProps) {
 
           <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
             <div>
-              <label className="dp-label">Estudiante a Calificar</label>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+                <label className="dp-label" style={{ margin: 0 }}>Estudiante a Calificar</label>
+                {role === "APRENDIZ" && (
+                  <span style={{ fontSize: "0.72rem", color: "#3b82f6", fontWeight: 700 }}>
+                    🛡️ Tu Perfil (Solo Lectura)
+                  </span>
+                )}
+              </div>
               <select
                 className="dp-select"
                 value={alumno}
+                disabled={role === "APRENDIZ"}
                 onChange={(e) => setAlumno(e.target.value)}
+                style={role === "APRENDIZ" ? { opacity: 0.85, cursor: "not-allowed" } : {}}
               >
                 {aprendices.map((ap) => (
                   <option key={ap.id} value={`${ap.numDoc} — ${ap.nombres} ${ap.apellidos}`}>
@@ -352,15 +397,17 @@ export function TabPruebas({ role, onSave }: TabPruebasProps) {
             <div>
               <label className="dp-label">Marca Lograda ({pruebaActiva.unidad})</label>
               <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-                <button
-                  type="button"
-                  onClick={() => ajustarMarca(-pruebaActiva.step)}
-                  className="btn btn-secondary"
-                  style={{ padding: "12px 16px", borderRadius: 10, color: "var(--color-text-primary)" }}
-                  title="Disminuir marca"
-                >
-                  <Minus size={16} />
-                </button>
+                {role !== "APRENDIZ" && (
+                  <button
+                    type="button"
+                    onClick={() => ajustarMarca(-pruebaActiva.step)}
+                    className="btn btn-secondary"
+                    style={{ padding: "12px 16px", borderRadius: 10, color: "var(--color-text-primary)" }}
+                    title="Disminuir marca"
+                  >
+                    <Minus size={16} />
+                  </button>
+                )}
 
                 <input
                   className="dp-input"
@@ -368,19 +415,22 @@ export function TabPruebas({ role, onSave }: TabPruebasProps) {
                   step={pruebaActiva.step}
                   placeholder={pruebaActiva.placeholder}
                   value={marcaStr}
+                  disabled={role === "APRENDIZ"}
                   onChange={(e) => setMarcaStr(e.target.value)}
-                  style={{ fontSize: "1.4rem", fontWeight: 800, textAlign: "center" }}
+                  style={{ fontSize: "1.4rem", fontWeight: 800, textAlign: "center", ...(role === "APRENDIZ" ? { opacity: 0.9 } : {}) }}
                 />
 
-                <button
-                  type="button"
-                  onClick={() => ajustarMarca(pruebaActiva.step)}
-                  className="btn btn-secondary"
-                  style={{ padding: "12px 16px", borderRadius: 10, color: "var(--color-text-primary)" }}
-                  title="Aumentar marca"
-                >
-                  <Plus size={16} />
-                </button>
+                {role !== "APRENDIZ" && (
+                  <button
+                    type="button"
+                    onClick={() => ajustarMarca(pruebaActiva.step)}
+                    className="btn btn-secondary"
+                    style={{ padding: "12px 16px", borderRadius: 10, color: "var(--color-text-primary)" }}
+                    title="Aumentar marca"
+                  >
+                    <Plus size={16} />
+                  </button>
+                )}
               </div>
             </div>
 
@@ -400,18 +450,149 @@ export function TabPruebas({ role, onSave }: TabPruebasProps) {
                 style={{ fontSize: "0.88rem", fontWeight: 700 }}
               />
             </div>
+
+            {/* Demostración en Video y Técnica de Ejecución Oficial */}
+            {pruebaActiva.videoUrl ? (
+              <div
+                style={{
+                  borderRadius: 14,
+                  overflow: "hidden",
+                  border: "1px solid var(--color-border)",
+                  background: "var(--color-bg-card)",
+                }}
+              >
+                <div
+                  style={{
+                    padding: "10px 14px",
+                    background: "var(--color-bg-surface)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    borderBottom: "1px solid var(--color-border)",
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <Video size={16} color={pruebaActiva.color} />
+                    <span style={{ fontSize: "0.85rem", fontWeight: 800, color: "var(--color-text-primary)" }}>
+                      Demostración Técnica ({pruebaActiva.nombre})
+                    </span>
+                  </div>
+                  <span
+                    style={{
+                      fontSize: "0.72rem",
+                      fontWeight: 800,
+                      padding: "2px 8px",
+                      borderRadius: 6,
+                      background: "rgba(16, 185, 129, 0.15)",
+                      color: "var(--color-green)",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 4,
+                    }}
+                  >
+                    <ShieldCheck size={12} /> Técnica Válida
+                  </span>
+                </div>
+
+                <div style={{ position: "relative", width: "100%", background: "#0a0f1d" }}>
+                  <video
+                    key={pruebaActiva.videoUrl}
+                    src={pruebaActiva.videoUrl}
+                    controls
+                    playsInline
+                    loop
+                    muted
+                    autoPlay
+                    preload="metadata"
+                    style={{
+                      width: "100%",
+                      maxHeight: "220px",
+                      objectFit: "contain",
+                      display: "block",
+                      margin: "0 auto",
+                    }}
+                  />
+                </div>
+
+                {pruebaActiva.tecnica && (
+                  <div style={{ padding: "12px 14px", display: "flex", flexDirection: "column", gap: 8, fontSize: "0.8rem" }}>
+                    <div style={{ display: "flex", alignItems: "flex-start", gap: 6 }}>
+                      <span style={{ color: "var(--color-green)", fontWeight: 900 }}>✓</span>
+                      <div>
+                        <strong style={{ color: "var(--color-text-primary)" }}>Ejecución válida: </strong>
+                        <span style={{ color: "var(--color-text-secondary)" }}>{pruebaActiva.tecnica.ejecucion}</span>
+                      </div>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "flex-start", gap: 6 }}>
+                      <AlertTriangle size={14} color="#f43f5e" style={{ flexShrink: 0, marginTop: 2 }} />
+                      <div>
+                        <strong style={{ color: "#f43f5e" }}>Faltas comunes: </strong>
+                        <span style={{ color: "var(--color-text-secondary)" }}>{pruebaActiva.tecnica.falta}</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : pruebaActiva.tecnica ? (
+              <div
+                style={{
+                  borderRadius: 14,
+                  padding: "12px 14px",
+                  border: "1px dashed var(--color-border)",
+                  background: "var(--color-bg-surface)",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 6,
+                  fontSize: "0.8rem",
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: 6, fontWeight: 800, color: pruebaActiva.color }}>
+                  <Info size={15} />
+                  <span>Guía Técnica: {pruebaActiva.nombre}</span>
+                </div>
+                <div style={{ color: "var(--color-text-secondary)" }}>
+                  <strong style={{ color: "var(--color-text-primary)" }}>Técnica: </strong>
+                  {pruebaActiva.tecnica.ejecucion}
+                </div>
+                <div style={{ color: "var(--color-text-secondary)" }}>
+                  <strong style={{ color: "#f43f5e" }}>Faltas: </strong>
+                  {pruebaActiva.tecnica.falta}
+                </div>
+              </div>
+            ) : null}
           </div>
 
-          {/* Botón de Guardar Calificación */}
+          {/* Botón de Guardar Calificación (Oculto a Aprendiz, visible solo a Docente/Entrenador) */}
           <div style={{ marginTop: "auto", paddingTop: 8 }}>
-            <button
-              className="btn btn-primary"
-              onClick={handleGuardar}
-              style={{ width: "100%", justifyContent: "center", padding: "14px", fontSize: "0.95rem" }}
-            >
-              {savedOk ? <CheckCircle2 size={18} /> : <Save size={18} />}
-              <span>{savedOk ? "✓ ¡Calificación Guardada con Éxito!" : "Registrar y Guardar Calificación"}</span>
-            </button>
+            {role === "APRENDIZ" ? (
+              <div
+                style={{
+                  padding: "12px 14px",
+                  borderRadius: 12,
+                  background: "rgba(59, 130, 246, 0.08)",
+                  border: "1px solid rgba(59, 130, 246, 0.25)",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 10,
+                  fontSize: "0.82rem",
+                  color: "var(--color-text-secondary)",
+                }}
+              >
+                <ShieldCheck size={18} color="#3b82f6" style={{ flexShrink: 0 }} />
+                <span>
+                  <strong>Modo Consulta (Aprendiz):</strong> Visualizando baremos y demostraciones técnicas oficiales. El registro y guardado de calificaciones está reservado al Docente / Entrenador.
+                </span>
+              </div>
+            ) : (
+              <button
+                className="btn btn-primary"
+                onClick={handleGuardar}
+                style={{ width: "100%", justifyContent: "center", padding: "14px", fontSize: "0.95rem" }}
+              >
+                {savedOk ? <CheckCircle2 size={18} /> : <Save size={18} />}
+                <span>{savedOk ? "✓ ¡Calificación Guardada con Éxito!" : "Registrar y Guardar Calificación"}</span>
+              </button>
+            )}
           </div>
         </div>
 

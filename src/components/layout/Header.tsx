@@ -3,9 +3,9 @@
 // Diseñada para docentes: ultracompacta, 100% responsiva, sin traslapes
 // ─────────────────────────────────────────────────────────────
 import React from "react";
-import { Activity, ShieldCheck, LogOut, Sun, Moon, Sparkles, Search } from "lucide-react";
+import { Activity, ShieldCheck, LogOut, Sun, Moon, Sparkles, Search, Zap, Building2 } from "lucide-react";
 
-type Role = "ENTRENADOR" | "APRENDIZ";
+type Role = "ADMIN" | "ENTRENADOR" | "APRENDIZ";
 
 interface HeaderProps {
   role: Role;
@@ -15,6 +15,8 @@ interface HeaderProps {
   onToggleTheme: () => void;
   onOpenGemini: () => void;
   onOpenSearch?: () => void;
+  brandMode?: "mercado" | "institucional";
+  onToggleBrandMode?: () => void;
 }
 
 export function Header({
@@ -25,7 +27,11 @@ export function Header({
   onToggleTheme,
   onOpenGemini,
   onOpenSearch,
+  brandMode = "mercado",
+  onToggleBrandMode,
 }: HeaderProps) {
+  const isMercado = brandMode === "mercado";
+
   return (
     <header
       style={{
@@ -53,14 +59,16 @@ export function Header({
           gap: 12,
         }}
       >
-        {/* 1. Marca SENA & Logo (Compacto) */}
+        {/* 1. Marca & Logo */}
         <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
           <div
             style={{
               width: 38,
               height: 38,
               borderRadius: 10,
-              background: "linear-gradient(135deg, var(--color-green-dark), var(--color-green))",
+              background: isMercado
+                ? "linear-gradient(135deg, #0d9488, #10b981)"
+                : "linear-gradient(135deg, var(--color-green-dark), var(--color-green))",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -89,14 +97,14 @@ export function Header({
                   fontSize: "0.68rem",
                   padding: "1px 6px",
                   borderRadius: 6,
-                  background: "rgba(16, 185, 129, 0.15)",
-                  color: "var(--color-green)",
+                  background: isMercado ? "rgba(6, 182, 212, 0.15)" : "rgba(16, 185, 129, 0.15)",
+                  color: isMercado ? "#0891b2" : "var(--color-green)",
                   fontWeight: 800,
-                  border: "1px solid rgba(16, 185, 129, 0.35)",
+                  border: isMercado ? "1px solid rgba(6, 182, 212, 0.35)" : "1px solid rgba(16, 185, 129, 0.35)",
                   letterSpacing: "0.04em",
                 }}
               >
-                SENA
+                {isMercado ? "ATHLETIC OS" : "SENA"}
               </span>
             </div>
             <p
@@ -109,7 +117,7 @@ export function Header({
                 lineHeight: 1.1,
               }}
             >
-              Rendimiento Atlético & Salud
+              {isMercado ? "Rendimiento Deportivo & Fitness Pro" : "Rendimiento Atlético & Salud Escolar"}
             </p>
           </div>
         </div>
@@ -177,6 +185,37 @@ export function Header({
             <span>Asistente IA</span>
           </button>
 
+          {/* Alternador de Enfoque de Marca: Mercado vs Institucional SENA */}
+          {onToggleBrandMode && (
+            <button
+              onClick={onToggleBrandMode}
+              className="btn btn-secondary"
+              style={{
+                padding: "6px 10px",
+                borderRadius: 10,
+                fontSize: "0.78rem",
+                gap: 5,
+                cursor: "pointer",
+                whiteSpace: "nowrap",
+                border: isMercado ? "1.5px solid #10b981" : "1.5px solid var(--color-border)",
+                background: isMercado ? "rgba(16, 185, 129, 0.09)" : "var(--color-bg-card)",
+              }}
+              title={isMercado ? "Cambiar a Modo Institucional (SENA)" : "Cambiar a Modo Mercado (Gimnasios / Clubes)"}
+            >
+              {isMercado ? (
+                <>
+                  <Zap size={14} color="#10b981" />
+                  <span style={{ fontWeight: 800, color: "#059669" }}>Mercado Pro</span>
+                </>
+              ) : (
+                <>
+                  <Building2 size={14} color="var(--color-text-secondary)" />
+                  <span style={{ fontWeight: 700 }}>Modo SENA</span>
+                </>
+              )}
+            </button>
+          )}
+
           {/* Selector de Tema Claro / Oscuro */}
           <button
             onClick={onToggleTheme}
@@ -232,8 +271,9 @@ export function Header({
                 outline: "none",
               }}
             >
-              <option value="ENTRENADOR">Entrenador</option>
-              <option value="APRENDIZ">Aprendiz</option>
+              <option value="ADMIN">{isMercado ? "Director Deportivo (Admin)" : "Administrador"}</option>
+              <option value="ENTRENADOR">{isMercado ? "Coach / Entrenador" : "Docente / Entrenador"}</option>
+              <option value="APRENDIZ">{isMercado ? "Atleta / Cliente" : "Aprendiz"}</option>
             </select>
           </div>
 

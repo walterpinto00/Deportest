@@ -5,6 +5,7 @@ const authMiddleware = require('../middlewares/auth');
 const { isAdmin, isEntrenador, isAprendiz } = require('../middlewares/roleGuard');
 
 // ── Rutas públicas (sin autenticación) ──────────────────────
+router.post('/register',      authController.register);
 router.post('/login',         authController.login);
 router.post('/refresh-token', authController.refreshToken);
 router.post('/logout',        authController.logout);

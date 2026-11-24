@@ -8,9 +8,10 @@ const redisClient = require('../config/redis');
 class TokenService {
   // Generar Access Token (JWT de corta duración)
   generateAccessToken(userId, role) {
+    const secret = process.env.JWT_SECRET || 'deportest_sena_jwt_super_secreto_2026_seguridad_colombia';
     return jwt.sign(
       { userId, role },
-      process.env.JWT_SECRET,
+      secret,
       { expiresIn: process.env.JWT_EXPIRES_IN || '15m' }
     );
   }
@@ -33,7 +34,8 @@ class TokenService {
   // Verificar Access Token
   verifyAccessToken(token) {
     try {
-      return jwt.verify(token, process.env.JWT_SECRET);
+      const secret = process.env.JWT_SECRET || 'deportest_sena_jwt_super_secreto_2026_seguridad_colombia';
+      return jwt.verify(token, secret);
     } catch (error) {
       return null;
     }

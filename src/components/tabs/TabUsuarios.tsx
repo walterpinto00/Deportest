@@ -262,16 +262,16 @@ export function TabUsuarios({ onSave }: TabUsuariosProps) {
             bg: "rgba(16, 185, 129, 0.08)",
           },
           {
-            label: "Entrenadores / Docentes",
+            label: "Entrenadores & Coaches",
             value: totalEntrenadores,
-            sub: "Instructores autorizados SENA",
+            sub: "Entrenadores y preparadores autorizados",
             color: "var(--color-blue)",
             bg: "rgba(59, 130, 246, 0.08)",
           },
           {
-            label: "Aprendices Deportistas",
+            label: "Atletas & Deportistas",
             value: totalAprendices,
-            sub: "Fichas técnicas y escolares",
+            sub: "Perfiles atléticos registrados",
             color: "var(--color-purple)",
             bg: "rgba(139, 92, 246, 0.08)",
           },
@@ -481,7 +481,7 @@ export function TabUsuarios({ onSave }: TabUsuariosProps) {
               <Input
                 label="Correo Institucional *"
                 type="email"
-                placeholder="ejemplo@sena.edu.co"
+                placeholder="ejemplo@deportest.com"
                 value={formData.email}
                 onChange={(e) => handleChange("email", e.target.value)}
                 error={errors.email}

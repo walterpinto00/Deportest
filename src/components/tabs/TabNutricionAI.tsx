@@ -78,7 +78,7 @@ const THEME_MOMENTOS: Record<
     badgeBorder: "rgba(16, 185, 129, 0.45)",
     badgeText: "#34d399",
     bulletColor: "#10b981",
-    tagNombre: "LONCHERA ESCOLAR",
+    tagNombre: "SNACK DEPORTIVO / MEDIA MAÑANA",
   },
   almuerzo: {
     color: "#06b6d4", // Cyan eléctrico de alto rendimiento
@@ -91,7 +91,7 @@ const THEME_MOMENTOS: Record<
     badgeBorder: "rgba(6, 182, 212, 0.45)",
     badgeText: "#38bdf8",
     bulletColor: "#06b6d4",
-    tagNombre: "PLATO PRINCIPAL",
+    tagNombre: "PLATO PRINCIPAL BALANCEADO",
   },
   merienda: {
     color: "#8b5cf6", // Violeta dinámico para pre-actividad
@@ -104,7 +104,7 @@ const THEME_MOMENTOS: Record<
     badgeBorder: "rgba(139, 92, 246, 0.45)",
     badgeText: "#c084fc",
     bulletColor: "#8b5cf6",
-    tagNombre: "PRE-ENTRENO FORMATIVO",
+    tagNombre: "PRE-WORKOUT ENERGÉTICO",
   },
   cena: {
     color: "#14b8a6", // Turquesa / Teal relajante nocturno
@@ -162,10 +162,10 @@ const PLAN_DATA = {
       },
       {
         id: "lonchera",
-        momento: "Refrigerio / Lonchera Escolar",
+        momento: "Snack Nutritivo / Media Mañana",
         hora: "09:45 am",
         kcal: 250,
-        enfoque: "Pausa activa saludable (100% libre de ultraprocesados y paquetes)",
+        enfoque: "Aporte energético sostenido libre de ultraprocesados para mantener el metabolismo activo",
         alimentos: [
           "1 fruta entera de temporada lavada (manzana o pera)",
           "Puñado de frutos secos naturales (maní sin sal, almendras)",
@@ -174,10 +174,10 @@ const PLAN_DATA = {
       },
       {
         id: "almuerzo",
-        momento: "Almuerzo Balanceado",
+        momento: "Almuerzo de Alto Rendimiento",
         hora: "01:15 pm",
         kcal: 750,
-        enfoque: "Plato del Buen Comer (50% vegetales frescos, 25% proteína, 25% carbohidratos)",
+        enfoque: "Plato del Buen Comer (50% vegetales frescos, 25% proteína magra, 25% carbohidratos complejos)",
         alimentos: [
           "120 g de pechuga de pollo, pescado o carne magra a la plancha",
           "1 taza mediana de arroz o papa cocida al vapor",
@@ -187,10 +187,10 @@ const PLAN_DATA = {
       },
       {
         id: "merienda",
-        momento: "Merienda Pre-Actividad",
+        momento: "Snack Pre-Entrenamiento",
         hora: "04:30 pm",
         kcal: 250,
-        enfoque: "Recarga rápida de glucógeno muscular antes de entrenar o jugar",
+        enfoque: "Recarga rápida de glucógeno muscular y aminoácidos antes de entrenar",
         alimentos: [
           "1 yogur natural o vaso de leche descremada",
           "1 tostada o galleta integral con queso campesino bajo en grasa",
@@ -319,7 +319,7 @@ export function TabNutricionAI({ onSave }: TabNutricionAIProps) {
     perfil: {
       ...PLAN_DATA.perfil,
       nombre: alumnoActivo ? `${alumnoActivo.nombres} ${alumnoActivo.apellidos}` : PLAN_DATA.perfil.nombre,
-      grado: alumnoActivo ? alumnoActivo.grado || "Programa SENA" : PLAN_DATA.perfil.grado,
+      grado: alumnoActivo ? alumnoActivo.grado || "Atleta / Categoría Libre" : PLAN_DATA.perfil.grado,
       peso: `${pesoNum} kg`,
       talla: `${tallaNum} m`,
       imc: `${imcCalculado} (Rango Saludable OMS)`,

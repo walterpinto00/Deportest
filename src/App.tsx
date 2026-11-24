@@ -20,17 +20,17 @@ import { Login }            from "./components/auth/Login";
 import { AsistenteGeminiDocente } from "./components/ai/AsistenteGeminiDocente";
 import { BuscadorInteligente } from "./components/search/BuscadorInteligente";
 
-type Role   = "ENTRENADOR" | "APRENDIZ";
+type Role   = "ADMIN" | "ENTRENADOR" | "APRENDIZ";
 type TabId  = "dashboard" | "usuarios" | "antropometria" | "pruebas" | "graficas" | "ia";
 type Theme  = "light" | "dark";
 
 const ALL_TABS: TabConfig[] = [
-  { id: "dashboard",     icon: LayoutDashboard, label: "Dashboard",             color: "#10b981", allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
-  { id: "usuarios",      icon: Users,           label: "Usuarios & Roles",      color: "#3b82f6", allowedRoles: ["ENTRENADOR"] },
-  { id: "antropometria", icon: FileText,        label: "Ficha Antropométrica",  color: "#10b981", allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
-  { id: "pruebas",       icon: Activity,        label: "Pruebas Físicas",       color: "#f97316", allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
-  { id: "graficas",      icon: BarChart2,       label: "Gráficas & Reportes",   color: "#8b5cf6", allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
-  { id: "ia",            icon: Heart,           label: "Nutrición & Hábitos",   color: "#06b6d4", allowedRoles: ["ENTRENADOR", "APRENDIZ"] },
+  { id: "dashboard",     icon: LayoutDashboard, label: "Dashboard",             color: "#10b981", allowedRoles: ["ADMIN", "ENTRENADOR", "APRENDIZ"] },
+  { id: "usuarios",      icon: Users,           label: "Usuarios & Roles",      color: "#3b82f6", allowedRoles: ["ADMIN", "ENTRENADOR"] },
+  { id: "antropometria", icon: FileText,        label: "Ficha Antropométrica",  color: "#10b981", allowedRoles: ["ADMIN", "ENTRENADOR", "APRENDIZ"] },
+  { id: "pruebas",       icon: Activity,        label: "Pruebas Físicas",       color: "#f97316", allowedRoles: ["ADMIN", "ENTRENADOR", "APRENDIZ"] },
+  { id: "graficas",      icon: BarChart2,       label: "Gráficas & Reportes",   color: "#8b5cf6", allowedRoles: ["ADMIN", "ENTRENADOR", "APRENDIZ"] },
+  { id: "ia",            icon: Heart,           label: "Nutrición & Hábitos",   color: "#06b6d4", allowedRoles: ["ADMIN", "ENTRENADOR", "APRENDIZ"] },
 ];
 
 export default function App() {
@@ -40,6 +40,19 @@ export default function App() {
   const [toast, setToast]       = useState<string | null>(null);
   const [isGeminiOpen, setIsGeminiOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  // Modo de Enfoque: Mercado Profesional vs Institucional SENA (por defecto: mercado)
+  const [brandMode, setBrandMode] = useState<"mercado" | "institucional">(() => {
+    return (localStorage.getItem("deportest_brand_mode") as "mercado" | "institucional") || "mercado";
+  });
+
+  const toggleBrandMode = () => {
+    setBrandMode((prev) => {
+      const next = prev === "mercado" ? "institucional" : "mercado";
+      localStorage.setItem("deportest_brand_mode", next);
+      return next;
+    });
+  };
 
   // Modo Claro Institucional por defecto (limpio, claro y amigable para profesores)
   const [theme, setTheme] = useState<Theme>(() => {
@@ -87,7 +100,7 @@ export default function App() {
     return (
       <AnimatePresence mode="wait">
         <motion.div key="login" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-          <Login onLogin={handleLogin} />
+          <Login onLogin={handleLogin} brandMode={brandMode} onToggleBrandMode={toggleBrandMode} />
         </motion.div>
       </AnimatePresence>
     );
@@ -104,6 +117,8 @@ export default function App() {
         onToggleTheme={toggleTheme}
         onOpenGemini={() => setIsGeminiOpen(true)}
         onOpenSearch={() => setIsSearchOpen(true)}
+        brandMode={brandMode}
+        onToggleBrandMode={toggleBrandMode}
       />
       <Navigation tabs={ALL_TABS} activeTab={activeTab} role={role} onTabChange={(id) => setActiveTab(id as TabId)} />
 
@@ -117,8 +132,27 @@ export default function App() {
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
           >
-            {activeTab === "dashboard"     && <TabDashboard onNavigate={(t) => setActiveTab(t as any)} />}
-            {activeTab === "usuarios"      && <TabUsuarios      onSave={(msg) => notify(msg || "✓ Usuario registrado correctamente.")} />}
+            {activeTab === "dashboard"     && <TabDashboard onNavigate={(t) => setActiveTab(t as any)} brandMode={brandMode} />}
+            {activeTab === "usuarios"      && (
+              role === "APRENDIZ" ? (
+                <div className="glass-elevated" style={{ padding: "48px 32px", textAlign: "center", borderRadius: 24, maxWidth: 600, margin: "40px auto" }}>
+                  <div style={{ width: 64, height: 64, borderRadius: "50%", background: "rgba(225, 29, 72, 0.12)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
+                    <Users size={32} color="#e11d48" />
+                  </div>
+                  <h3 style={{ fontSize: "1.35rem", fontWeight: 800, color: "var(--color-text-primary)", marginBottom: 8 }}>
+                    Acceso Restringido (403) — Rol Aprendiz
+                  </h3>
+                  <p style={{ color: "var(--color-text-secondary)", fontSize: "0.9rem", lineHeight: 1.5, margin: "0 auto 20px" }}>
+                    Tu cuenta actual tiene rol de <strong>Aprendiz</strong>. Por políticas de seguridad institucional, la administración de usuarios, cambio de roles y permisos del sistema está reservada a Docentes y Administradores.
+                  </p>
+                  <button onClick={() => setActiveTab("dashboard")} className="btn btn-secondary" style={{ margin: "0 auto" }}>
+                    Regresar al Dashboard
+                  </button>
+                </div>
+              ) : (
+                <TabUsuarios onSave={(msg) => notify(msg || "✓ Usuario registrado correctamente.")} />
+              )
+            )}
             {activeTab === "antropometria" && (
               <TabAntropometria
                 role={role}

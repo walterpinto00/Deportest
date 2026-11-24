@@ -184,7 +184,7 @@ const USUARIOS_INICIALES: Usuario[] = [
     fechaNacimiento: "1988-06-15",
     avatarUrl: "https://api.dicebear.com/9.x/dylan/svg?seed=walterpinto&backgroundColor=d1f4e0",
     fechaRegistro: "01/02/2026",
-    grado: "Instructor Titular SENA"
+    grado: "Head Coach & Preparador Físico"
   },
   {
     id: "usr-11",

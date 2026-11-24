@@ -19,9 +19,12 @@ import { motion, Variants } from "framer-motion";
 
 interface TabDashboardProps {
   onNavigate?: (tab: string) => void;
+  brandMode?: "mercado" | "institucional";
 }
 
-export function TabDashboard({ onNavigate }: TabDashboardProps) {
+export function TabDashboard({ onNavigate, brandMode = "mercado" }: TabDashboardProps) {
+  const isMercado = brandMode === "mercado";
+
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     show: {
@@ -43,7 +46,7 @@ export function TabDashboard({ onNavigate }: TabDashboardProps) {
       animate="show"
       style={{ display: "flex", flexDirection: "column", gap: 24 }}
     >
-      {/* ── 1. BANNER HERO LIMPIO Y CLARO (Acciones Rápidas para el Docente) ── */}
+      {/* ── 1. BANNER HERO LIMPIO Y CLARO (Acciones Rápidas para el Coach / Docente) ── */}
       <div
         className="glass-elevated"
         style={{
@@ -79,7 +82,7 @@ export function TabDashboard({ onNavigate }: TabDashboardProps) {
                 letterSpacing: "0.06em",
               }}
             >
-              Panel Activo · Período Académico 2026
+              {isMercado ? "Ecosistema Deportivo Activo · Temporada 2026" : "Panel Activo · Período Académico 2026"}
             </span>
           </div>
 
@@ -91,7 +94,7 @@ export function TabDashboard({ onNavigate }: TabDashboardProps) {
               letterSpacing: "-0.02em",
             }}
           >
-            Bienvenido, Entrenador / Instructor SENA
+            {isMercado ? "Bienvenido, Head Coach / Preparador Físico" : "Bienvenido, Entrenador / Instructor SENA"}
           </h2>
 
           <p
@@ -102,7 +105,9 @@ export function TabDashboard({ onNavigate }: TabDashboardProps) {
               fontWeight: 500,
             }}
           >
-            Monitorea el estado físico de los aprendices y califica valoraciones en tiempo real sin complicaciones.
+            {isMercado
+              ? "Monitorea el rendimiento atlético de tus deportistas y califica valoraciones físicas en tiempo real."
+              : "Monitorea el estado físico de los aprendices y califica valoraciones en tiempo real sin complicaciones."}
           </p>
         </div>
 
@@ -155,35 +160,35 @@ export function TabDashboard({ onNavigate }: TabDashboardProps) {
       >
         {[
           {
-            label: "Aprendices Registrados",
+            label: isMercado ? "Atletas & Clientes" : "Aprendices Registrados",
             valor: "248",
-            nota: "+18 nuevas fichas este ciclo",
+            nota: isMercado ? "+18 nuevos perfiles este mes" : "+18 nuevas fichas este ciclo",
             icon: Users,
             color: "#2563eb", // Azul
             bgIcon: "rgba(37, 99, 235, 0.12)",
           },
           {
-            label: "Evaluaciones Antropométricas",
+            label: isMercado ? "Fichas Biométricas" : "Evaluaciones Antropométricas",
             valor: "186",
-            nota: "Completadas con protocolo OMS",
+            nota: isMercado ? "Composición corporal completada" : "Completadas con protocolo OMS",
             icon: FileText,
             color: "#d97706", // Ámbar
             bgIcon: "rgba(217, 119, 6, 0.12)",
           },
           {
-            label: "Pruebas Físicas Calificadas",
+            label: isMercado ? "Baterías de Test Realizadas" : "Pruebas Físicas Calificadas",
             valor: "412",
-            nota: "Baremos oficiales asignados",
+            nota: isMercado ? "Baremos de rendimiento asignados" : "Baremos oficiales asignados",
             icon: Activity,
             color: "#ea580c", // Naranja
             bgIcon: "rgba(234, 88, 12, 0.12)",
           },
           {
-            label: "En Zona Saludable (OMS)",
+            label: isMercado ? "Rendimiento Atlético Óptimo" : "En Zona Saludable (OMS)",
             valor: "76.4%",
-            nota: "Percentil óptimo juvenil",
+            nota: isMercado ? "Zona de alto acondicionamiento" : "Percentil óptimo juvenil",
             icon: ShieldCheck,
-            color: "#10b981", // Verde SENA
+            color: "#10b981", // Verde
             bgIcon: "rgba(16, 185, 129, 0.12)",
           },
         ].map((kpi, i) => {
@@ -338,28 +343,28 @@ export function TabDashboard({ onNavigate }: TabDashboardProps) {
               {
                 rango: "Peso Saludable / Adecuado",
                 pct: "76.4%",
-                alumnos: "189 aprendices",
+                alumnos: isMercado ? "189 atletas" : "189 aprendices",
                 color: "#10b981",
                 bg: "rgba(16, 185, 129, 0.08)",
               },
               {
                 rango: "Sobrepeso Leve (Monitoreo)",
                 pct: "14.2%",
-                alumnos: "35 aprendices",
+                alumnos: isMercado ? "35 atletas" : "35 aprendices",
                 color: "#d97706",
                 bg: "rgba(217, 119, 6, 0.08)",
               },
               {
                 rango: "Bajo Peso (Orientación)",
                 pct: "6.8%",
-                alumnos: "17 aprendices",
+                alumnos: isMercado ? "17 atletas" : "17 aprendices",
                 color: "#2563eb",
                 bg: "rgba(37, 99, 235, 0.08)",
               },
               {
                 rango: "Riesgo de Obesidad",
                 pct: "2.6%",
-                alumnos: "7 aprendices",
+                alumnos: isMercado ? "7 atletas" : "7 aprendices",
                 color: "#e11d48",
                 bg: "rgba(225, 29, 72, 0.08)",
               },

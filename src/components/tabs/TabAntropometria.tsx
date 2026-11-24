@@ -228,10 +228,11 @@ export function TabAntropometria({ role, onSave, onOpenGemini }: TabAntropometri
             {/* Selector Rápido de Alumno */}
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 6 }}>
               <span style={{ fontSize: "0.85rem", color: "var(--color-text-muted)", fontWeight: 600 }}>
-                Estudiante a evaluar:
+                {role === "APRENDIZ" ? "Estudiante evaluado:" : "Estudiante a evaluar:"}
               </span>
               <select
                 value={estudianteSel.id}
+                disabled={role === "APRENDIZ"}
                 onChange={(e) => cambiarEstudiante(e.target.value)}
                 style={{
                   background: "var(--color-bg-card)",
@@ -241,7 +242,8 @@ export function TabAntropometria({ role, onSave, onOpenGemini }: TabAntropometri
                   fontSize: "0.86rem",
                   fontWeight: 700,
                   color: "var(--color-text-primary)",
-                  cursor: "pointer",
+                  cursor: role === "APRENDIZ" ? "not-allowed" : "pointer",
+                  opacity: role === "APRENDIZ" ? 0.9 : 1,
                 }}
               >
                 {estudiantes.map((est) => (
@@ -250,6 +252,11 @@ export function TabAntropometria({ role, onSave, onOpenGemini }: TabAntropometri
                   </option>
                 ))}
               </select>
+              {role === "APRENDIZ" && (
+                <span style={{ fontSize: "0.72rem", color: "#3b82f6", fontWeight: 700 }}>
+                  🛡️ Mi Ficha
+                </span>
+              )}
             </div>
           </div>
         </div>
@@ -283,14 +290,34 @@ export function TabAntropometria({ role, onSave, onOpenGemini }: TabAntropometri
             <span>Imprimir PDF</span>
           </button>
 
-          <button
-            className="btn btn-primary"
-            onClick={handleSave}
-            style={{ padding: "10px 20px", fontSize: "0.88rem" }}
-          >
-            {savedOk ? <CheckCircle2 size={16} /> : <Save size={16} />}
-            <span>{savedOk ? "✓ Ficha Guardada" : "Guardar Ficha Oficial"}</span>
-          </button>
+          {role === "APRENDIZ" ? (
+            <div
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 6,
+                padding: "8px 16px",
+                borderRadius: 10,
+                background: "rgba(59, 130, 246, 0.1)",
+                border: "1px solid rgba(59, 130, 246, 0.3)",
+                color: "#2563eb",
+                fontSize: "0.85rem",
+                fontWeight: 700,
+              }}
+            >
+              <ShieldCheck size={16} />
+              <span>Modo Lectura (Aprendiz)</span>
+            </div>
+          ) : (
+            <button
+              className="btn btn-primary"
+              onClick={handleSave}
+              style={{ padding: "10px 20px", fontSize: "0.88rem" }}
+            >
+              {savedOk ? <CheckCircle2 size={16} /> : <Save size={16} />}
+              <span>{savedOk ? "✓ Ficha Guardada" : "Guardar Ficha Oficial"}</span>
+            </button>
+          )}
         </div>
       </div>
 
@@ -448,14 +475,16 @@ export function TabAntropometria({ role, onSave, onOpenGemini }: TabAntropometri
                 </div>
 
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <button
-                    onClick={() => ajustarTalla(-0.01)}
-                    className="btn btn-secondary"
-                    style={{ padding: "10px 14px", borderRadius: 10 }}
-                    title="Restar 1 centímetro"
-                  >
-                    <Minus size={16} />
-                  </button>
+                  {role !== "APRENDIZ" && (
+                    <button
+                      onClick={() => ajustarTalla(-0.01)}
+                      className="btn btn-secondary"
+                      style={{ padding: "10px 14px", borderRadius: 10 }}
+                      title="Restar 1 centímetro"
+                    >
+                      <Minus size={16} />
+                    </button>
+                  )}
 
                   <input
                     className="dp-input"
@@ -464,18 +493,21 @@ export function TabAntropometria({ role, onSave, onOpenGemini }: TabAntropometri
                     min="0.8"
                     max="2.5"
                     value={talla}
+                    disabled={role === "APRENDIZ"}
                     onChange={(e) => setTalla(e.target.value)}
-                    style={{ textAlign: "center", fontSize: "1.3rem", fontWeight: 800 }}
+                    style={{ textAlign: "center", fontSize: "1.3rem", fontWeight: 800, ...(role === "APRENDIZ" ? { opacity: 0.9 } : {}) }}
                   />
 
-                  <button
-                    onClick={() => ajustarTalla(0.01)}
-                    className="btn btn-secondary"
-                    style={{ padding: "10px 14px", borderRadius: 10 }}
-                    title="Sumar 1 centímetro"
-                  >
-                    <Plus size={16} />
-                  </button>
+                  {role !== "APRENDIZ" && (
+                    <button
+                      onClick={() => ajustarTalla(0.01)}
+                      className="btn btn-secondary"
+                      style={{ padding: "10px 14px", borderRadius: 10 }}
+                      title="Sumar 1 centímetro"
+                    >
+                      <Plus size={16} />
+                    </button>
+                  )}
                 </div>
               </div>
 
@@ -491,14 +523,16 @@ export function TabAntropometria({ role, onSave, onOpenGemini }: TabAntropometri
                 </div>
 
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <button
-                    onClick={() => ajustarPeso(-0.5)}
-                    className="btn btn-secondary"
-                    style={{ padding: "10px 14px", borderRadius: 10 }}
-                    title="Restar medio kilogramo"
-                  >
-                    <Minus size={16} />
-                  </button>
+                  {role !== "APRENDIZ" && (
+                    <button
+                      onClick={() => ajustarPeso(-0.5)}
+                      className="btn btn-secondary"
+                      style={{ padding: "10px 14px", borderRadius: 10 }}
+                      title="Restar medio kilogramo"
+                    >
+                      <Minus size={16} />
+                    </button>
+                  )}
 
                   <input
                     className="dp-input"
@@ -507,18 +541,21 @@ export function TabAntropometria({ role, onSave, onOpenGemini }: TabAntropometri
                     min="20"
                     max="200"
                     value={peso}
+                    disabled={role === "APRENDIZ"}
                     onChange={(e) => setPeso(e.target.value)}
-                    style={{ textAlign: "center", fontSize: "1.3rem", fontWeight: 800 }}
+                    style={{ textAlign: "center", fontSize: "1.3rem", fontWeight: 800, ...(role === "APRENDIZ" ? { opacity: 0.9 } : {}) }}
                   />
 
-                  <button
-                    onClick={() => ajustarPeso(0.5)}
-                    className="btn btn-secondary"
-                    style={{ padding: "10px 14px", borderRadius: 10 }}
-                    title="Sumar medio kilogramo"
-                  >
-                    <Plus size={16} />
-                  </button>
+                  {role !== "APRENDIZ" && (
+                    <button
+                      onClick={() => ajustarPeso(0.5)}
+                      className="btn btn-secondary"
+                      style={{ padding: "10px 14px", borderRadius: 10 }}
+                      title="Sumar medio kilogramo"
+                    >
+                      <Plus size={16} />
+                    </button>
+                  )}
                 </div>
               </div>
 
